@@ -1,4 +1,5 @@
 ---
+id: "36TmKi8eO45b4dIi"
 category: "sales/products"
 tags: []
 published_at: "2026-08-01T00:00:00.000Z"
