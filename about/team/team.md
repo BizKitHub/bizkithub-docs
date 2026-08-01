@@ -9,102 +9,102 @@ published_at: "2026-07-24T19:26:44.995Z"
 Team
 ====
 
-Náš core tým se skládá z pečlivě léty ověřených osob, kterým věříme. Vyznáváme princip férového a zodpovědného podnikání.
+Our core team is made up of carefully vetted people we have worked with for years and whom we trust. We stand by the principle of fair and responsible business.
 
-## Core tým
+## Core team
 
 ### Jan Barášek
 
 **CCO &amp; Owner**
 
-Zakladatel a hlavní vizionář společnosti BizKitHub.
+Founder and chief visionary of BizKitHub.
 
 ### Bc. Alexander Diószeghy
 
 **Head of Product &amp; Head of Platform Team**
 
-Vedoucí produktového vývoje a platformního týmu.
+Leads product development and the platform team.
 
 ### Jan Buchal
 
 **Head of Marketing**
 
-Vedoucí marketingu a komunikace.
+Leads marketing and communications.
 
 ### Samuel Průša
 
 **Head of Operations**
 
-Vedoucí operací a procesů.
+Leads operations and processes.
 
-## Naše základní firemní hodnoty
+## Our core company values
 
-### Nekrademe, nepodvádíme a nelžeme si navzájem
+### We don't steal, cheat, or lie to each other
 
-Základní etické principy naší spolupráce.
+The foundational ethical principles of how we work together.
 
-### Podnikáme tak, abychom tu byli i za 100 let
+### We build the business to still be here in 100 years
 
-Dlouhodobá udržitelnost a odpovědnost.
+Long-term sustainability and accountability.
 
-### Transparentně zpracováváme data a ověřujeme informace
+### We process data transparently and verify information
 
-Otevřenost a důvěryhodnost v práci s daty.
+Openness and trustworthiness in everything we do with data.
 
-### Podporujeme se navzájem a budujeme mezi sebou zlaté mosty
+### We support each other and build golden bridges between us
 
-Týmová spolupráce a vzájemná podpora.
+Teamwork and mutual support.
 
-### Pomalu nabíráme a rychle propouštíme
+### We hire slowly and fire quickly
 
-Pečlivý výběr lidí s rychlým rozhodováním.
+Careful hiring paired with decisive action when a fit isn't working.
 
-### Děláme naši práci nejlépe jak dovedeme
+### We do our work as well as we possibly can
 
-Vysoké standardy kvality a profesionality.
+High standards of quality and professionalism.
 
-## Další principy naší práce
+## Additional working principles
 
-1. Všichni rozumíme vizi společnosti a pracujeme na dosažení společných cílů.
-2. Víme, že síla je ve spolupráci a jednotném zodpovědném přístupu.
-3. Maximalizujeme kvalitu produktu pro zákazníka a spokojenost.
-4. Provádíme pravidelný sběr zpětné vazby a psychologický výslech pro prevenci nedorozmění.
-5. Neděláme závažná rozhodnutí pod tlakem, pečlivě zvažujeme dostupné alternativy.
+1. Everyone understands the company's vision and works toward shared goals.
+2. We know that strength lies in collaboration and a unified, responsible approach.
+3. We maximise product quality and customer satisfaction.
+4. We collect feedback regularly and hold candid one-on-ones to prevent misunderstandings.
+5. We don't make major decisions under pressure — we carefully weigh the available alternatives.
 
-## Naše filozofie
+## Our philosophy
 
-### Dlouhodobá vize
+### Long-term vision
 
-Budujeme společnost, která bude prosperovat i za 100 let. Naše rozhodnutí vždy zvažujeme z dlouhodobého hlediska a udržitelnosti.
+We are building a company that will still be thriving in 100 years. We always weigh our decisions from a long-term and sustainable perspective.
 
-- Udržitelný růst před rychlým ziskem.
-- Investice do kvality a inovací.
-- Odpovědnost vůči zákazníkům i společnosti.
+- Sustainable growth over quick profit.
+- Investment in quality and innovation.
+- Responsibility to our customers and to society.
 
-### Týmová spolupráce
+### Teamwork
 
-Věříme v sílu týmové spolupráce a otevřené komunikace. Každý člen týmu má svůj hlas a přispívá k celkovému úspěchu.
+We believe in the power of teamwork and open communication. Every team member has a voice and contributes to our collective success.
 
-- Pravidelná zpětná vazba.
-- Transparentní komunikace.
-- Vzájemná podpora a důvěra.
+- Regular feedback.
+- Transparent communication.
+- Mutual support and trust.
 
-## Pracovní kultura
+## Work culture
 
-### Kvalita nad kvantitou
+### Quality over quantity
 
-Zaměřujeme se na vysokou kvalitu práce a produktů, ne na rychlé a povrchní řešení.
+We focus on high-quality work and products, not on quick, shallow solutions.
 
-### Péče o tým
+### Care for the team
 
-Staráme se o pohodu a rozvoj každého člena týmu, vytváříme pozitivní pracovní prostředí.
+We look after the well-being and growth of every team member and create a positive working environment.
 
-### Jasné cíle
+### Clear goals
 
-Všichni rozumíme vizi společnosti a společně pracujeme na dosažení stanovených cílů.
+Everyone understands the company's vision, and we work together to reach our stated goals.
 
-## Chcete se k nám připojit?
+## Want to join us?
 
-Hledáme talentované a motivované lidi, kteří sdílejí naše hodnoty a chtějí s námi budovat budoucnost technologií.
+We're looking for talented, motivated people who share our values and want to help us build the future of technology.
 
-Napište nám na careers@bizkithub.com.
+Write to us at careers@bizkithub.com.
