@@ -104,3 +104,36 @@ Several operations can be performed directly from the overview without opening t
 - **Block / Unblock** — immediate change of access to the portal.
 - **Invalidate Sessions** — forced logout of the customer from all devices.
 - **Delete Contact** — soft delete with a mandatory reason.
+
+## The anonymous customer
+
+Every organisation has a built-in **anonymous customer** account that cannot be deleted. It exists because a great many real-world scenarios produce a valid order without a real, addressable shopper: a physical point-of-sale sale where the operator does not collect an e-mail, a phone order transcribed by a receptionist, a partner integration that submits sales in bulk without individual buyer details, or a data-erasure request that requires historical orders to lose their customer link.
+
+In all of these cases the platform still needs *some* contact to attach the order to, and the anonymous customer is that anchor. All orders that would otherwise land without a customer are automatically routed to it. Business analytics that segment by contact see this account distinctly, so activity that is genuinely anonymous does not distort the profile of any real shopper.
+
+The anonymous customer's e-mail address is set to a system constant that does not accept mail — every attempted delivery is discarded. This is intentional: an operator or automation that mistakenly triggers a "confirmation e-mail" for an anonymous order will not spam a real inbox, and the discard is visible in the e-mailer log for later audit.
+
+## Customer reference number (`cuRefNo`)
+
+Every profile carries a stable **customer reference number** — abbreviated `cuRefNo` on public APIs — that identifies the shopper across integrations, e-mails, invoices, and any other channel that needs to reference them without exposing the platform's internal database identifier. It is a 16-character opaque string composed of lowercase and uppercase letters of the English alphabet and digits.
+
+Example of a valid, existing reference: `1cGIHvFoQDGLAbcA`.
+
+Two rules govern how `cuRefNo` is used:
+
+- **It is stable.** Once assigned it never changes; safe to store on the merchant's side, print on paper, embed in URLs or e-mail templates.
+- **It is scoped to the organisation.** Uniqueness is guaranteed within one organisation, and the platform tries to keep it globally unique across all organisations, but external systems should not rely on cross-organisation uniqueness.
+
+The internal database identifier is never exposed through the public API. The `cuRefNo` is the only handle you receive on responses that reference a contact.
+
+## How automatic profile updates work
+
+Every profile is continuously refined by the platform without operator intervention. Whenever the system learns a new fact about a shopper — a phone number typed into an order form, a company name entered during registration, a corrected postal code — the value is compared against what the profile already holds and either merged in, ignored, or promoted over the existing value.
+
+The comparison uses an internal metric called the **quality score**. For each candidate value the platform estimates how likely it is to be a genuine improvement over the current profile value: an all-caps entry that a shopper corrected in a subsequent order is likely to be worse than the corrected version, a freshly verified phone number is likely better than a stale one, and so on. Only values that clear the improvement bar are promoted; the rest remain on the specific order but do not overwrite the profile.
+
+Some fields the platform can derive without any external input. If a shopper's e-mail has the shape `first.last@domain.tld` and the leading token matches a dictionary of first names in the shopper's language, first and last name can be pre-filled — the platform is careful to only apply this heuristic when the confidence is high and never to overwrite hand-entered values.
+
+Before writing anything into a profile the value is passed through the normaliser pipeline (see [String normalisation](/string-normalisation) and [Phone normalisation](/phone-normalisation)): first letter of a name uppercased, whitespace collapsed, phone digits reformatted into the canonical `+<prefix> <value>` form. This keeps the whole customer database internally consistent regardless of how carelessly individual fields were typed.
+
+Companies get a further layer of automatic maintenance. If a contact carries a company registration number or VAT identifier, parts of the profile can be automatically completed or updated from a public business registry (ARES in the Czech Republic). This refresh runs on a slow, deprioritised schedule — typically every few days per company — so it does not overload the source registry, and it never overwrites hand-corrected fields marked as manually maintained.

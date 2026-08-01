@@ -144,3 +144,54 @@ Reminders are sent via **email** and **SMS** (if the attendee's phone is filled 
 - For long-term plans, **view the Month** — easily spot overlaps and gaps in the schedule.
 - For **regular meetings**, use **recurrence** — enter once and the series handles the rest.
 - Check analytics in the **Report** once a week — it reveals unused capacities and peak times.
+
+## How blocking events protect reservations
+
+Every event carries an `isBlocking` flag. A blocking event acts as a **binding reservation** for its slot: the calendar refuses to store a second event that overlaps in time within the same calendar. This is the mechanism that guarantees a resource — a trainer, a doctor, a treatment room — is never double-booked automatically.
+
+When a new event is submitted, the platform scans the calendar for existing blocking events that overlap the requested time window. If one is found the create is rejected, and the caller receives a documented conflict error. The check is deterministic and takes no arguments beyond the calendar and the time window; it does not depend on event type, attendees, or product linkage.
+
+The one exception is the administrator writing manually. An operator with the appropriate permission can override the block from the administration — typically to record a walk-in customer that the automation should not have prevented. When the automation itself creates events (recurring generation, bulk import), the block is always honoured.
+
+## Cross-calendar attendee conflicts
+
+Beyond the per-calendar blocking check, the platform can also detect that a person invited as a **required** attendee to an event in one calendar is already required to attend another event at the same time in a different calendar. When this happens the invite flow surfaces a warning so the operator does not accidentally commit the same trainer or doctor to two appointments in parallel across two calendars.
+
+The check runs at invite time only — no attempt is made to enforce mutual exclusion; the operator is trusted to make the final call. Two operational caveats worth remembering when relying on this:
+
+- **Physical distance is not modelled.** The platform cannot know whether the same person can realistically travel between two adjacent meetings held at two different addresses. That judgement remains with the operator.
+- **Optional attendees are ignored.** Only attendees marked as required participate in the collision check. Optional invitees are not evaluated against other events at the same time.
+
+## Reminder queue and timing guarantees
+
+Every event can carry any number of reminders — each specified as a relative time before the event (`1d`, `1h`, `30m`, and so on). Reminders live in a long-running queue that the platform's automation drains at a regular interval, roughly once every three minutes.
+
+Because the queue is polled, a reminder scheduled at a specific moment is not guaranteed to fire at that exact moment. The platform commits to firing every reminder **within five minutes of its planned time**, depending on current queue load. If you schedule a reminder that must be delivered ahead of a specific downstream deadline — a payment cutoff, a departure time — pick a lead time that comfortably accommodates the five-minute worst-case latency.
+
+Reminders can trigger more than the customer-facing notification. A reminder can also fire a system action — generate a door-lock passcode ahead of check-in, verify that a ticket has been paid, confirm attendance for outstanding guests, or run any other pre-registered platform routine. This is the mechanism that lets calendars serve as the entry point for downstream automation of physical or digital fulfilment.
+
+## Recurring events and the generator limit
+
+A recurring event begins as a normal single event — the **reference event** — with an accompanying rule that describes how it should repeat and over what interval. When the rule is committed, a generator materialises the individual occurrences into the calendar as ordinary events, each linked back to the reference event.
+
+The generator is deliberately bounded. In a single generation pass it will create **at most 1,000 occurrences**. If the supplied rule would produce more, the generator stops at the limit, persists what it produced, and reports the truncation — the remaining occurrences are not silently discarded but they are also not automatically retried; the operator can extend the interval or split the rule and generate the next batch.
+
+This limit protects the calendar from a rule that would flood it with millions of occurrences (a typo in the recurrence expression or an accidentally-open end date). It also caps memory and lock time on very large calendars, keeping generation predictable.
+
+Once created, every generated occurrence is an independent event. It can be renamed, moved to a different slot, cancelled, or reconciled against a later conflict without affecting the rest of the series or the reference event. If a specific occurrence conflicts with a blocking event created after the fact, the generator skips that occurrence rather than overriding the block; the operator is notified and can resolve the specific slot manually. An optional generator switch relaxes this behaviour: on conflict the occurrence is created but is marked as **non-blocking**, so the human can inspect and adjust.
+
+The finest recurrence period the platform supports is **once per day**. Sub-daily recurrence must be modelled as several independent daily rules or as manual event creation.
+
+## Cancelled and historical events
+
+An event can be marked with the `isStorno` flag to indicate that it has been cancelled. The event stays in the database — it is not physically removed — and is hidden from the calendar view; the record remains available for audit and historical statistics. Statistics deliberately exclude cancelled events, so a wave of cancellations does not distort utilisation reports.
+
+Full deletion is not a routine operation. The default is that any event can be restored: the platform biases towards preserving history because well-meaning but inexperienced users can accidentally delete large slices of a calendar if the option is too easy. If genuine physical deletion is required, contact platform support.
+
+Historical events are retained indefinitely by default. Every calendar is backed up automatically and replicated across data centres.
+
+## Time zones
+
+Every calendar is bound to exactly one time zone. Every event's start, end and reserved-until timestamps are stored in UTC; the calendar's time zone is applied only at render time, so the same event always appears in a consistent local slot for readers of that calendar. If your organisation operates in multiple time zones — different branches, different countries — model each as its own calendar in the appropriate zone rather than trying to represent multiple zones in one calendar.
+
+Daylight-saving transitions and events that cross local midnight are handled by the render pipeline. Events that span midnight appear on both local days for consistent scanning.

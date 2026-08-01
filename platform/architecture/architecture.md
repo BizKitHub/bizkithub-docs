@@ -86,14 +86,18 @@ A modular architecture with 30+ specialized modules handling all business operat
 
 ### Data layer
 
+BizKitHub uses several storage systems side by side. Each is chosen for the shape of data it holds best, and every system is covered by strict backup, replication and access-control policies regardless of where it sits in the stack.
+
 <table>
 <thead>
 <tr><th>Store</th><th>Role</th></tr>
 </thead>
 <tbody>
-<tr><td>PostgreSQL</td><td>Primary database</td></tr>
-<tr><td>Redis</td><td>Cache &amp; sessions</td></tr>
-<tr><td>S3 storage</td><td>Files &amp; media</td></tr>
+<tr><td>PostgreSQL</td><td>Primary relational database — the source of truth for every business record.</td></tr>
+<tr><td>Blob storage</td><td>Uploaded images, generated PDFs, user files, backups and any other binary content.</td></tr>
+<tr><td>Redis</td><td>Ephemeral real-time data, cache and session storage where the ratio of writes to reads is high.</td></tr>
+<tr><td>Edge cache</td><td>Cached responses assembled from several sources — most commonly API responses, transformed images and other static output — served from the region nearest the caller.</td></tr>
+<tr><td>Git-backed filesystem</td><td>Version-controlled static assets distributed through the platform CDN. Content lives in Git and moves to the edge on deploy.</td></tr>
 </tbody>
 </table>
 

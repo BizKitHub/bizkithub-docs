@@ -60,3 +60,34 @@ BFF makes the most sense when you have multiple distinct client types with meani
 ## Conclusion
 
 The Backend for Frontend pattern trades a bit of extra infrastructure for significantly cleaner, faster, and more maintainable client-specific APIs. It's a popular choice in microservice architectures where different clients have genuinely different needs — and it lets frontend and backend teams move faster, with less friction, by giving each frontend the backend it actually needs.
+
+## The BizKitHub BFF
+
+BizKitHub applies this pattern in a specific way — the platform exposes two parallel HTTP surfaces on `api.bizkithub.com`, and understanding when each applies is important if you are integrating against the platform.
+
+The **public API** at `api.bizkithub.com/api/v1/*` (documented in the [API](/api) article) is the external contract: stable, versioned, authenticated by [API key](/api-key), and intended for external systems — merchant storefronts, partner integrations, mobile apps, third-party tools. It carries strong backwards-compatibility guarantees so that integrations built against it continue to work as the platform evolves.
+
+The **BFF layer** at `api.bizkithub.com/bff/*` is the second surface. It is not part of the public contract — it exists to serve BizKitHub's own administration UI at `admin.bizkithub.com` and any other in-house front-end the platform may add. Its shape is optimised for the exact needs of the admin: a single call typically returns everything a screen needs to render.
+
+### Key differences from the public API
+
+| Aspect | Public API | BFF |
+|--------|-----------|-----|
+| Base URL | `api.bizkithub.com/api/v1/*` | `api.bizkithub.com/bff/*` |
+| Auth | API key | Signed-in session cookie |
+| Contract stability | Versioned, long-term stable | Free to change with the admin UI |
+| Payload shape | Normalised, JSON-first | Tailored to the admin screen consuming it |
+| Caching | Uses cached snapshots where safe | Prefers fresh live data — no aggressive caching |
+| Intended consumer | External integrations | BizKitHub's own front-ends only |
+
+BFF endpoints prefer live database reads over cached snapshots because the operators consuming them expect to see the state as it is *right now* — a merchant editing a product should see the update reflected immediately in every subsequent screen, without waiting for a cache to invalidate. This is the opposite optimisation from the public catalog endpoints, which serve high-traffic public storefronts and are backed by cached snapshots refreshed on every write.
+
+### When not to use BFF
+
+If you are building an integration on top of BizKitHub — a marketplace importer, an accounting connector, a reporting tool, a mobile companion app — use the public API rather than the BFF. Reasons:
+
+- BFF endpoints are not versioned and can change without notice; a working integration today may break tomorrow.
+- Session-cookie authentication is not designed for headless clients.
+- Payload shapes are shaped for specific admin screens, not for generic consumption.
+
+The public API surface exposes every operation an integration needs; if you find yourself thinking a BFF endpoint would be more convenient, the correct path is to file a feature request against the public API.

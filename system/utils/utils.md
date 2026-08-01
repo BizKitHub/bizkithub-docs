@@ -22,6 +22,13 @@ BizKitHub exposes a small set of stateless HTTP utilities that any application c
 | [PDF generator](/pdf-generator) | `https://pdf.bizkithub.com/generator` | Render HTML into a downloadable PDF. |
 | [URL shortener](/url-shortener) | `https://xhp.cz/api/shorten` | Create short redirect URLs with click analytics. |
 
+## Internal normalisation utilities
+
+Beyond the network-facing utilities above, the platform ships a family of **stateless text normalisers** that are applied internally before any user-authored text is persisted. They are not accessible as endpoints — they are documented so integrators know what shape their input will land in after ingestion, and so operators can reason about the canonical form of stored fields (search matching, deduplication, exports).
+
+- [String normalisation](/string-normalisation) — the full family of text normalisers: slug generation, ASCII transliteration, HTML sanitisation, human-label conversion, description formatting for storefront rendering, and secret masking.
+- [Phone normalisation](/phone-normalisation) — canonical `+<prefix> <value>` storage format and the invariants every stored phone number satisfies.
+
 ## Common properties
 
 - **No authentication** required for basic usage.
