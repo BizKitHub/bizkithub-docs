@@ -106,4 +106,6 @@ A successful response confirms that the gateway received your request, resolved 
 - [Error Codes](/error-codes) — Learn about API error responses and how to handle them in your application.
 - [Rate Limiting](/rate-limiting) — Understand API rate limits and best practices for optimal performance.
 - [BFF](/bff) — Backend-for-Frontend endpoints used by BizKitHub's own administration UI.
-- [Order create API](/order-create-api), [Product catalog API](/product-catalog-api), [Customer account API](/customer-account-api) — end-to-end contracts for the most-used endpoints.
+- [Order create API](/order-create) — place an order from a storefront or POS.
+- [Product feed API](/product-feed) and [Product detail API](/product-detail) — catalog read endpoints, plus [Product variants](/product-variants).
+- [Customer register API](/customer-register), [Customer login API](/customer-login), [Customer account info API](/customer-account-info) — shopper-account endpoints for storefronts.

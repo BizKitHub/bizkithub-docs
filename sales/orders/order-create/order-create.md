@@ -1,5 +1,5 @@
 ---
-category: "developers/order-create-api"
+category: "sales/orders"
 tags: []
 published_at: "2026-08-01T00:00:00.000Z"
 ---
