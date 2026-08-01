@@ -21,7 +21,7 @@ BizKitHub provides a REST API that allows you to integrate our services into you
 
 ### 1. Get your API key
 
-First, you need to obtain an API key from your BizKitHub admin panel. The API key authenticates all your requests. See [How to get an API key](/api-key).
+First, you need to obtain an API key from your BizKitHub admin panel. The API key authenticates all your requests. See [How to get an API key](/api-key-overview).
 
 ### 2. Make HTTPS requests
 
@@ -43,7 +43,7 @@ The `apiKey` query parameter is mandatory for all API requests. Requests without
 
 ## API Endpoints
 
-For a complete list of all available endpoints, including request parameters and response formats, please refer to our interactive [Swagger documentation](/swagger). You can also [get an API key](/api-key) from the admin panel.
+For a complete list of all available endpoints, including request parameters and response formats, please refer to our interactive [Swagger documentation](/swagger). You can also [get an API key](/api-key-overview) from the admin panel.
 
 ## URL Structure
 
@@ -89,7 +89,7 @@ GET https://api.bizkithub.com/api/v1/ping/v1?apiKey=YOUR_API_KEY
 }
 ```
 
-Both channels are accepted on every endpoint, and they may be combined — what matters is that the key is supplied at least once. For details on key formats, prefixes, and rate-limit tiers, see the [API key](/api-key) article.
+Both channels are accepted on every endpoint, and they may be combined — what matters is that the key is supplied at least once. For details on key formats, prefixes, and rate-limit tiers, see the [API key](/api-key-overview) article.
 
 ## Quick health check
 
@@ -103,9 +103,9 @@ A successful response confirms that the gateway received your request, resolved 
 
 ## Related Topics
 
-- [Error Codes](/error-codes) — Learn about API error responses and how to handle them in your application.
-- [Rate Limiting](/rate-limiting) — Understand API rate limits and best practices for optimal performance.
-- [BFF](/bff) — Backend-for-Frontend endpoints used by BizKitHub's own administration UI.
-- [Order create API](/order-create) — place an order from a storefront or POS.
-- [Product feed API](/product-feed) and [Product detail API](/product-detail) — catalog read endpoints, plus [Product variants](/product-variants).
-- [Customer register API](/customer-register), [Customer login API](/customer-login), [Customer account info API](/customer-account-info) — shopper-account endpoints for storefronts.
+- [Error Codes](/error-codes-reference) — Learn about API error responses and how to handle them in your application.
+- [Rate Limiting](/rate-limiting-overview) — Understand API rate limits and best practices for optimal performance.
+- [BFF](/bff-overview) — Backend-for-Frontend endpoints used by BizKitHub's own administration UI.
+- [Order create API](/order-create-api) — place an order from a storefront or POS.
+- [Product feed API](/product-feed-api) and [Product detail API](/product-detail-api) — catalog read endpoints, plus [Product variants](/product-variants).
+- [Customer register API](/customer-register-api), [Customer login API](/customer-login-api), [Customer account info API](/customer-account-info-api) — shopper-account endpoints for storefronts.

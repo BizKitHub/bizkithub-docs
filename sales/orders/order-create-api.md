@@ -11,7 +11,7 @@ Order create API
 
 The order-create endpoint is the single entry point through which every external system — an e-shop storefront, a point-of-sale terminal, a mobile app, a booking widget, a partner integration — records a purchase in BizKitHub. It is intentionally the same endpoint whether the checkout produces a €5 digital download or a subscription with a twelve-month schedule; the flexibility lives in the payload, not in a matrix of specialised endpoints. Every field beyond the customer and a list of items is optional and inferred from the organisation's default configuration when omitted, so integrators can start with a minimal call and grow into the full contract as their business logic hardens.
 
-This article documents the public request and response shapes, the fields you can set, and the exact sequence of operations the platform performs on your behalf while creating the order. It is the developer-oriented counterpart to the [Orders](/orders) admin guide, which describes how the resulting record is then managed from the administration.
+This article documents the public request and response shapes, the fields you can set, and the exact sequence of operations the platform performs on your behalf while creating the order. It is the developer-oriented counterpart to the [Orders](/order-overview) admin guide, which describes how the resulting record is then managed from the administration.
 
 ## Endpoint
 
@@ -19,7 +19,7 @@ This article documents the public request and response shapes, the fields you ca
 POST https://api.bizkithub.com/api/v1/order/create
 ```
 
-Authentication is via the standard `apiKey` parameter (see the [API key](/api-key) article). No other headers are required beyond `Content-Type: application/json`.
+Authentication is via the standard `apiKey` parameter (see the [API key](/api-key-overview) article). No other headers are required beyond `Content-Type: application/json`.
 
 ## Minimum viable payload
 
@@ -32,7 +32,7 @@ export type CreateOrderRequest = {
 };
 ```
 
-The e-mail address is always required because it is the anchor by which the platform pairs the incoming order with an existing customer profile — or creates a new one if the address is being seen for the first time. Any additional customer fields you supply are merged into the profile using the platform's quality-scoring heuristics (see [Contacts](/contacts) for the merge rules).
+The e-mail address is always required because it is the anchor by which the platform pairs the incoming order with an existing customer profile — or creates a new one if the address is being seen for the first time. Any additional customer fields you supply are merged into the profile using the platform's quality-scoring heuristics (see [Contacts](/contact-overview) for the merge rules).
 
 ## Complete payload
 
@@ -188,7 +188,7 @@ When the request arrives, the platform executes a deterministic sequence of step
 15. **Total-price calculation.** The order total is computed from the items, the customer's available credits and the preferred payment method.
 16. **Total written.** The calculated total is persisted onto the order row.
 17. **Automatic credit payment.** If the order can be settled entirely from the customer's credit balance, the credits are deducted immediately and a corresponding order item is added for the credit application.
-18. **Confirmation e-mail.** A creation notification is enqueued to the customer using the organisation's default template for this event, routed through the platform e-mailer (see the [E-mailer](/e-mailer) article).
+18. **Confirmation e-mail.** A creation notification is enqueued to the customer using the organisation's default template for this event, routed through the platform e-mailer (see the [E-mailer](/emailer-overview) article).
 19. **Zero-total short-circuit.** If the final total is zero (typically because the whole order was paid in credits), the order is immediately marked as paid and the paid-order workflow — including its notifications — is executed.
 20. **Expiration scheduling.** If `expirationDate` was set and the order is unpaid, a background job is scheduled to cancel the order at that time if payment does not arrive first.
 21. **Tag writing.** Any `tags` supplied on the request are stored against the new order.
@@ -204,7 +204,7 @@ Prices submitted on line items are always **final** sale prices — VAT included
 
 ## Anonymous orders
 
-An order without a real customer — typical for physical point-of-sale checkouts — is routed to the organisation's built-in **anonymous customer** account. See [Contacts](/contacts) for the semantics of that account, including why it cannot be deleted and how it interacts with e-mail delivery.
+An order without a real customer — typical for physical point-of-sale checkouts — is routed to the organisation's built-in **anonymous customer** account. See [Contacts](/contact-overview) for the semantics of that account, including why it cannot be deleted and how it interacts with e-mail delivery.
 
 ## Webhooks and return URLs
 
@@ -214,7 +214,7 @@ If both URLs are supplied, you receive the state change on both channels. The we
 
 ## Related articles
 
-- [Orders](/orders) — the administration guide describing what happens to the order after creation.
-- [Order workflow](/order-workflow) — how order states, transitions and automated actions are modelled.
-- [API key](/api-key) — how to authenticate this request.
-- [Error codes](/error-codes) — how to interpret error responses from this endpoint.
+- [Orders](/order-overview) — the administration guide describing what happens to the order after creation.
+- [Order workflow](/workflow-overview) — how order states, transitions and automated actions are modelled.
+- [API key](/api-key-overview) — how to authenticate this request.
+- [Error codes](/error-codes-reference) — how to interpret error responses from this endpoint.

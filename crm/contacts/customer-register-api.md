@@ -11,7 +11,7 @@ Customer register API
 
 The register endpoint creates a new **registration request** for a shopper. On success the platform sends a confirmation e-mail (template code `customer-register-account`) to the supplied address; the shopper must click through it before the account is usable for sign-in. Until then the profile exists but is not yet activated.
 
-This is one of three storefront-integration endpoints for shopper accounts, together with the [customer login API](/customer-login) and the [customer account info API](/customer-account-info). For the concepts behind contacts, registered accounts and guests, see the [Contacts](/contacts) article.
+This is one of three storefront-integration endpoints for shopper accounts, together with the [customer login API](/customer-login-api) and the [customer account info API](/customer-account-info-api). For the concepts behind contacts, registered accounts and guests, see the [Contacts](/contact-overview) article.
 
 ## Endpoint
 
@@ -19,7 +19,7 @@ This is one of three storefront-integration endpoints for shopper accounts, toge
 POST https://api.bizkithub.com/contact/v1/register-account
 ```
 
-Authentication is via the standard `apiKey` parameter (see the [API key](/api-key) article).
+Authentication is via the standard `apiKey` parameter (see the [API key](/api-key-overview) article).
 
 ## Request body
 
@@ -43,7 +43,7 @@ export type CustomerRegisterRequest = {
 };
 ```
 
-The minimum accepted payload is a syntactically valid `email` and a non-empty `password`. Every other field is optional and can be added to the profile later, either through the administration or by re-sending it with a subsequent order — the platform merges new information into the profile using its quality-scoring rules (see [Contacts](/contacts) for the merge logic).
+The minimum accepted payload is a syntactically valid `email` and a non-empty `password`. Every other field is optional and can be added to the profile later, either through the administration or by re-sending it with a subsequent order — the platform merges new information into the profile using its quality-scoring rules (see [Contacts](/contact-overview) for the merge logic).
 
 ## Response
 
@@ -80,15 +80,15 @@ export type PublicCustomerRegisterAccountResponse =
 
 ## What happens after a successful call
 
-1. The confirmation e-mail is dispatched to the supplied address through the platform's [e-mailer](/e-mailer).
+1. The confirmation e-mail is dispatched to the supplied address through the platform's [e-mailer](/emailer-overview).
 2. The shopper clicks the confirmation link, which activates the profile.
-3. The shopper can now sign in using the [customer login API](/customer-login).
-4. Once signed in, the storefront loads the profile via the [customer account info API](/customer-account-info).
+3. The shopper can now sign in using the [customer login API](/customer-login-api).
+4. Once signed in, the storefront loads the profile via the [customer account info API](/customer-account-info-api).
 
 ## Related articles
 
-- [Customer login API](/customer-login) — sign a registered shopper in and obtain the session token.
-- [Customer account info API](/customer-account-info) — load the compact profile of the signed-in shopper.
-- [Contacts](/contacts) — administration guide covering contacts, quality scoring, anonymous customer.
-- [API key](/api-key) — how to authenticate the request.
-- [Error codes](/error-codes) — the platform's error-code conventions.
+- [Customer login API](/customer-login-api) — sign a registered shopper in and obtain the session token.
+- [Customer account info API](/customer-account-info-api) — load the compact profile of the signed-in shopper.
+- [Contacts](/contact-overview) — administration guide covering contacts, quality scoring, anonymous customer.
+- [API key](/api-key-overview) — how to authenticate the request.
+- [Error codes](/error-codes-reference) — the platform's error-code conventions.

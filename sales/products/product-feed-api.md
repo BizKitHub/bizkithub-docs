@@ -13,7 +13,7 @@ The product feed is the read endpoint that powers any many-item product listing 
 
 A **product** in the platform is broader than "an item with a price": it can be physical goods, a digital download, a virtual gift, an add-on service, a calendar-bound event (tickets, classes, camps), or a non-sellable directory entry (a trainer in a gym, a room in a venue). All of them live in the same virtual **product catalog** and are surfaced by this endpoint.
 
-For the admin-side counterpart — how products are created, priced and grouped from the administration — see the [Products](/products) article. This document is the developer contract for the feed endpoint. For a single-product detail response, see the [Product detail API](/product-detail).
+For the admin-side counterpart — how products are created, priced and grouped from the administration — see the [Products](/product-overview) article. This document is the developer contract for the feed endpoint. For a single-product detail response, see the [Product detail API](/product-detail-api).
 
 ## Endpoint
 
@@ -21,7 +21,7 @@ For the admin-side counterpart — how products are created, priced and grouped 
 GET https://api.bizkithub.com/product/v1/feed
 ```
 
-Authentication is via the standard `apiKey` parameter (see the [API key](/api-key) article).
+Authentication is via the standard `apiKey` parameter (see the [API key](/api-key-overview) article).
 
 ## Query parameters
 
@@ -62,7 +62,7 @@ export type ProductFeedItem = {
 };
 ```
 
-Each item in the feed is a compact representation intended for listing UI. Follow the item's `slug` to the [Product detail API](/product-detail) endpoint when the caller needs the full detail — long description, gallery, variants, physical dimensions, and all other rich fields.
+Each item in the feed is a compact representation intended for listing UI. Follow the item's `slug` to the [Product detail API](/product-detail-api) endpoint when the caller needs the full detail — long description, gallery, variants, physical dimensions, and all other rich fields.
 
 ## Ordering
 
@@ -76,9 +76,9 @@ The feed items are served from a cached snapshot refreshed on every catalog chan
 
 ## Related articles
 
-- [Product detail API](/product-detail) — the companion endpoint for a single product's full payload.
+- [Product detail API](/product-detail-api) — the companion endpoint for a single product's full payload.
 - [Product variants](/product-variants) — how variants are modelled and referenced.
-- [Products](/products) — administration guide.
-- [Product categories](/product-categories) — hierarchy of categories that the feed filters by.
-- [Order create API](/order-create) — placing an order referencing a product from the feed.
-- [API key](/api-key) — how to authenticate the request.
+- [Products](/product-overview) — administration guide.
+- [Product categories](/product-category-overview) — hierarchy of categories that the feed filters by.
+- [Order create API](/order-create-api) — placing an order referencing a product from the feed.
+- [API key](/api-key-overview) — how to authenticate the request.

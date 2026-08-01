@@ -18,7 +18,7 @@ In the administration, IoT (Internet of Things) refers to any physical device th
 Practically, this means that from a single interface, using the same browser where orders are processed, one can also unlock a door for a visitor, check a camera's battery status, or assign an access code to a tenant.
 ## Currently supported categories
 The portfolio of supported devices is gradually expanding according to the needs of organizations. At this moment, only one category is fully integrated into the system:
-- **Smart Locks (TTLock)** — electronic locks controlled via the TTLock cloud and managed in the [Smart Locks (`/iot-lock`)](iot-lock.md) module.
+- **Smart Locks (TTLock)** — electronic locks controlled via the TTLock cloud and managed in the [Smart Locks (`/iot-lock`)](/iot-lock-overview) module.
 > 💡 Other categories — environmental sensors, Wi-Fi gateways, cameras — can be gradually added. As soon as a new category becomes available, it will appear as a separate item in the main navigation and a link will also be added to this page to complete the overview.
 ## Authorization rules
 All IoT devices in the system are bound to a specific organization — the one that registered them. This simple binding is the foundation of the security model: a user sees and controls exclusively devices of their organization, and every command sent is checked against the current login context. This prevents, for example, an administrator of one branch from accidentally opening a lock at another branch, even if they knew the device ID.

@@ -65,7 +65,7 @@ The Backend for Frontend pattern trades a bit of extra infrastructure for signif
 
 BizKitHub applies this pattern in a specific way — the platform exposes two parallel HTTP surfaces on `api.bizkithub.com`, and understanding when each applies is important if you are integrating against the platform.
 
-The **public API** at `api.bizkithub.com/api/v1/*` (documented in the [API](/api) article) is the external contract: stable, versioned, authenticated by [API key](/api-key), and intended for external systems — merchant storefronts, partner integrations, mobile apps, third-party tools. It carries strong backwards-compatibility guarantees so that integrations built against it continue to work as the platform evolves.
+The **public API** at `api.bizkithub.com/api/v1/*` (documented in the [API](/api) article) is the external contract: stable, versioned, authenticated by [API key](/api-key-overview), and intended for external systems — merchant storefronts, partner integrations, mobile apps, third-party tools. It carries strong backwards-compatibility guarantees so that integrations built against it continue to work as the platform evolves.
 
 The **BFF layer** at `api.bizkithub.com/bff/*` is the second surface. It is not part of the public contract — it exists to serve BizKitHub's own administration UI at `admin.bizkithub.com` and any other in-house front-end the platform may add. Its shape is optimised for the exact needs of the admin: a single call typically returns everything a screen needs to render.
 

@@ -6,8 +6,8 @@ published_at: "2026-08-01T00:00:00.000Z"
 ---
 
 
-Error codes
-===========
+Error codes reference
+=====================
 
 Every failure path in the BizKitHub platform is a **named error**, not a free-form message. When an API call fails for a documented reason, the response carries a stable, unique code that can be looked up in the error registry and pattern-matched by client integrations. This is the developer-facing complement to the [API](/api) article: it explains how to interpret the errors those endpoints return.
 
@@ -47,5 +47,5 @@ For example, `https://docs.bizkithub.com/errors/PUBLIC_API_KEY_DOES_NOT_EXIST` d
 ## Related articles
 
 - [API](/api) — request/response conventions of the platform's REST API.
-- [API key](/api-key) — the most common source of authentication-related error codes.
-- [Rate limiting](/rate-limiting) — errors related to per-key quotas.
+- [API key](/api-key-overview) — the most common source of authentication-related error codes.
+- [Rate limiting](/rate-limiting-overview) — errors related to per-key quotas.

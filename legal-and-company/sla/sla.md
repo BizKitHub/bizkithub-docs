@@ -117,4 +117,4 @@ Real-time service status is available on the status pages above. Historical data
 
 ## Contact
 
-Questions about this SLA go to [/support](/support).
+Questions about this SLA go to [/support](/support-overview).

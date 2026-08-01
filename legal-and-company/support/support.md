@@ -23,7 +23,7 @@ Choose the support channel that works best for you. We're here to help through m
 
 ### Documentation
 
-Comprehensive guides, API reference, tutorials, and code examples to help you integrate quickly. Browse the docs at [/guides](/guides).
+Comprehensive guides, API reference, tutorials, and code examples to help you integrate quickly. Browse the docs at [/guides](/guides-overview).
 
 ### Community Forum
 
@@ -48,19 +48,19 @@ Our technical support team is available during business hours to help with compl
 
 ### How do I get started with the BizKitHub API?
 
-Start with our Getting Started guide that covers authentication setup, making your first API call, and handling responses. Most developers are up and running within 15 minutes. See [Getting Started Guide](/guides).
+Start with our Getting Started guide that covers authentication setup, making your first API call, and handling responses. Most developers are up and running within 15 minutes. See [Getting Started Guide](/guides-overview).
 
 ### What are the API rate limits?
 
-Rate limits depend on your plan: Free tier allows 1,000 requests/hour, Starter offers 10,000, and Professional provides 100,000. Enterprise customers get custom limits. See [rate limits](/rate-limiting).
+Rate limits depend on your plan: Free tier allows 1,000 requests/hour, Starter offers 10,000, and Professional provides 100,000. Enterprise customers get custom limits. See [rate limits](/rate-limiting-overview).
 
 ### How do I authenticate API requests?
 
-Include your API key in the `Authorization` header as a Bearer token. Never expose API keys in client-side code — use server-side proxies or edge functions instead. See [API Key Documentation](/api-key).
+Include your API key in the `Authorization` header as a Bearer token. Never expose API keys in client-side code — use server-side proxies or edge functions instead. See [API Key Documentation](/api-key-overview).
 
 ### Can I use webhooks for real-time notifications?
 
-Yes, webhooks provide instant notifications when events occur. Configure endpoints in your dashboard and we'll send signed payloads for secure verification. See the [Webhook Setup Guide](/guides).
+Yes, webhooks provide instant notifications when events occur. Configure endpoints in your dashboard and we'll send signed payloads for secure verification. See the [Webhook Setup Guide](/guides-overview).
 
 ### How do I report bugs or request features?
 
@@ -72,9 +72,9 @@ All systems are operational. Our infrastructure maintains 99.99% uptime with rea
 
 ## Quick Resources
 
-- [API Changelog](/changelog)
-- [Rate Limiting](/rate-limiting)
-- [Error Reference](/errors)
+- [API Changelog](/changelog-overview)
+- [Rate Limiting](/rate-limiting-overview)
+- [Error Reference](/error-codes-reference)
 
 ## Still Need Help?
 

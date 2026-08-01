@@ -18,9 +18,9 @@ BizKitHub exposes a small set of stateless HTTP utilities that any application c
 
 | Utility | Endpoint | Purpose |
 |---------|----------|---------|
-| [QR code generator](/qr-code) | `https://cdn.bizkithub.com/qr` | Encode any text or URL into a PNG QR code. |
-| [PDF generator](/pdf-generator) | `https://pdf.bizkithub.com/generator` | Render HTML into a downloadable PDF. |
-| [URL shortener](/url-shortener) | `https://xhp.cz/api/shorten` | Create short redirect URLs with click analytics. |
+| [QR code generator](/qr-code-overview) | `https://cdn.bizkithub.com/qr` | Encode any text or URL into a PNG QR code. |
+| [PDF generator](/pdf-generator-overview) | `https://pdf.bizkithub.com/generator` | Render HTML into a downloadable PDF. |
+| [URL shortener](/url-shortener-overview) | `https://xhp.cz/api/shorten` | Create short redirect URLs with click analytics. |
 
 ## Internal normalisation utilities
 

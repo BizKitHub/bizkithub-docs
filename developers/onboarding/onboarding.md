@@ -106,9 +106,9 @@ After successful registration, you will receive an email with important informat
 
 ## Onboarding Support
 
-- [Technical Support](/support) — help with technical issues
+- [Technical Support](/support-overview) — help with technical issues
 - [Documentation](/api) — guides and manuals for users
-- [Organizations](/organization) — information about organization management
+- [Organizations](/organization-overview) — information about organization management
 
 ## Get Started
 

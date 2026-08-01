@@ -47,5 +47,5 @@ When a phone number is shown to a human — in the administration, on a printed 
 
 ## Related articles
 
-- [Utils](/utils) — index of the platform's stateless utilities.
+- [Utils](/utils-overview) — index of the platform's stateless utilities.
 - [String normalisation](/string-normalisation) — related normalisers for free-form text fields.

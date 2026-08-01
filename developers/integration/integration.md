@@ -32,7 +32,7 @@ Follow these steps to begin your integration with BizKitHub.
 
 ### 1. Request API access
 
-Contact your BizKitHub account manager or request API credentials through the admin panel. See [Get API Key](/api-key).
+Contact your BizKitHub account manager or request API credentials through the admin panel. See [Get API Key](/api-key-overview).
 
 ### 2. Review API documentation
 
@@ -44,7 +44,7 @@ Use your `DEV_` prefixed API key for development and testing before going to pro
 
 ### 4. Implement &amp; test
 
-Build your integration, handle error codes properly, and respect rate limits. See [Error Codes](/errors).
+Build your integration, handle error codes properly, and respect rate limits. See [Error Codes](/error-codes-reference).
 
 ## Available API Modules
 
@@ -74,7 +74,7 @@ Choose the integration approach that best fits your needs.
 
 Build your own storefront using BizKitHub as a headless commerce backend. Full control over design and UX.
 
-Use cases: online stores, mobile commerce apps, Progressive Web Apps. See [E-Shop Quickstart](/eshop-quickstart).
+Use cases: online stores, mobile commerce apps, Progressive Web Apps. See [E-Shop Quickstart](/eshop-quickstart-overview).
 
 ### ERP &amp; Business Systems
 
@@ -92,7 +92,7 @@ Use cases: email marketing, analytics platforms, CRM sync. See [API reference](/
 
 Build automated workflows triggered by BizKitHub events using webhooks and API calls.
 
-Use cases: order processing, notifications, data pipelines. See [workflow](/workflow).
+Use cases: order processing, notifications, data pipelines. See [workflow](/workflow-overview).
 
 ## Technical Requirements
 
@@ -127,9 +127,9 @@ Ensure your integration follows security best practices.
 
 ## Related Resources
 
-- [E-Shop Quickstart](/eshop-quickstart)
-- [Platform Architecture](/architecture)
-- [Security](/security)
-- [Rate Limiting](/rate-limiting)
-- [Get API Key](/api-key)
-- [Contact Support](/support)
+- [E-Shop Quickstart](/eshop-quickstart-overview)
+- [Platform Architecture](/architecture-overview)
+- [Security](/security-overview)
+- [Rate Limiting](/rate-limiting-overview)
+- [Get API Key](/api-key-overview)
+- [Contact Support](/support-overview)

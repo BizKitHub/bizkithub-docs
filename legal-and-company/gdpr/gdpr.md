@@ -50,7 +50,7 @@ As a data subject, you have the right to:
 
 ## Sub-processors
 
-We share limited personal data with vetted sub-processors that help us deliver the service (hosting, e-mail delivery, analytics, payments). The current list, their locations, and the safeguards we apply are published at [/subprocessors](/subprocessors).
+We share limited personal data with vetted sub-processors that help us deliver the service (hosting, e-mail delivery, analytics, payments). The current list, their locations, and the safeguards we apply are published at [/subprocessors](/subprocessors-overview).
 
 ## International transfers
 
@@ -58,7 +58,7 @@ Where a sub-processor is located outside the EEA, transfers are governed by the 
 
 ## Security
 
-Technical and organisational measures include TLS 1.3 for all traffic, encryption at rest for the database, row-level tenant isolation, role-based access control, mandatory 2FA for administrators, and continuous audit logging. Detailed security posture is described at [/security](/security).
+Technical and organisational measures include TLS 1.3 for all traffic, encryption at rest for the database, row-level tenant isolation, role-based access control, mandatory 2FA for administrators, and continuous audit logging. Detailed security posture is described at [/security](/security-overview).
 
 ## Contact
 

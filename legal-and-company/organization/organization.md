@@ -93,7 +93,7 @@ A flexible membership system enables efficient team and data access management.
 
 Upon creating an organization, the free **BASIC** plan is automatically activated, which includes basic features and limits to get you started.
 
-See the [free tier documentation](/free-tier) to learn more about plans.
+See the [free tier documentation](/free-tier-overview) to learn more about plans.
 
 ## API Key Issuance
 
@@ -115,8 +115,8 @@ Ability to create multiple keys with different permissions and restrictions.
 
 Easy connection with your applications and external systems.
 
-See the [API key documentation](/api-key) for more details.
+See the [API key documentation](/api-key-overview) for more details.
 
 ## Get Started
 
-Create your organization and gain access to all BizKitHub platform features. Registration is free and takes just a few minutes. Sign up at [https://bizkithub.com/register](https://bizkithub.com/register) or follow the [registration guide](/onboarding).
+Create your organization and gain access to all BizKitHub platform features. Registration is free and takes just a few minutes. Sign up at [https://bizkithub.com/register](https://bizkithub.com/register) or follow the [registration guide](/onboarding-overview).

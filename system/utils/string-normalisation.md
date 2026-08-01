@@ -94,5 +94,5 @@ The gentlest normaliser: safe, generic formatting fixes that can be applied to a
 
 ## Related articles
 
-- [Utils](/utils) — index of the platform's stateless utilities.
+- [Utils](/utils-overview) — index of the platform's stateless utilities.
 - [Phone normalisation](/phone-normalisation) — dedicated normalisation rules for phone numbers.

@@ -9,7 +9,7 @@ published_at: "2026-08-01T00:00:00.000Z"
 Product detail API
 ==================
 
-The product detail endpoint returns the complete public payload of a single product — everything a storefront needs to render a product page in one call: name, short and long description, gallery, variants, physical dimensions, category assignment, event data, and custom fields. It is the companion to the [Product feed API](/product-feed), which returns compact list items suitable for browse pages.
+The product detail endpoint returns the complete public payload of a single product — everything a storefront needs to render a product page in one call: name, short and long description, gallery, variants, physical dimensions, category assignment, event data, and custom fields. It is the companion to the [Product feed API](/product-feed-api), which returns compact list items suitable for browse pages.
 
 The endpoint is designed to be hit on every product page view. The response is served from an internally cached snapshot that is refreshed on every catalog change, so it stays fast even under high traffic and even when the underlying data model is complex.
 
@@ -19,7 +19,7 @@ The endpoint is designed to be hit on every product page view. The response is s
 GET https://api.bizkithub.com/product/v1/detail?slug=xxx
 ```
 
-The `slug` query parameter is required and must match the canonical product slug (unique within the organisation). Authentication is via the standard `apiKey` parameter (see the [API key](/api-key) article).
+The `slug` query parameter is required and must match the canonical product slug (unique within the organisation). Authentication is via the standard `apiKey` parameter (see the [API key](/api-key-overview) article).
 
 If the slug does not resolve to a visible product, the endpoint returns the platform error `PUBLIC_PRODUCT_DOES_NOT_EXIST`. A product is considered non-visible if it is inactive, soft-deleted, or the slug simply does not exist.
 
@@ -161,8 +161,8 @@ The detail response is served from a cached snapshot refreshed on every catalog 
 
 ## Related articles
 
-- [Product feed API](/product-feed) — the companion endpoint for many-item listings.
+- [Product feed API](/product-feed-api) — the companion endpoint for many-item listings.
 - [Product variants](/product-variants) — how variants are modelled and referenced.
-- [Products](/products) — administration guide.
-- [Order create API](/order-create) — placing an order referencing this product.
-- [API key](/api-key) — how to authenticate the request.
+- [Products](/product-overview) — administration guide.
+- [Order create API](/order-create-api) — placing an order referencing this product.
+- [API key](/api-key-overview) — how to authenticate the request.

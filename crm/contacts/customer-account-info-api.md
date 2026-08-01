@@ -13,7 +13,7 @@ The account-info endpoint returns a compact snapshot of the currently signed-in 
 
 The endpoint intentionally does not return the full contact profile — that would be heavier than most page renders need, and the fields it does return are already sufficient to render an account widget, decide credit-related UI, and gate premium content. For fields that are not exposed here (address, communication history, order history), call the specific endpoint that owns them.
 
-This is one of three storefront-integration endpoints for shopper accounts, together with the [customer register API](/customer-register) and the [customer login API](/customer-login). For the concepts behind contacts, `cuRefNo`, credit and the trust score, see the [Contacts](/contacts) article.
+This is one of three storefront-integration endpoints for shopper accounts, together with the [customer register API](/customer-register-api) and the [customer login API](/customer-login-api). For the concepts behind contacts, `cuRefNo`, credit and the trust score, see the [Contacts](/contact-overview) article.
 
 ## Endpoint
 
@@ -21,7 +21,7 @@ This is one of three storefront-integration endpoints for shopper accounts, toge
 GET https://api.bizkithub.com/contact/v1/get-account-info?identityId=xxx
 ```
 
-The `identityId` is the opaque session token returned by the [customer login API](/customer-login). Authentication is via the standard `apiKey` parameter (see the [API key](/api-key) article).
+The `identityId` is the opaque session token returned by the [customer login API](/customer-login-api). Authentication is via the standard `apiKey` parameter (see the [API key](/api-key-overview) article).
 
 ## Response
 
@@ -75,7 +75,7 @@ The response reflects the current server-side session state at the moment of the
 
 ## Related articles
 
-- [Customer register API](/customer-register) — create a new shopper account.
-- [Customer login API](/customer-login) — sign a shopper in and obtain the `identityId`.
-- [Contacts](/contacts) — administration guide covering `cuRefNo`, credit, quality scoring and blocking.
-- [API key](/api-key) — how to authenticate the request.
+- [Customer register API](/customer-register-api) — create a new shopper account.
+- [Customer login API](/customer-login-api) — sign a shopper in and obtain the `identityId`.
+- [Contacts](/contact-overview) — administration guide covering `cuRefNo`, credit, quality scoring and blocking.
+- [API key](/api-key-overview) — how to authenticate the request.

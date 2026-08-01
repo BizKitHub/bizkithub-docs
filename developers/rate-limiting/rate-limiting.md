@@ -105,4 +105,4 @@ Use webhooks instead of polling when possible. This eliminates unnecessary API c
 
 ## Need Higher Limits?
 
-Enterprise customers get custom rate limits tailored to their specific requirements, dedicated infrastructure, and priority support. See the [API documentation](/api) or contact sales through [support](/support).
+Enterprise customers get custom rate limits tailored to their specific requirements, dedicated infrastructure, and priority support. See the [API documentation](/api) or contact sales through [support](/support-overview).

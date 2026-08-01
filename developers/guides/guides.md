@@ -17,7 +17,7 @@ Guides are organized into the following categories: All, Basics, Security, Integ
 
 ## Available Guides
 
-### [Authentication](/api-key)
+### [Authentication](/api-key-overview)
 
 Secure your API requests with proper authentication methods.
 
@@ -25,7 +25,7 @@ Secure your API requests with proper authentication methods.
 - Level: Beginner
 - Duration: 10 min read
 
-### [Webhooks](/guides/webhooks)
+### [Webhooks](/integration-overview)
 
 Set up real-time notifications for your application.
 
@@ -33,7 +33,7 @@ Set up real-time notifications for your application.
 - Level: Intermediate
 - Duration: 15 min read
 
-### [Rate Limiting](/guides/rate-limits)
+### [Rate Limiting](/rate-limiting-overview)
 
 Understand API rate limits and how to handle them gracefully.
 
@@ -41,7 +41,7 @@ Understand API rate limits and how to handle them gracefully.
 - Level: Intermediate
 - Duration: 8 min read
 
-### [Error Handling](/guides/error-codes)
+### [Error Handling](/error-codes-reference)
 
 Best practices for handling API errors and edge cases.
 
@@ -49,7 +49,7 @@ Best practices for handling API errors and edge cases.
 - Level: Intermediate
 - Duration: 12 min read
 
-### [Advanced Filtering](/guides/filtering)
+### [Advanced Filtering](/guides-overview)
 
 Use advanced query parameters to filter and sort data efficiently.
 
@@ -60,4 +60,4 @@ Use advanced query parameters to filter and sort data efficiently.
 ## Popular Topics
 
 - [API Reference](/api) — Explore the complete API documentation with examples.
-- [Best Practices](/guides/error-codes) — Learn industry best practices for API integration and error handling.
+- [Best Practices](/error-codes-reference) — Learn industry best practices for API integration and error handling.

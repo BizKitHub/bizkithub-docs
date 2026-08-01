@@ -11,7 +11,7 @@ Product variants
 
 Variants let a merchant sell multiple versions of the same underlying product without maintaining a separate product record for every combination. Classic examples: T-shirts in several sizes and colours, phones offered with several storage capacities, coffee subscriptions with different grinds. Each variant is treated as a **separate stock-keeping unit** with its own identifier, its own price and its own stock, but shares the parent product's marketing copy, gallery, categories and tax rate.
 
-This article documents the variant data model as exposed through the public API — how variants are shaped in responses, how prices work, and how to reference a specific variant when placing an order. For the administration-side view — creating variants, editing prices, marking a combination as inactive — see the [Products](/products) article.
+This article documents the variant data model as exposed through the public API — how variants are shaped in responses, how prices work, and how to reference a specific variant when placing an order. For the administration-side view — creating variants, editing prices, marking a combination as inactive — see the [Products](/product-overview) article.
 
 ## Variant space
 
@@ -21,11 +21,11 @@ Combinations that are not produced (a colour that is not manufactured in a parti
 
 ## Where variants appear on API responses
 
-### On the [product feed](/product-feed)
+### On the [product feed](/product-feed-api)
 
 The feed exposes only enough information to render a listing item. Variant-level detail is not returned in feed responses — the storefront should either show the parent product with a generic "select variant" affordance and defer the picker to the detail page, or fetch the detail explicitly when it needs per-variant data.
 
-### On the [product detail](/product-detail)
+### On the [product detail](/product-detail-api)
 
 The detail response carries the parent product plus a `variantItems` array with one entry per active variant. It also sets the parent product's `isVariantProduct` flag to `true` when at least one active variant exists. When that flag is set, a storefront must require the shopper to pick a variant before adding to cart.
 
@@ -61,7 +61,7 @@ Internally the merchant may enter the variant price either as an **absolute valu
 
 ## Ordering a specific variant
 
-When placing an order for a variant product through the [order create API](/order-create), the line item must reference both the parent product and the specific variant:
+When placing an order for a variant product through the [order create API](/order-create-api), the line item must reference both the parent product and the specific variant:
 
 ```json
 {
@@ -81,7 +81,7 @@ If the parent product has variants (`isVariantProduct: true` on the detail respo
 
 ## Related articles
 
-- [Products](/products) — administration guide covering variant creation and editing.
-- [Product feed API](/product-feed) — many-item listings.
-- [Product detail API](/product-detail) — the endpoint that surfaces `variantItems`.
-- [Order create API](/order-create) — how to place an order that references a variant.
+- [Products](/product-overview) — administration guide covering variant creation and editing.
+- [Product feed API](/product-feed-api) — many-item listings.
+- [Product detail API](/product-detail-api) — the endpoint that surfaces `variantItems`.
+- [Order create API](/order-create-api) — how to place an order that references a variant.
