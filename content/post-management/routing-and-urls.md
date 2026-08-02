@@ -1,7 +1,12 @@
 ---
+id: "frpJD26Ft94icO9q"
 category: "content/post-management"
-tags: ["posts", "routing", "urls", "seo"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "routing"
+  - "urls"
+  - "seo"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

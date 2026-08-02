@@ -1,7 +1,13 @@
 ---
+id: "rY0HqzP24Q9E9T4y"
 category: "content/post-management"
-tags: ["posts", "git", "import", "export", "markdown"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "git"
+  - "import"
+  - "export"
+  - "markdown"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

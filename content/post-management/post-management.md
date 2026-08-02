@@ -1,7 +1,10 @@
 ---
 id: "d4i21CrECN9V2yKs"
 category: "content/post-management"
-tags: ["posts", "overview", "content"]
+tags:
+  - "posts"
+  - "overview"
+  - "content"
 published_at: "2026-04-07T15:18:08.877Z"
 ---
 

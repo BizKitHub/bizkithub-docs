@@ -1,7 +1,11 @@
 ---
+id: "1tbjqrLjc1P751X6"
 category: "content/post-management"
-tags: ["posts", "analytics", "views"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "analytics"
+  - "views"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

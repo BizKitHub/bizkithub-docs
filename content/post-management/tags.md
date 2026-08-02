@@ -1,7 +1,11 @@
 ---
+id: "1vm7Hi745ts1I5EK"
 category: "content/post-management"
-tags: ["posts", "tags", "taxonomy"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "tags"
+  - "taxonomy"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

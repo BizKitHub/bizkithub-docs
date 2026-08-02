@@ -1,7 +1,12 @@
 ---
+id: "rjUkyo20qm6giz7b"
 category: "content/post-management"
-tags: ["posts", "translations", "i18n", "multilingual"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "translations"
+  - "i18n"
+  - "multilingual"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

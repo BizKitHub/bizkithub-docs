@@ -1,7 +1,11 @@
 ---
+id: "JO5C15Y6Vo75f4o2"
 category: "content/post-management"
-tags: ["posts", "search", "fulltext"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "search"
+  - "fulltext"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

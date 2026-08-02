@@ -1,7 +1,11 @@
 ---
+id: "oAyca6k9L3kqPMI5"
 category: "content/post-management"
-tags: ["posts", "ai", "automation"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "ai"
+  - "automation"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

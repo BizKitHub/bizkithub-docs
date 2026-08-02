@@ -1,7 +1,12 @@
 ---
+id: "rnK9wfhIJavPB6WQ"
 category: "content/post-management"
-tags: ["posts", "images", "gallery", "ai"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "images"
+  - "gallery"
+  - "ai"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

@@ -1,7 +1,11 @@
 ---
+id: "GzhGPB4E7v4Ic4PZ"
 category: "content/post-management"
-tags: ["posts", "feedback", "ratings"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "feedback"
+  - "ratings"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

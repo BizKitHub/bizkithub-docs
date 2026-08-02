@@ -1,7 +1,11 @@
 ---
+id: "5Rt8C6u8oCel3ixj"
 category: "content/post-management"
-tags: ["posts", "attachments", "downloads"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "attachments"
+  - "downloads"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

@@ -1,7 +1,11 @@
 ---
+id: "LryMs9c60DbO1VLL"
 category: "content/post-management"
-tags: ["posts", "bulk", "operations"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "bulk"
+  - "operations"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

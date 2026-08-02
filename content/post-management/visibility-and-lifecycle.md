@@ -1,7 +1,12 @@
 ---
+id: "rxaPn255Qwa6XVQj"
 category: "content/post-management"
-tags: ["posts", "publishing", "scheduling", "visibility"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "publishing"
+  - "scheduling"
+  - "visibility"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 

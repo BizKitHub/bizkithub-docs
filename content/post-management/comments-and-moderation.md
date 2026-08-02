@@ -1,7 +1,11 @@
 ---
+id: "L4A7MK08O316Loie"
 category: "content/post-management"
-tags: ["posts", "comments", "moderation"]
-published_at: "2026-08-02T09:59:43.000Z"
+tags:
+  - "posts"
+  - "comments"
+  - "moderation"
+published_at: "2026-08-02T00:00:00.000Z"
 ---
 
 
