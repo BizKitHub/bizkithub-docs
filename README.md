@@ -28,4 +28,16 @@ kept in the database and are refreshed on import. Media attachments (images,
 files) are NOT exported — they live in blob storage and are referenced by
 absolute HTTPS URLs inside the Markdown body.
 
-For the full contributor workflow (both human and AI), see `INSTRUCTIONS.md`.
+## Contributor workflow
+
+Two files govern how content lands in this repository:
+
+- [`INSTRUCTIONS.md`](./INSTRUCTIONS.md) — mechanics. File format, frontmatter
+  fields, the `id` invariant, round-trip semantics. Short.
+- [`AUTHORING.md`](./AUTHORING.md) — content. Who the docs are for, how to
+  structure an article, what to write, what to never write (internal
+  identifiers), voice and tone, section templates, coverage goal,
+  anti-patterns. Long — but every section earns its space.
+
+Read both before you edit or create your first article. Human or AI agent —
+same guide, same rules.

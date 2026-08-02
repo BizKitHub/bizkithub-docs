@@ -1,5 +1,12 @@
 # INSTRUCTIONS — Editing Posts in this Repository
 
+> **Two files, two concerns.** This file covers the **mechanics** — file
+> format, frontmatter fields, the `id` invariant, round-trip semantics
+> with the platform. For **content authoring** — voice, structure, what
+> to write, what to avoid, section templates, coverage goals — read
+> [`AUTHORING.md`](./AUTHORING.md). Read both before you write your first
+> article; keep both open while you write.
+
 ## For humans
 
 - Every post is a single `.md` file with a YAML frontmatter header, followed
@@ -25,19 +32,24 @@
 
 When editing or creating posts programmatically:
 
-1. Preserve the frontmatter block verbatim except for the fields you are
+1. **Read [`AUTHORING.md`](./AUTHORING.md) first.** It defines the writing
+   contract — audience, voice, structure, section templates, confidentiality
+   rules (no internal identifiers), coverage goals, anti-patterns. This
+   file is only about the mechanical shape of the frontmatter and the
+   round-trip.
+2. Preserve the frontmatter block verbatim except for the fields you are
    changing. In particular, never remove or alter the `id` field.
-2. When creating a new post, omit the `id` field (do not invent one). The
+3. When creating a new post, omit the `id` field (do not invent one). The
    import pipeline will assign a canonical identifier and write it back on
    the next round-trip export.
-3. Use YAML flow strings (double-quoted, with standard JSON escapes) for any
+4. Use YAML flow strings (double-quoted, with standard JSON escapes) for any
    string that contains special characters. The exporter already emits values
    in this shape.
-4. The body of the file is authored in the primary locale of the organisation
+5. The body of the file is authored in the primary locale of the organisation
    (declared once in `README.md`, not per-file). Translations to other
    locales are re-derived from the primary locale on import — do not
    hand-translate here.
-5. Media (images, attachments) is not exported. Reference existing media by
+6. Media (images, attachments) is not exported. Reference existing media by
    its absolute HTTPS URL, exactly as the platform emits it. New media must
    be uploaded via the admin UI before it can be referenced from here.
 
