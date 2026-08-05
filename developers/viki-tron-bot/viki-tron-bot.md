@@ -15,8 +15,8 @@ VikiTronBot is the public-internet crawler behind [VikiTron](https://vikitron.co
 
 - **User-Agent:** `VikiTronBot/1.0 (+https://vikitron.com/bot)`
 - **Contact for webmasters:**
-    - `abuse@bizkithub.com` — DMCA and abuse reports
-    - `support@bizkithub.com` — technical questions
+- `abuse@bizkithub.com` — DMCA and abuse reports
+- `support@bizkithub.com` — technical questions
 - **IP ranges:** will be published on this page. We recommend whitelisting at CIDR level once ranges are announced.
 
 ## Crawling policies

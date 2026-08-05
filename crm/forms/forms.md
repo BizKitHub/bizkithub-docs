@@ -10,43 +10,81 @@ Forms
 =====
 
 Forms are a fundamental way in every digital operation to get structured information from a visitor — whether it's a simple contact inquiry, event registration, satisfaction survey, or complaint request. The `/form` module therefore serves as a universal tool for designing, publishing, and managing such forms. The administrator creates their own forms as needed, defines their fields, and views submitted responses in the same interface. The entire philosophy of the module is based on the idea that a form is not a rigid template but a living object that can be modified, deactivated, copied, and further developed over time — and the history of already received data remains consistent, even as the underlying structure changes.
+
 ## Form Overview
-The main page of the module displays a list of all forms for the current organization. The overview is designed so that the administrator can see at a glance what is currently actively collecting data and where new responses are being added. Rows are therefore sorted by the date of the last modification — the one worked on most recently is displayed first. The table automatically refreshes every 20 seconds, so new responses immediately increase the record counter.
-In each row, the user will find the **form name** (which also serves as a link to the detail), an additional **description**, an **active** flag indicating whether the form is currently published on the website, the **number of records** submitted by visitors, and a pair of **creation and last modification dates**.
+
+The main page of the module displays a list of all forms for the current organization. The overview is designed so that the administrator can see at a glance what is currently actively collecting data and where new responses are being added. Rows are therefore sorted by the date of the last modification — the one worked on most recently is displayed first. The table automatically refreshes every 20 seconds, so new responses immediately increase the record counter. In each row, the user will find the **form name** (which also serves as a link to the detail), an additional **description**, an **active** flag indicating whether the form is currently published on the website, the **number of records** submitted by visitors, and a pair of **creation and last modification dates**.
+
 ## Creating a New Form
+
 A new form is created using the **Add** button in the upper right corner. The form only requires a **name**, optionally a **code (slug)**, and a **description**. The code is a URL-friendly identifier under which the form will be published on the website; if the administrator does not enter it, the system will automatically derive it from the name and, in case of a collision with an existing form, append a numerical suffix (typically `contact-2`). A new form is created in an active state and without a single field — the fields themselves are added in the detail, where the administrator has more space for designing the structure.
+
 > ℹ️ The code serves as a URL-friendly identifier and is used when embedding the form into public pages.
+
 ## Form Detail
+
 Clicking on a specific form opens its detail, which divides the work into two main areas: **Records** show responses from visitors, and **Structure** is used to design the fields. This separation reflects two typical operating modes — either you are just building the form, or you are already collecting data from it and checking what is coming in. Clicking on a specific response in the Records tab opens the detail of an individual submission with all entered values and the exact time.
+
 ## Field Types
+
 A form consists of fields that cover common categories of user input. Available are **heading** (a visual element only for dividing a longer form into sections), single-line **text** for short data like name or email, multi-line **textarea** for longer messages, a field for selecting a **date** from a calendar, a numeric **number** field, a checkbox **yes/no**, and finally a **selection (select)** in the form of a dropdown menu with predefined options. This repertoire covers the vast majority of common data collection scenarios while remaining simple enough not to overwhelm the visitor.
+
 ## Field Management
+
 In the form detail, the administrator has full control over each field. **Adding** creates a new empty text field at the end of the form with an automatically generated key, which can be renamed at any time. **Duplication** creates an exact copy next to the original — including type, label, and options — and receives a new unique key. **Deleting** a field is permanent, but values from already submitted records remain in history because the system stores the field label valid at the time of submission (see below). **Renaming the key** changes the programmatic identifier of the field, and in case of a collision with another key within the form, a numerical suffix is automatically appended. **The order of fields** is changed by dragging and dropping in the editor and is saved as a complete readjustment of all indexes, so there is no risk of a partially saved state.
+
 ### Individual Field Configuration
+
 Each field can have a **label** (text displayed to the visitor), additional **help text** below the field, a **required** checkbox (required fields are marked with an asterisk on the website and their empty value blocks submission), a **default value** that the visitor sees on first display, **options** (relevant for select type, key → label pairs), and an **active** flag for temporary deactivation of the field without deleting it.
+
 ## Form Lifecycle
+
 A form has only two states, which differ in how it behaves towards the public website. An **active** form is published, and visitors can submit responses to it. An **inactive** form is temporarily hidden — submissions stop, but all already received records remain available in the administration. Deactivation is useful for seasonal forms (registration for a summer event), for forms in preparation that are still awaiting completion, and for temporarily suspended forms requiring modifications.
+
 ## Response Validation
+
 When submitting a form from the public website, the system verifies that the incoming data makes sense and corresponds to the settings of individual fields. Required fields must be filled, numeric fields must contain a valid number, date fields a valid date, select fields may only contain predefined values, and for text fields, minimum and maximum length are checked. In case of an error, the form is not submitted, and a specific error message in Czech is displayed next to the problematic field to the visitor (e.g., "Field must be a number" or "Value must be at least 3 characters"), so they can correct it without technical knowledge.
+
 ## Copying a Form
+
 The context menu above the form offers the **Copy Form** action, which is useful whenever you need to create a variant of an existing form without affecting the original. The copy inherits the entire field structure, gets a new unique code (again with an optional numerical suffix in case of a collision), and is intentionally created as **inactive** — this prevents situations where a copy might unexpectedly publish an unfinished version. Logically, it has zero records, so the copy starts with a clean slate.
+
 ## Viewing and Deleting Records
+
 In the form detail, the administrator browses all submitted records. Each row corresponds to one submission, and the columns capture individual fields — clicking on a row opens the detail with all values, including the original field labels that were valid at the time of submission. Records can be deleted individually via the context menu, with **deletion in this module being permanent** — unlike posts or categories, soft-delete is not applied here.
+
 > ⚠️ Deleting an entire form also removes all its fields and received records. The action is irreversible, and if you are not sure you will never need the form again, it is better to use deactivation.
+
 ## Field Label History
+
 One of the subtle but important features of the module is that it remembers the field label valid at the time of submission for each submitted record. So, if you later rename or even delete a field, older records retain their original context and remain readable. The editor can thus calmly develop the form structure without historical response checks yielding incomprehensible results. For select-type fields, the options valid at the time of submission are analogously saved.
+
 ## Extended Use
+
 Thanks to its general design, the module covers a wide range of scenarios. Most commonly, these are **contact forms** (name, email, message), **satisfaction surveys** combining text fields with selections, **event registrations** with participation dates and number of people, structured **applications**, and also **complaint forms**, whose content typically continues into the Complaints module. Submitted data is stored in an internal table and is available at any time for retrospective analysis; integration with email notifications or other workflow actions takes place outside this page.
+
 ## Context Menu
+
 Above a form row, the context menu offers three actions that cover common operations: **Copy Form** creates a new copy with the same structure, **Delete** removes the entire form including fields and records (with a confirmation dialog), and directly in the detail, **Delete Record** is available for permanent removal of an individual response.
+
 ## Best Practices
+
 When designing forms, several rules have proven effective in increasing the likelihood that a visitor will actually complete the form. **Start with only the essential fields** — each additional field reduces the completion rate. **Minimize required fields** and keep them only where you truly cannot do anything with the response without a value. **Write labels in the first person** ("Your name", "Your email address") — it sounds more human than stark labels. **Use help text for fields with unclear formats** (e.g., "Enter phone number in the format +420 XXX XXX XXX"). And finally, **test the form before publishing** — create a copy, submit a few test responses, and check how they look in detail.
+
 ### Record Structure
+
 Each submitted record contains a **record ID** (a unique identifier within the form), **submission date**, and a **list of items**, where for each field, its original key, label, type, and the value entered by the visitor are stored. The combination of label and type ensures that the record can be reliably displayed even after later modifications to the form structure.
+
 ## Sender Geolocation
+
 With each form submission, the system also stores the sender's technical trace, typically the location derived from the IP address. This information is used only for internal statistics and detection of suspicious submissions; it is not displayed by default in the record detail.
+
 > ℹ️ Geolocation is not reliable for users using VPN or proxy servers. Therefore, it must not be used as a form of identity verification.
+
 ## Restrictions and Limits
+
 Several technical rules apply when working with forms. **Field name** has no fixed limit, but for readability, we recommend staying under 60 characters. **Field key** must be unique within the form, and in case of a collision, the system automatically appends a numerical suffix. **Selection fields** have no fixed limit on the number of options, but for more than ten items, it is often more appropriate to use a different input than a select (e.g., an autocomplete text field). **Form code** must be unique across the entire organization.
+
 ## Integration with the Public Website
+
 The form is displayed on the public website according to its code. If the form is deactivated, the page displays an informational message stating that the form is currently unavailable — and the administration remains accessible to previously received records, so deactivation does not mean the loss of historical data or its temporary hiding.

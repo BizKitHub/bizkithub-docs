@@ -92,7 +92,7 @@ Main entities of the system:
 
 - `issue` — main ticket
 - `project` — project / organization
-- `issueStatus` — ticket states. Every organisation inherits four seeded system statuses (New / In progress / Waiting / Done) that are read-only and translated into every supported locale. Custom refinement statuses can be added per-organisation within one of the four canonical categories; AI and automation always dispatch by category, never by label, so custom statuses never break the fallback.
+- `issueStatus` — ticket states
 - `SLA` — service level agreement
 
 ### Supporting entities

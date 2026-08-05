@@ -51,45 +51,23 @@ password: 'userPassword123'
 
 const data = await response.json();
 
-// Extract identityId from response
-const identityId = data.identityId; // e.g., "Z9CPkS2o3UV163VQn5OUv0T8BQi8Fvdg"</code></pre>
+// Extract identityId from response const identityId = data.identityId; // e.g., "Z9CPkS2o3UV163VQn5OUv0T8BQi8Fvdg"</code></pre>
 
 ### Step 2: Store in cookies
 
 <pre><code>// Store identityId in cookies
 document.cookie = `identityId=${identityId}; path=/; max-age=86400; secure; samesite=strict`;
 
-// Or using a cookie library (recommended)
-import Cookies from 'js-cookie';
-Cookies.set('identityId', identityId, {
-expires: 1, // 1 day
-secure: true,
-sameSite: 'strict'
-});</code></pre>
+// Or using a cookie library (recommended) import Cookies from 'js-cookie'; Cookies.set('identityId', identityId, { expires: 1, // 1 day secure: true, sameSite: 'strict' });</code></pre>
 
 ### Step 3: Include in API requests
 
 <pre><code>// Get identityId from cookies
 const identityId = Cookies.get('identityId');
 
-// Include in API request
-const response = await fetch('https://api.bizkithub.com/api/v1/contact/profile', {
-method: 'GET',
-headers: {
-'Content-Type': 'application/json'
-}
-}).then(res =&gt; res.json());
+// Include in API request const response = await fetch('https://api.bizkithub.com/api/v1/contact/profile', { method: 'GET', headers: { 'Content-Type': 'application/json' } }).then(res =&gt; res.json());
 
-// Or in request body
-const response = await fetch('https://api.bizkithub.com/api/v1/contact/update', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({
-apiKey: 'YOUR_API_KEY',
-identityId: identityId,
-// ... other data
-})
-});</code></pre>
+// Or in request body const response = await fetch('https://api.bizkithub.com/api/v1/contact/update', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey: 'YOUR_API_KEY', identityId: identityId, // ... other data }) });</code></pre>
 
 ### Step 4: Handle session expiration
 
@@ -105,13 +83,9 @@ identityId: Cookies.get('identityId')
 
 const data = await response.json();
 
-if (data.error === 'SESSION_EXPIRED' || data.error === 'INVALID_IDENTITY') {
-// Clear expired session
-Cookies.remove('identityId');
+if (data.error === 'SESSION_EXPIRED' || data.error === 'INVALID_IDENTITY') { // Clear expired session Cookies.remove('identityId');
 
-// Redirect to login
-window.location.href = '/login';
-}</code></pre>
+// Redirect to login window.location.href = '/login'; }</code></pre>
 
 ## Best Practices
 

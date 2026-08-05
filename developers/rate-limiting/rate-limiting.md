@@ -63,13 +63,7 @@ X-RateLimit-Remaining: 0
 X-RateLimit-Reset: 1640995200
 Retry-After: 3600
 
-{
-"error": {
-"code": "RATE_LIMIT_EXCEEDED",
-"message": "Too many requests",
-"retry_after": 3600
-}
-}</code></pre>
+{ "error": { "code": "RATE_LIMIT_EXCEEDED", "message": "Too many requests", "retry_after": 3600 } }</code></pre>
 
 ### Retry Logic Example
 
@@ -77,20 +71,9 @@ Retry-After: 3600
 for (let i = 0; i &lt;= retries; i++) {
 const res = await fetch(url, options);
 
-if (res.status === 429) {
-const wait = res.headers.get('Retry-After');
-const delay = wait
-? parseInt(wait) * 1000
-: Math.pow(2, i) * 1000;
+if (res.status === 429) { const wait = res.headers.get('Retry-After'); const delay = wait ? parseInt(wait) * 1000 : Math.pow(2, i) * 1000;
 
-if (i &lt; retries) {
-await new Promise(r =&gt; setTimeout(r, delay));
-continue;
-}
-}
-return res;
-}
-}</code></pre>
+if (i &lt; retries) { await new Promise(r =&gt; setTimeout(r, delay)); continue; } } return res; } }</code></pre>
 
 ## Best Practices
 

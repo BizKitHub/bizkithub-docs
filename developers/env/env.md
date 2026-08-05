@@ -17,10 +17,11 @@ Complete reference of all configurable environment variables in BizKitHub. Custo
 STRIPE_SECRET_KEY=sk_live_...
 
 # Email Configuration
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
+
+SMTP_HOST=smtp.example.com SMTP_PORT=587
 
 # Shipping Integration
+
 PACKETA_API_KEY=pk_...</code></pre>
 
 ## Overview
