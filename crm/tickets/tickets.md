@@ -13,7 +13,7 @@ Every organization that works with customers or on more complex projects needs a
 
 ## Ticket Overview
 
-The main table displays a list of all tickets belonging to the current organization that are not marked as spam. Sorting is from newest to oldest, so newly arriving tickets are always at the top — the team can open the module in the morning and immediately see what has accumulated overnight. In the top bar, there is full-text search across all columns for quick retrieval of a specific case. Each row indicates:
+The main table displays a list of all tickets belonging to the current organization that are not marked as spam. The default order is optimized for an operator inbox: active work first (tickets in **New** and **In Progress**, grouped together), then tickets **Waiting** for an external response, and finally **Done** at the very bottom. Within each of those buckets the list is further sorted by priority (highest first), then by issue type (incidents and bugs float above questions and feature requests), and finally by last activity so freshly touched tickets rise to the top. The result is that the tickets an operator can act on this morning are always at the top of the page — nothing important is buried by low-priority "done" chatter. In the top bar, there is full-text search across all columns for quick retrieval of a specific case. Each row indicates:
 
 - **Ticket Key** — an internal identifier in the format `PROJ-123` (project abbreviation and sequence number), which is permanent and used in communication.
 - **Subject** — a concise name describing the essence of the ticket.
@@ -26,7 +26,7 @@ The main table displays a list of all tickets belonging to the current organizat
 
 The list automatically refreshes every 15 seconds.
 
-> ℹ️ The order of rows is from newest to oldest — the most important (newly arriving) tickets will therefore always appear at the top without the need for manual sorting.
+> ℹ️ The default order is `smart` — active work at the top, waiting tickets in the middle, done at the bottom. If you need a different order (e.g. sort by creation date or by priority alone) click any column header.
 
 ## Ticket Types
 
@@ -40,7 +40,16 @@ Priority determines how quickly a ticket should be resolved and helps focus the 
 
 ## Statuses
 
-Statuses express the current stage of resolution a ticket is in, and each specific status belongs to one of four system categories. **New** is a freshly created ticket that no one has yet taken on. **In Progress** means active processing. **Waiting** signals that the resolver is awaiting external input — typically a customer or supplier response — and cannot proceed. **Done** indicates a closed ticket. Below these categories, there are specific statuses defined separately for each project: "For Analysis", "In Testing", "Ready for Deployment". The category determines how statistics and automation interact with the ticket, while the specific status helps the team with more precise orientation.
+Statuses express the current stage of resolution a ticket is in, and each specific status belongs to one of four system categories. The four categories are the backbone of every automation and every default sort in the system, so it is worth being precise about what each one means:
+
+- **New** — a freshly created ticket that no interaction has happened on yet. Waiting for the team to look at it for the first time.
+- **In Progress** — the team is actively working on the ticket, OR new context has just arrived (for example, the reporter replied) and the ticket needs another round of attention. This is the "on my desk right now" bucket.
+- **Waiting** — the team has done what it can and is now blocked on someone else's response (typically the reporter or an external supplier). Nothing more can happen on our side until that response arrives.
+- **Done** — the final answer has been delivered, the ticket is closed, and nothing further is expected. Everything the customer needed has been resolved.
+
+Below these categories, there are specific statuses defined separately for each project — for example "For Analysis", "In Testing", or "Ready for Deployment" — that map to one of the four categories above. The category determines how statistics and automation interact with the ticket, while the specific status helps the team with more precise orientation.
+
+> ℹ️ When the reporter replies (typically by e-mail on a customer inquiry), the system automatically moves the ticket back to **In Progress**. A `Waiting` ticket flips to `In Progress` on any reply (the reply IS the awaited input, so we can resume work). A `Done` ticket flips to `In Progress` only when the reply contains substantive new content — a short "thanks / díky" acknowledgement stays as a closing comment without disturbing the closed state.
 
 > ℹ️ Transitions between statuses are performed using a switch in the ticket detail. Allowed transitions are determined by the project workflow — not every status is accessible from everywhere, which prevents skipping steps.
 
