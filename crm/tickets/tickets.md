@@ -28,28 +28,13 @@ The list automatically refreshes every 15 seconds.
 
 > ℹ️ The default order is `smart` — active work at the top, waiting tickets in the middle, done at the bottom. If you need a different order (e.g. sort by creation date or by priority alone) click any column header.
 
-## Ticket Types
+## Classification: types, priorities and statuses
 
-The system can record issues of various natures. The type is not explicitly marked with a separate label but is derived from the project and content. **Task** is a standard work item for someone on the team — typically an internal matter. **Bug** represents a recorded system failure that needs to be fixed. **Feature Request** is a proposal for a new function or improvement. **Customer Inquiry** is incoming external communication that requires a response, typically originating from a contact form. **Sub-task** is a ticket linked to a parent ticket — used to break down larger tasks into smaller ones.
+Every ticket carries three independent labels — an **issue type** (what kind of work it is), a **priority** (how urgent it is), and a **status** (where in the flow it sits). The system uses ten issue types (Story, Task, Bug, Incident, Question, Feature request and a few others), five priority levels (Low, Normal, High, Critical, Blocker), and four status categories (New, In progress, Waiting, Done). New tickets default to Normal priority and Story type so intake is never blocked on a required field.
 
-## Priorities
+Every project-specific status label (for example "For analysis", "In testing", "Ready for deployment") maps to one of the four system categories. Automations, statistics and the default inbox order look only at the category — the specific label helps the team orient itself but does not change platform behaviour. When the reporter replies to a Waiting ticket, it auto-reopens to In progress; a substantive reply on a Done ticket does the same, while a short thank-you keeps the closed state. Customer-facing comment e-mails surface the priority only when it is Critical or Blocker.
 
-Priority determines how quickly a ticket should be resolved and helps focus the team's attention on what is truly urgent. The system distinguishes five levels: **1 — Low** for issues that can be postponed, **2 — Normal** for routine agenda (default value), **3 — High** for cases requiring priority resolution, **4 — Critical** for tickets blocking a significant portion of users, and **5 — Blocker** for complete operational shutdown, which is addressed immediately. Each level has its own color label for quick visual orientation in the list.
-
-> 💡 When creating a ticket without an explicitly set priority, the value **Normal (2)** is automatically assigned. This means the team doesn't have to decide how urgent every common task actually is.
-
-## Statuses
-
-Statuses express the current stage of resolution a ticket is in, and each specific status belongs to one of four system categories. The four categories are the backbone of every automation and every default sort in the system, so it is worth being precise about what each one means:
-
-- **New** — a freshly created ticket that no interaction has happened on yet. Waiting for the team to look at it for the first time.
-- **In Progress** — the team is actively working on the ticket, OR new context has just arrived (for example, the reporter replied) and the ticket needs another round of attention. This is the "on my desk right now" bucket.
-- **Waiting** — the team has done what it can and is now blocked on someone else's response (typically the reporter or an external supplier). Nothing more can happen on our side until that response arrives.
-- **Done** — the final answer has been delivered, the ticket is closed, and nothing further is expected. Everything the customer needed has been resolved.
-
-Below these categories, there are specific statuses defined separately for each project — for example "For Analysis", "In Testing", or "Ready for Deployment" — that map to one of the four categories above. The category determines how statistics and automation interact with the ticket, while the specific status helps the team with more precise orientation.
-
-> ℹ️ When the reporter replies (typically by e-mail on a customer inquiry), the system automatically moves the ticket back to **In Progress**. A `Waiting` ticket flips to `In Progress` on any reply (the reply IS the awaited input, so we can resume work). A `Done` ticket flips to `In Progress` only when the reply contains substantive new content — a short "thanks / díky" acknowledgement stays as a closing comment without disturbing the closed state.
+See [Ticket classification model](/ticket-classification-model) for the full definitions of every label, the signals used by the AI classifier, and the rules driving the smart inbox order.
 
 > ℹ️ Transitions between statuses are performed using a switch in the ticket detail. Allowed transitions are determined by the project workflow — not every status is accessible from everywhere, which prevents skipping steps.
 
