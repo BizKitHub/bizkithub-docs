@@ -112,4 +112,4 @@ After successful registration, you will receive an email with important informat
 
 ## Get Started
 
-Complete the onboarding process and gain access to all BizKitHub platform features. Registration is free and takes only a few minutes. Start at [bizkithub.com/register](https://bizkithub.com/register) or sign in at [admin.bizkithub.com](https://admin.bizkithub.com/).
+Complete the onboarding process and gain access to all BizKitHub platform features. Registration is free and takes only a few minutes. Start at [admin.bizkithub.com/signup](https://admin.bizkithub.com/signup) or sign in at [admin.bizkithub.com](https://admin.bizkithub.com/).

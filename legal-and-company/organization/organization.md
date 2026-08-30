@@ -119,4 +119,4 @@ See the [API key documentation](/api-key-overview) for more details.
 
 ## Get Started
 
-Create your organization and gain access to all BizKitHub platform features. Registration is free and takes just a few minutes. Sign up at [https://bizkithub.com/register](https://bizkithub.com/register) or follow the [registration guide](/onboarding-overview).
+Create your organization and gain access to all BizKitHub platform features. Registration is free and takes just a few minutes. Sign up at [https://admin.bizkithub.com/signup](https://admin.bizkithub.com/signup) or follow the [registration guide](/onboarding-overview).
