@@ -48,7 +48,7 @@ The system distinguishes several types of documents that are issued for an order
 - **Corrective tax document (credit note)** — created upon goods return or complaint and automatically links to the original document.
 - **Final invoice** — a settlement document closing the order after all advance payments have been made.
 
-If the organization is not a VAT payer, simplified document variants without tax reporting are used.
+If the organization is not a VAT payer, simplified document variants without tax reporting are used. The exact rules that decide the rate on each line — full payer, §6i identified person, or non-payer — and the difference between the seller's and the buyer's VAT status are documented in [VAT handling and registration types](/vat).
 
 > 💡 If you need to issue a document outside the standard process (e.g., for additional invoicing of services), an invoice can be created manually from the order detail — the result is fully functional and fits into the same numerical series as automatically issued documents.
 
