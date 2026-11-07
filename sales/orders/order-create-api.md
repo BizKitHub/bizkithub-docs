@@ -123,6 +123,8 @@ export type PublicOrderCreateResponse = {
 | `tags` | `OrderTagList` | Arbitrary key–value tags for later filtering. Up to 200 tags per order. |
 | `returnUrl` | `string` | Where to redirect the customer after payment completes at the gateway. |
 | `notificationUrl` | `string` | Webhook URL called on every state change of the order. |
+| `formData` | `{ code: string; data: object }` | Arbitrary JSON stored with the order exactly as sent (up to 256 kB), e.g. a whole offer your tool needs to reopen later. Returned only by `GET /api/v1/shop/order/detail-full` with the API key, never by the public order detail. |
+| `preventAutoPayment` | `boolean` | Controls the automatic "paid" mark of an order whose total is zero. `true` keeps it unpaid, `false` always marks it as paid, omitted follows the organisation setting (default: mark as paid). |
 
 ### OrderItem fields
 
@@ -205,6 +207,15 @@ Prices submitted on line items are always **final** sale prices — VAT included
 ## Anonymous orders
 
 An order without a real customer — typical for physical point-of-sale checkouts — is routed to the organisation's built-in **anonymous customer** account. See [Contacts](/contact-overview) for the semantics of that account, including why it cannot be deleted and how it interacts with e-mail delivery.
+
+## Reading orders back
+
+Two endpoints let a server holding the organisation API key read orders without an operator session:
+
+- `GET /api/v1/shop/order/list` lists the organisation's orders, newest change first. Filter by `groupCode`, `assigneeEmail`, `customerEmail`, `statusCode` / `excludeStatusCode` (comma-separated) and `tag` (`key:value`, comma-separated, all must match). Each item carries the status, group, customer, price with and without VAT, assignee, tags and `parentHash`.
+- `GET /api/v1/shop/order/detail-full?hash=…` returns the same fields plus `formData`, the internal notice and the items.
+
+Both only ever return orders of the organisation that owns the API key. The public `GET /api/v1/shop/order/detail?hash=…` is meant for customers and never includes `formData`.
 
 ## Webhooks and return URLs
 
