@@ -18,7 +18,7 @@ For the admin-side counterpart — how products are created, priced and grouped 
 ## Endpoint
 
 ```
-GET https://api.bizkithub.com/product/v1/feed
+GET https://api.bizkithub.com/api/v1/product/feed
 ```
 
 Authentication is via the standard `apiKey` parameter (see the [API key](/api-key-overview) article).
@@ -30,7 +30,7 @@ All parameters are optional; if none are supplied the feed returns every product
 | Property | Type | Meaning |
 |----------|------|---------|
 | `query` | `string` | Full-text search term. Matched against product name, code and description. |
-| `category` | `string` | Category code the products must belong to. Defaults to all categories. |
+| `category` | `string` | Category slug. Returns every product assigned to the category or to any of its subcategories, both as the main category and as a secondary category. Each product appears at most once. Defaults to all categories. |
 | `page` | `number` | 1-based page number for large result sets. Defaults to `1`. |
 | `limit` | `number` | Maximum number of items per page. Defaults to `32`. |
 
@@ -40,7 +40,8 @@ All parameters are optional; if none are supplied the feed returns every product
 export type ProductId = `${string}`;
 
 export type PublicProductFeedResponse = {
-  count: number;
+  count: number; // items on this page
+  totalCount: number; // all products matching the filters, across pages
   items: ProductFeedItem[];
 };
 
