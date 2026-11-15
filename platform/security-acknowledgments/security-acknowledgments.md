@@ -44,13 +44,16 @@ We recognize and thank security researchers who help keep the BizKitHub platform
 3. **Resolution.** Fix deployed based on severity.
 4. **Recognition.** Public acknowledgment (if desired).
 
+## Rewards
+
+BizKitHub is an independent project run by a single developer without outside funding. We do not offer monetary rewards or bounties. Valid reports are recognized publicly in the Hall of Fame below, with the name and link the researcher chooses.
+
 ## Hall of Fame
 
-| Researcher | Date | Severity | Description | Status | Reward |
-|---|---|---|---|---|---|
-| Security Researcher | 2024-12-15 | Medium | Reported potential XSS vulnerability in user input validation | Fixed | Recognition |
-| Anonymous Researcher | 2024-11-28 | Low | Information disclosure in error messages | Fixed | Recognition |
-| Ethical Hacker | 2024-10-12 | High | Authentication bypass in legacy API endpoint | Fixed | Recognition + Bounty |
+| Researcher | Date | Severity | Description | Status |
+|---|---|---|---|---|
+
+No entries yet.
 
 ## Important notice
 
