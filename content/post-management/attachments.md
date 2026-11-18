@@ -45,9 +45,7 @@ For posts with any attachments, the public article page renders a **Downloads** 
 
 - The **filename**.
 - The **file size**, formatted for readability (`2.3 MB`, `450 KB`).
-- The **file type**, inferred from the extension and MIME type
-
-(PDF, Excel, ZIP, …), with a matching icon.
+- The **file type**, inferred from the extension and MIME type (PDF, Excel, ZIP, …), with a matching icon.
 
 - A **download button** that triggers a browser download.
 
@@ -71,13 +69,9 @@ The link opens the file in the reader's browser — most browsers will preview P
 
 Choose based on how the file is meant to be consumed:
 
-- **Gallery** — for images intended to be viewed inline in the
+- **Gallery** — for images intended to be viewed inline in the article body or in the lightbox reader. The reader looks at the image; downloading is possible but incidental.
 
-article body or in the lightbox reader. The reader looks at the image; downloading is possible but incidental.
-
-- **Attachments** — for files intended to be downloaded. The
-
-reader takes the file away; viewing inline is possible but incidental.
+- **Attachments** — for files intended to be downloaded. The reader takes the file away; viewing inline is possible but incidental.
 
 If you have a diagram illustrating a point in the article, put it in the gallery. If you have a spreadsheet supporting the article's claims, attach it.
 
@@ -86,63 +80,41 @@ If you have a diagram illustrating a point in the article, put it in the gallery
 Every non-internal attachment appears in:
 
 - **The article's public detail page** under Downloads.
-- **The public API** — the `/api/v1/post/detail` response includes
+- **The public API** — the `/api/v1/post/detail` response includes an `attachments` array with every attachment's filename, size, MIME type, upload date, and downloadable URL. Integrations can render their own downloads section.
 
-an `attachments` array with every attachment's filename, size, MIME type, upload date, and downloadable URL. Integrations can render their own downloads section.
+- **NOT the RSS feed** — attachments are not enclosures. The RSS feed's `<enclosure>` tag is reserved for a single main media file (typically a podcast episode) rather than a general downloads section.
 
-- **NOT the RSS feed** — attachments are not enclosures. The RSS
-
-feed's `<enclosure>` tag is reserved for a single main media file (typically a podcast episode) rather than a general downloads section.
-
-See [API integration](/post-api-integration).
+See [API integration](/api-integration).
 
 ## Access control
 
 Attachments inherit the post's visibility:
 
-- **Public post** — attachments are downloadable by anyone. The
+- **Public post** — attachments are downloadable by anyone. The file URLs are stable but not secret; sharing a URL bypasses the admin.
 
-file URLs are stable but not secret; sharing a URL bypasses the admin.
+- **Private / unlisted post** — attachments are technically downloadable by anyone who knows the URL, but the URL itself is effectively secret because the post is not linked from anywhere public. Treat unlisted URLs as unlisted, not private.
 
-- **Private / unlisted post** — attachments are technically
+- **Subscribe-only post** — attachments are guarded by the subscriber wall. Anonymous requests receive a redirect to the subscribe page.
 
-downloadable by anyone who knows the URL, but the URL itself is effectively secret because the post is not linked from anywhere public. Treat unlisted URLs as unlisted, not private.
-
-- **Subscribe-only post** — attachments are guarded by the
-
-subscriber wall. Anonymous requests receive a redirect to the subscribe page.
-
-- **Archived (deleted) post** — attachments are inaccessible from
-
-the public URL. If the post is restored, the attachments become accessible again unchanged.
+- **Archived (deleted) post** — attachments are inaccessible from the public URL. If the post is restored, the attachments become accessible again unchanged.
 
 For genuinely confidential files, do not attach them to a `public` post. The storage URLs are stable and shareable; there is no per-request access token.
 
 ## Tips
 
-- **Rename files before upload.** The filename is what readers
+- **Rename files before upload.** The filename is what readers see in the download card and what their browser saves to. A file called `Untitled-2 (final)(v3).xlsx` looks unprofessional; rename to `product-pricing-2026-q3.xlsx` before you drop it on the upload area.
 
-see in the download card and what their browser saves to. A file called `Untitled-2 (final)(v3).xlsx` looks unprofessional; rename to `product-pricing-2026-q3.xlsx` before you drop it on the upload area.
+- **Prefer PDF over Word** for shared documents. Word documents render inconsistently across viewers and can trigger safety warnings in some browsers. PDFs preview reliably.
 
-- **Prefer PDF over Word** for shared documents. Word documents
+- **ZIP related files together** if there are many. Ten discrete attachments produce a cluttered Downloads section; one ZIP with ten files inside is often better.
 
-render inconsistently across viewers and can trigger safety warnings in some browsers. PDFs preview reliably.
-
-- **ZIP related files together** if there are many. Ten discrete
-
-attachments produce a cluttered Downloads section; one ZIP with ten files inside is often better.
-
-- **Keep attachments up to date.** An attached spreadsheet or PDF
-
-is a snapshot of what you meant at upload time. Update the file by uploading a fresh version and deleting the stale one — do NOT edit the file externally and re-upload with the same name assuming it will replace, because it will not (upload creates a new record every time).
+- **Keep attachments up to date.** An attached spreadsheet or PDF is a snapshot of what you meant at upload time. Update the file by uploading a fresh version and deleting the stale one — do NOT edit the file externally and re-upload with the same name assuming it will replace, because it will not (upload creates a new record every time).
 
 ## Related
 
 - [Post editor](/post-editor)
-- [Gallery and images](/post-gallery-and-images)
-- [Post management overview](/post-management)
-- [Visibility and lifecycle](/post-visibility-and-lifecycle) —
+- [Gallery and images](/gallery-and-images)
+- [Post management overview](/prispevky-overview)
+- [Visibility and lifecycle](/visibility-and-lifecycle) — attachment access follows post visibility.
 
-attachment access follows post visibility.
-
-- [API integration](/post-api-integration)
+- [API integration](/api-integration)

@@ -21,27 +21,17 @@ This article covers what counts as a view, how the count is buffered and flushed
 A view is a successful read of the article via one of the customer-facing surfaces:
 
 - Reading the article on the public site (article page).
-- Fetching the article via the public REST API's `/api/v1/post/*`
+- Fetching the article via the public REST API's `/api/v1/post/*` endpoints.
 
-endpoints.
-
-- Reading the article via an RSS-feed reader that requests the
-
-full body (rare — most readers only fetch the feed's summary, which does not count).
+- Reading the article via an RSS-feed reader that requests the full body (rare — most readers only fetch the feed's summary, which does not count).
 
 Not counted:
 
-- Loading the admin post detail — the operator's own reads never
+- Loading the admin post detail — the operator's own reads never inflate the counter.
 
-inflate the counter.
+- Reads by internal automation (crawlers, bots identified by known user-agents).
 
-- Reads by internal automation (crawlers, bots identified by
-
-known user-agents).
-
-- Serving the sitemap or the RSS feed itself — those aggregate
-
-many articles but do not read individual bodies.
+- Serving the sitemap or the RSS feed itself — those aggregate many articles but do not read individual bodies.
 
 The counter is per-article and cumulative across all locales. If an article has Czech and English translations, both count toward the same article's total. Per-locale view breakdown is not currently exposed in the admin grid.
 
@@ -49,17 +39,11 @@ The counter is per-article and cumulative across all locales. If an article has 
 
 For performance, the platform buffers view increments in a fast in-memory store and flushes them to the persistent counter every five minutes. Practical consequences:
 
-- **Grid view count lags reality by up to five minutes.** A
+- **Grid view count lags reality by up to five minutes.** A viral article read a thousand times in the last minute may still show yesterday's count for a few minutes before the flush arrives.
 
-viral article read a thousand times in the last minute may still show yesterday's count for a few minutes before the flush arrives.
+- **Counter drift is bounded.** In the very rare case of a platform restart with unflushed reads in memory, at most five minutes of reads can be lost. Not zero, but never many.
 
-- **Counter drift is bounded.** In the very rare case of a
-
-platform restart with unflushed reads in memory, at most five minutes of reads can be lost. Not zero, but never many.
-
-- **The buffer is per-organisation.** Reads across organisations
-
-do not compete for the same buffer; a spike in one org does not affect another's counter accuracy.
+- **The buffer is per-organisation.** Reads across organisations do not compete for the same buffer; a spike in one org does not affect another's counter accuracy.
 
 For most editorial purposes the lag is invisible. If you need precise real-time view counts (e.g. for a live A/B test), consider integrating a dedicated analytics tool alongside the platform.
 
@@ -75,15 +59,11 @@ The **Views** column on `/post` shows each article's cumulative count formatted 
 
 For articles with enough history (see below), the count is accompanied by an arrow:
 
-- **↗ Green** — reads in the last few days are meaningfully higher
-
-than the equivalent window before. Trending up.
+- **↗ Green** — reads in the last few days are meaningfully higher than the equivalent window before. Trending up.
 
 - **↘ Red** — reads are meaningfully lower. Trending down.
 - **→ Grey** — reads are flat within a small tolerance.
-- **No arrow** — no baseline for comparison (very new article, or
-
-an article with too little history).
+- **No arrow** — no baseline for comparison (very new article, or an article with too little history).
 
 The trend is a rolling-window comparison — reads in the most recent N days versus reads in the N days immediately before that. The default window is short (a few days) so the arrow reflects current momentum, not lifetime averages. A ±10 % band (with a minimum of ~2 views absolute) is treated as flat to prevent a single accidental refresh from flipping the arrow.
 
@@ -99,37 +79,25 @@ The chart is populated from daily snapshots taken by an internal reporting job. 
 
 Under the hood, the platform records one snapshot per (post, day) with the cumulative read count as of that day's end. That gives every article a full time series:
 
-- **The chart** on the detail page reads directly from these
+- **The chart** on the detail page reads directly from these snapshots.
 
-snapshots.
+- **The trend arrow** compares two snapshots — the one N days ago and the one 2N days ago — to compute the two-window delta.
 
-- **The trend arrow** compares two snapshots — the one N days ago
-
-and the one 2N days ago — to compute the two-window delta.
-
-- **The current cumulative count** is a live counter (buffered
-
-and flushed as described above) — not a snapshot.
+- **The current cumulative count** is a live counter (buffered and flushed as described above) — not a snapshot.
 
 Snapshots are lightweight and retained indefinitely. There is no admin pruning; historical trend analysis over years remains available.
 
 ## What the trend arrow does NOT tell you
 
-- **Overall popularity** — an article with 100 views/day trending
-
-down still has more absolute reads than a new article with 5 views/day trending up. The arrow measures direction, not magnitude.
+- **Overall popularity** — an article with 100 views/day trending down still has more absolute reads than a new article with 5 views/day trending up. The arrow measures direction, not magnitude.
 
 - **Comparison across articles** — the arrow is per-article.
 
 Sorting the grid by the arrow is not meaningful; sort by the view count instead.
 
-- **Referrer or geography** — the platform does not (currently)
+- **Referrer or geography** — the platform does not (currently) break down where the reads came from. For that, integrate a general-purpose analytics tool.
 
-break down where the reads came from. For that, integrate a general-purpose analytics tool.
-
-- **Reader time on page or scroll depth** — engagement metrics
-
-beyond "did they load the article" require an external tool.
+- **Reader time on page or scroll depth** — engagement metrics beyond "did they load the article" require an external tool.
 
 ## The reader-facing surface
 
@@ -147,17 +115,11 @@ There is no per-time-window filter (e.g. "articles most read this week"). To ans
 
 The public API surfaces:
 
-- **`viewsCount`** on the article list and detail — cumulative
+- **`viewsCount`** on the article list and detail — cumulative reads, five-minute delayed.
 
-reads, five-minute delayed.
+- **`viewsRecentDelta`** — reads in the recent trend window (if available).
 
-- **`viewsRecentDelta`** — reads in the recent trend window (if
-
-available).
-
-- **`viewsPriorDelta`** — reads in the prior trend window (if
-
-available).
+- **`viewsPriorDelta`** — reads in the prior trend window (if available).
 
 Integrators building custom dashboards can use these to render their own trend visualisations.
 
@@ -165,30 +127,18 @@ The daily snapshot series is not currently exposed on the public API. It is admi
 
 ## Tips
 
-- **Do not chase individual-day spikes.** A viral post is
+- **Do not chase individual-day spikes.** A viral post is wonderful, but "why did this article get 500 views on Tuesday" is rarely knowable without an external referrer report. Watch the trend arrow over weeks.
 
-wonderful, but "why did this article get 500 views on Tuesday" is rarely knowable without an external referrer report. Watch the trend arrow over weeks.
+- **A stale-content signal:** articles with a green trend arrow are your workhorses. Articles with a red arrow that used to be workhorses often need refreshing — check the publication date, review the accuracy, consider a rewrite.
 
-- **A stale-content signal:** articles with a green trend arrow
+- **Correlate with SEO score.** An article with high views AND a low SEO health-score pill is a hint that content quality is carrying it despite the SEO gap; fixing the SEO gap could unlock more.
 
-are your workhorses. Articles with a red arrow that used to be workhorses often need refreshing — check the publication date, review the accuracy, consider a rewrite.
-
-- **Correlate with SEO score.** An article with high views AND a
-
-low SEO health-score pill is a hint that content quality is carrying it despite the SEO gap; fixing the SEO gap could unlock more.
-
-- **Compare cross-locale performance.** If the Czech translation
-
-of an article has 10× the views of the English translation, that is a signal about your audience mix that informs which markets to prioritise.
+- **Compare cross-locale performance.** If the Czech translation of an article has 10× the views of the English translation, that is a signal about your audience mix that informs which markets to prioritise.
 
 ## Related
 
-- [Post management overview](/post-management)
+- [Post management overview](/prispevky-overview)
 - [Post editor](/post-editor) — the sidebar's view chart.
-- [Translations](/post-translations) — cross-locale view
+- [Translations](/translations) — cross-locale view comparison context.
 
-comparison context.
-
-- [API integration](/post-api-integration) — the view fields on
-
-the API.
+- [API integration](/api-integration) — the view fields on the API.

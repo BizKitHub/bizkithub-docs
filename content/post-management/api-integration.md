@@ -19,12 +19,10 @@ This article covers the endpoints, authentication, the response shapes, common i
 
 ## Authentication
 
-Every request needs a valid API key. See the [API key](/docs-migration-api-key) article for how keys are issued, formatted, rotated, and passed on the request. The short version:
+Every request needs a valid API key. See the [API key](/api-key-overview) article for how keys are issued, formatted, rotated, and passed on the request. The short version:
 
 - Include the key as `apiKey` in the query string or JSON body.
-- Every response respects the organisation scope of the key —
-
-you never see posts from another organisation, even if you know their identifier.
+- Every response respects the organisation scope of the key — you never see posts from another organisation, even if you know their identifier.
 
 - Rate limits apply per key tier.
 
@@ -38,29 +36,17 @@ List posts belonging to the calling organisation.
 
 **Query parameters:**
 
-- `locale` — the locale to return the post's title, body, and
+- `locale` — the locale to return the post's title, body, and perex in. Defaults to the organisation's primary locale.
 
-perex in. Defaults to the organisation's primary locale.
+- `mainCategoryCode` — filter to posts whose main category has this code. Optional.
 
-- `mainCategoryCode` — filter to posts whose main category has
+- `status` — filter by computed status (`draft`, `scheduled`, `published`, `private`, `archived`). Optional.
 
-this code. Optional.
+- `visibility` — filter by raw visibility (`public`, `private`, `unlisted`, `subscribe`). Optional.
 
-- `status` — filter by computed status (`draft`, `scheduled`,
+- `hasMainImage` — `"true"` or `"false"` to filter by whether a main image is set. Optional.
 
-`published`, `private`, `archived`). Optional.
-
-- `visibility` — filter by raw visibility (`public`, `private`,
-
-`unlisted`, `subscribe`). Optional.
-
-- `hasMainImage` — `"true"` or `"false"` to filter by whether
-
-a main image is set. Optional.
-
-- `missingTranslation` — `"true"` to filter to posts missing at
-
-least one enabled locale. Optional.
+- `missingTranslation` — `"true"` to filter to posts missing at least one enabled locale. Optional.
 
 - `tagCode` — filter to posts carrying the tag with this code.
 - `kind` — `post`, `branch`, or `all`. Defaults to `post`.
@@ -68,21 +54,15 @@ least one enabled locale. Optional.
 
 Fields: `publishedDate`, `updatedDate`, `insertedDate`, `title`, `wordCount`, `commentsCount`, `viewsCount`, `ratingAverage`.
 
-- Standard pagination — `page`, `limit` (or the datagrid-envelope
+- Standard pagination — `page`, `limit` (or the datagrid-envelope equivalents).
 
-equivalents).
-
-- `filterFulltextQuery` — free-text search across title, body,
-
-and perex.
+- `filterFulltextQuery` — free-text search across title, body, and perex.
 
 **Response:** an object with `items` (an array of post summaries) and `itemCount` (the total matching count before pagination).
 
 Each item includes:
 
-- `id` — the article's external identifier (stable, unique per
-
-organisation).
+- `id` — the article's external identifier (stable, unique per organisation).
 
 - `title` — up to 140 characters, truncated with an ellipsis.
 - `mainCategoryId`, `mainCategoryName`.
@@ -94,13 +74,9 @@ organisation).
 - `wordCount`, `readingTimeMinutes`.
 - `hasPerex`.
 - `tags` — array of `{ id, name, code, color }`.
-- `translatedLocales` — array of locale codes for which a
+- `translatedLocales` — array of locale codes for which a translation exists.
 
-translation exists.
-
-- `staleLocales` — subset of `translatedLocales` whose reference
-
-is out of date.
+- `staleLocales` — subset of `translatedLocales` whose reference is out of date.
 
 - `viewsCount`.
 - `viewsRecentDelta`, `viewsPriorDelta` — for the trend arrow.
@@ -114,26 +90,18 @@ Full detail for a single post.
 **Query parameters:**
 
 - `id` — the post's external identifier. Required.
-- `locale` — the locale to return content in. Defaults to
-
-primary.
+- `locale` — the locale to return content in. Defaults to primary.
 
 **Response:** the article summary above plus:
 
 - `content` — the full HTML body in the requested locale.
 - `perex` — the article's short summary.
 - `metaTitle`, `metaDescription` — SEO fields.
-- `authorIds` — the ordered list of every author's external
+- `authorIds` — the ordered list of every author's external identifier.
 
-identifier.
+- `attachments` — array of `{ id, filename, downloadUrl, size, contentType, insertedDate }`.
 
-- `attachments` — array of `{ id, filename, downloadUrl, size,
-
-contentType, insertedDate }`.
-
-- `translatedLocales`, `staleLocales` — same semantics as on
-
-list.
+- `translatedLocales`, `staleLocales` — same semantics as on list.
 
 ### `GET /api/v1/post/{externalId}/comments`
 
@@ -154,40 +122,30 @@ Per-category variants are available at `/api/v1/post/category/{categoryCode}/rss
 The API respects post visibility strictly:
 
 - **`public`** — always returned.
-- **`unlisted`** — returned on detail requests when the caller
-
-supplies the specific `id`, but NOT included in `list` or `feed` responses. This matches the behaviour of the public site.
+- **`unlisted`** — returned on detail requests when the caller supplies the specific `id`, but NOT included in `list` or `feed` responses. This matches the behaviour of the public site.
 
 - **`subscribe`** — only returned to authenticated subscribers.
 
 Anonymous integrator requests receive a gated response.
 
-- **`private`** — never returned on any endpoint. Editable only
+- **`private`** — never returned on any endpoint. Editable only through the admin.
 
-through the admin.
-
-- **`archived`** (deleted) — never returned. To surface deleted
-
-posts for a specific integration, use the admin surface, not this API.
+- **`archived`** (deleted) — never returned. To surface deleted posts for a specific integration, use the admin surface, not this API.
 
 ## Locale handling
 
 For every content-returning endpoint, the `locale` query parameter picks which language's title, body, perex, and meta fields are returned. Behaviour:
 
 - **Requested locale exists** — return it.
-- **Requested locale is missing** — fall back to the
+- **Requested locale is missing** — fall back to the organisation's primary locale.
 
-organisation's primary locale.
-
-- **Neither** — an empty response for the content fields (rare;
-
-only when the post has no translations at all).
+- **Neither** — an empty response for the content fields (rare; only when the post has no translations at all).
 
 The response always tells you which locale was actually served via the `translatedLocales` field, so a caller can detect fallback and react.
 
 ## Rate limits
 
-Every API key has a tier (Production, Development, System — see [API key](/docs-migration-api-key) for the tiers). Requests above the tier's per-minute quota receive an HTTP 429 with a `Retry-After` header. Well-behaved integrations should implement exponential backoff on 429.
+Every API key has a tier (Production, Development, System — see [API key](/api-key-overview) for the tiers). Requests above the tier's per-minute quota receive an HTTP 429 with a `Retry-After` header. Well-behaved integrations should implement exponential backoff on 429.
 
 Public read endpoints are cached edge-side for a short interval (seconds); repeated identical requests within that window return cached responses that do not count against the quota as aggressively.
 
@@ -207,26 +165,18 @@ Standard shape for every error response:
 
 Common error codes on the post endpoints:
 
-- `post_not_found` — the requested `id` does not exist or the
+- `post_not_found` — the requested `id` does not exist or the key does not have access.
 
-key does not have access.
+- `invalid_locale` — the locale parameter is not a supported locale code.
 
-- `invalid_locale` — the locale parameter is not a supported
-
-locale code.
-
-- `rate_limit_exceeded` — too many requests; wait for
-
-`Retry-After` seconds before retrying.
+- `rate_limit_exceeded` — too many requests; wait for `Retry-After` seconds before retrying.
 
 - `unauthorised` — API key missing, malformed, or invalid.
-- `forbidden` — the endpoint is not enabled for the caller's
-
-tier.
+- `forbidden` — the endpoint is not enabled for the caller's tier.
 
 ## View counting
 
-Every `detail` request (and, depending on the integration theme, every `list` request) increments the article's view counter. See [Views and analytics](/post-views-and-analytics) for the buffering behaviour.
+Every `detail` request (and, depending on the integration theme, every `list` request) increments the article's view counter. See [Views and analytics](/views-and-analytics) for the buffering behaviour.
 
 Integrations that want to fetch article data without inflating the view counter (e.g. for internal migration tooling, editorial dashboards) should include the `countAsView=false` query parameter. This is respected on `detail` and suppresses the counter increment.
 
@@ -235,13 +185,9 @@ Integrations that want to fetch article data without inflating the view counter 
 ### Embedding an article in another product
 
 1. Call `/detail` with the target `id` and desired `locale`.
-2. Render `title`, `perex`, `mainImageUrl`, and `content`
+2. Render `title`, `perex`, `mainImageUrl`, and `content` (the HTML body) inside your own theme.
 
-(the HTML body) inside your own theme.
-
-3. Optionally show `mainAuthorName`, `publishedDate`,
-
-`readingTimeMinutes` for byline context.
+3. Optionally show `mainAuthorName`, `publishedDate`, `readingTimeMinutes` for byline context.
 
 ### A syndicated site aggregating multiple organisations
 
@@ -251,37 +197,25 @@ Integrations that want to fetch article data without inflating the view counter 
 
 ### A mobile app browsing the article catalogue
 
-1. Call `/list` with pagination and the current visitor's
-
-locale.
+1. Call `/list` with pagination and the current visitor's locale.
 
 2. Render the list; on tap, call `/detail`.
-3. Cache aggressively on the client — the article `id`
-
-uniquely identifies a version, and any change bumps `updatedDate` which the client can use as a cache-buster.
+3. Cache aggressively on the client — the article `id` uniquely identifies a version, and any change bumps `updatedDate` which the client can use as a cache-buster.
 
 ### Building a custom search interface
 
 1. Call `/list` with `filterFulltextQuery` and locale.
-2. Render results, highlighting the query terms in the
-
-returned `title` and `perex`.
+2. Render results, highlighting the query terms in the returned `title` and `perex`.
 
 ## Compatibility guarantees
 
 The `/api/v1/post/*` endpoints are covered by the platform's public API stability policy:
 
-- **Additive changes** (new fields, new optional parameters,
+- **Additive changes** (new fields, new optional parameters, new endpoints) can appear at any time and are not breaking.
 
-new endpoints) can appear at any time and are not breaking.
+- **Behavioural changes** (removing a field, renaming a field, changing the shape of an existing response) require a new major version — `/api/v2/*` — and the `v1` endpoints remain available for the announced deprecation window (typically at least a year).
 
-- **Behavioural changes** (removing a field, renaming a field,
-
-changing the shape of an existing response) require a new major version — `/api/v2/*` — and the `v1` endpoints remain available for the announced deprecation window (typically at least a year).
-
-- **Deprecation announcements** appear in the platform's
-
-release notes; integrations should subscribe to those.
+- **Deprecation announcements** appear in the platform's release notes; integrations should subscribe to those.
 
 ## Where the OpenAPI spec lives
 
@@ -289,20 +223,12 @@ The full machine-readable OpenAPI spec is available at `https://docs.bizkithub.c
 
 ## Related
 
-- [API key](/docs-migration-api-key) — how authentication works.
-- [Post management overview](/post-management) — the admin
+- [API key](/api-key-overview) — how authentication works.
+- [Post management overview](/prispevky-overview) — the admin surface the API mirrors.
 
-surface the API mirrors.
+- [Translations](/translations) — for how locale parameter interacts with translation freshness.
 
-- [Translations](/post-translations) — for how locale
+- [Views and analytics](/views-and-analytics)
+- [Comments and moderation](/comments-and-moderation) — for how comment data is exposed.
 
-parameter interacts with translation freshness.
-
-- [Views and analytics](/post-views-and-analytics)
-- [Comments and moderation](/post-comments) — for how comment
-
-data is exposed.
-
-- [Reader feedback](/post-reader-feedback) — for the rating
-
-fields on the API.
+- [Reader feedback](/reader-feedback) — for the rating fields on the API.

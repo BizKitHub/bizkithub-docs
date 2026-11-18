@@ -20,13 +20,9 @@ Tags exist to let readers and editors filter articles by an attribute that does 
 
 Two places:
 
-- **Post editor** — the sidebar has a **Tags** section on every post
+- **Post editor** — the sidebar has a **Tags** section on every post where you assign or remove tags for that specific article.
 
-where you assign or remove tags for that specific article.
-
-- **Tags tab** on `/post` — the shared library where every tag in the
-
-organisation is defined, coloured, and edited.
+- **Tags tab** on `/post` — the shared library where every tag in the organisation is defined, coloured, and edited.
 
 Editing a tag's label or colour in the library propagates to every post it is attached to. Removing a tag from the library removes it from every post at once (with a confirmation asking whether you're sure).
 
@@ -34,25 +30,15 @@ Editing a tag's label or colour in the library propagates to every post it is at
 
 Every tag has:
 
-- **Code** — a URL-safe short identifier (lowercase, hyphens). Used
+- **Code** — a URL-safe short identifier (lowercase, hyphens). Used in URLs and filter parameters, and as a stable machine-readable identifier. The code is unique per organisation and rarely changes after creation.
 
-in URLs and filter parameters, and as a stable machine-readable identifier. The code is unique per organisation and rarely changes after creation.
+- **Label** — the human-readable display name shown as the chip text. Per-locale — you can have a Czech label, an English label, and so on. The active locale of the reader determines which label is shown.
 
-- **Label** — the human-readable display name shown as the chip
+- **Colour** — the background colour of the chip. Free-form hex (`#e11d48`, `#3b82f6`, …); the platform picks a readable text colour automatically.
 
-text. Per-locale — you can have a Czech label, an English label, and so on. The active locale of the reader determines which label is shown.
+- **Internal flag** — when set, the tag appears only in the admin and never on the public site. Use for internal editorial workflow labels like "needs review" or "author draft" that should not leak to readers.
 
-- **Colour** — the background colour of the chip. Free-form hex
-
-(`#e11d48`, `#3b82f6`, …); the platform picks a readable text colour automatically.
-
-- **Internal flag** — when set, the tag appears only in the admin
-
-and never on the public site. Use for internal editorial workflow labels like "needs review" or "author draft" that should not leak to readers.
-
-- **Active flag** — inactive tags are hidden from the picker in the
-
-post editor, but stay on any post they were already attached to. Use to retire a tag without losing history.
+- **Active flag** — inactive tags are hidden from the picker in the post editor, but stay on any post they were already attached to. Use to retire a tag without losing history.
 
 ## Creating a tag
 
@@ -82,33 +68,23 @@ Tags marked **internal** are stripped from the public API and never appear on th
 
 For non-internal tags:
 
-- **Article page** — the tags appear as a row of chips beneath the
+- **Article page** — the tags appear as a row of chips beneath the title, matching the admin colours.
 
-title, matching the admin colours.
+- **Category pages** — filter by tag via a query parameter or a visible chip strip, depending on the site theme.
 
-- **Category pages** — filter by tag via a query parameter or a
-
-visible chip strip, depending on the site theme.
-
-- **API** — the `/api/v1/post/*` responses include every non-internal
-
-tag with its code, localised label, and colour.
+- **API** — the `/api/v1/post/*` responses include every non-internal tag with its code, localised label, and colour.
 
 - **RSS feed** — categorises each item by its non-internal tags.
 
-See [API integration](/post-api-integration) for the exact response shape.
+See [API integration](/api-integration) for the exact response shape.
 
 ## Colours and design
 
 Colours are meaningful. A tag scheme becomes noise fast if every tag is a random rainbow colour. Two guidelines:
 
-- **Group by intent.** Reserve red for warnings ("deprecated",
+- **Group by intent.** Reserve red for warnings ("deprecated", "legal"), amber for editorial workflow ("draft", "needs review"), green for positive labels ("featured", "recommended"), grey for neutral labels ("guide", "reference"), and pick one theme colour for a series of related tags.
 
-"legal"), amber for editorial workflow ("draft", "needs review"), green for positive labels ("featured", "recommended"), grey for neutral labels ("guide", "reference"), and pick one theme colour for a series of related tags.
-
-- **Fewer bright colours.** Two or three saturated colours (for
-
-what matters) against many muted colours (for regular tags) reads better than a full-saturation carnival.
+- **Fewer bright colours.** Two or three saturated colours (for what matters) against many muted colours (for regular tags) reads better than a full-saturation carnival.
 
 The colour picker accepts any hex string. Contrast against the tag text is calculated automatically — you can pick any background without worrying about legibility.
 
@@ -124,13 +100,9 @@ If a locale is missing a label, the reader sees the organisation's primary-local
 
 Two options depending on whether you want existing usages to disappear or stay:
 
-- **Deactivate** — the tag stays attached to every post that carries
+- **Deactivate** — the tag stays attached to every post that carries it, but is hidden from the post-editor picker (no more posts will be tagged with it). Perfect for "stop tagging new content with this label, but keep the historical taxonomy honest".
 
-it, but is hidden from the post-editor picker (no more posts will be tagged with it). Perfect for "stop tagging new content with this label, but keep the historical taxonomy honest".
-
-- **Delete** — the tag is removed from the library AND detached
-
-from every post. A confirmation shows the number of affected articles. There is no undo.
+- **Delete** — the tag is removed from the library AND detached from every post. A confirmation shows the number of affected articles. There is no undo.
 
 Deleting is destructive by design — it exists for tags that were created by mistake and have no editorial value. For anything that was ever meaningful, prefer deactivation.
 
@@ -138,39 +110,25 @@ Deleting is destructive by design — it exists for tags that were created by mi
 
 There is no bulk-tag operation in the article grid. To attach the same tag to many articles, either:
 
-- Filter to the relevant subset, open each in turn, and add the
+- Filter to the relevant subset, open each in turn, and add the tag via the sidebar (fast for a handful of articles).
 
-tag via the sidebar (fast for a handful of articles).
-
-- Use the [Git workflow](/post-git-workflow) — export, edit the
-
-`tags:` frontmatter across many files, import back. Suitable for hundreds of articles at once.
+- Use the [Git workflow](/git-workflow) — export, edit the `tags:` frontmatter across many files, import back. Suitable for hundreds of articles at once.
 
 ## Tips
 
-- **Codes are forever.** A code appears in URLs, filter parameters,
+- **Codes are forever.** A code appears in URLs, filter parameters, and integrations. Renaming a code breaks external links. Pick a well-formed code the first time.
 
-and integrations. Renaming a code breaks external links. Pick a well-formed code the first time.
+- **Do not use tags for what belongs in categories.** A tag scheme that ends up as a hierarchy in disguise ("technology", "technology →software", "technology→software→ai") is a category tree fighting to escape. Move it to the [Post categories](/post-category-overview) tree.
 
-- **Do not use tags for what belongs in categories.** A tag scheme
+- **Deactivate before deleting.** If you are not sure whether a tag is used, deactivate for a month, watch that nothing depends on it, then delete.
 
-that ends up as a hierarchy in disguise ("technology", "technology →software", "technology→software→ai") is a category tree fighting to escape. Move it to the [Post categories](/post-categories) tree.
-
-- **Deactivate before deleting.** If you are not sure whether a tag
-
-is used, deactivate for a month, watch that nothing depends on it, then delete.
-
-- **Do not proliferate.** Every tag you add is one more choice for
-
-the reader. Twenty well-chosen tags almost always beat two hundred fuzzy ones.
+- **Do not proliferate.** Every tag you add is one more choice for the reader. Twenty well-chosen tags almost always beat two hundred fuzzy ones.
 
 ## Related
 
 - [Post editor](/post-editor)
-- [Post categories](/post-categories) — for the hierarchical
+- [Post categories](/post-category-overview) — for the hierarchical taxonomy that tags complement.
 
-taxonomy that tags complement.
-
-- [Post management overview](/post-management)
-- [API integration](/post-api-integration)
-- [Git workflow](/post-git-workflow) — for bulk tag operations.
+- [Post management overview](/prispevky-overview)
+- [API integration](/api-integration)
+- [Git workflow](/git-workflow) — for bulk tag operations.

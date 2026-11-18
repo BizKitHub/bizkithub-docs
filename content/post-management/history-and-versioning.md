@@ -21,17 +21,11 @@ A version is a captured state of one language of one article at a specific momen
 
 - **Who** — the author who saved it (the member's contact identity).
 - **When** — the timestamp of the save.
-- **What** — the title and full body content at the moment of the
+- **What** — the title and full body content at the moment of the save.
 
-save.
+- **Locale** — which language of the article this snapshot belongs to. Every language of an article has its own independent version stream.
 
-- **Locale** — which language of the article this snapshot belongs
-
-to. Every language of an article has its own independent version stream.
-
-- **Optional commit message** — a short human-readable note
-
-describing the change. Auto-saves may omit this; explicit restore-from-version and translate operations add descriptive messages ("Restored from earlier version", "Auto-translate (initial)", "Auto-translate (refresh)").
+- **Optional commit message** — a short human-readable note describing the change. Auto-saves may omit this; explicit restore-from-version and translate operations add descriptive messages ("Restored from earlier version", "Auto-translate (initial)", "Auto-translate (refresh)").
 
 The body content is stored in blob storage; the version row records a reference plus a content fingerprint. That means large articles do not blow up the version log's storage footprint and title-only edits can reuse the previous body's blob rather than uploading a duplicate.
 
@@ -69,17 +63,11 @@ If the previous version for this (article, language) was saved by the same autho
 The rationale: an editor working on an article typically saves many times over a few minutes (autosave-like behaviour). Coalescing keeps the version log meaningful ("what changed in this session?") rather than turning it into a keystroke recorder.
 
 - The coalesce window is 10 minutes by default.
-- Coalesce only fires for the **same author** — Alice's edit at 12:00
+- Coalesce only fires for the **same author** — Alice's edit at 12:00 and Bob's edit at 12:05 always land as two distinct versions so the attribution stays honest.
 
-and Bob's edit at 12:05 always land as two distinct versions so the attribution stays honest.
+- Coalescing works even when the previous body was completely different — the same version row is reused. This is important because the platform treats a coalesced update as "the same editing session, evolving state". The previous body is discarded.
 
-- Coalescing works even when the previous body was completely
-
-different — the same version row is reused. This is important because the platform treats a coalesced update as "the same editing session, evolving state". The previous body is discarded.
-
-- When coalesce happens, downstream translations of this source
-
-version are automatically marked stale — see the [Translations interaction](#translations-interaction) section below.
+- When coalesce happens, downstream translations of this source version are automatically marked stale — see the [Translations interaction](#translations-interaction) section below.
 
 ### 3. New version
 
@@ -89,17 +77,11 @@ If neither of the above applies (different author, past the coalesce window, or 
 
 Clicking a version in the History tab opens the diff modal with three parts:
 
-- **Header** — version handle, author, timestamp, size, commit
+- **Header** — version handle, author, timestamp, size, commit message.
 
-message.
+- **Title diff** — side-by-side comparison of the version's title against the current title, with added and removed segments highlighted.
 
-- **Title diff** — side-by-side comparison of the version's title
-
-against the current title, with added and removed segments highlighted.
-
-- **Content diff** — the same for the body, with unchanged regions
-
-shown as context and edits highlighted inline.
+- **Content diff** — the same for the body, with unchanged regions shown as context and edits highlighted inline.
 
 The diff is against the current live version by default. There is also a compare-across-versions view — pick any two versions from the list and the modal renders their diff.
 
@@ -111,39 +93,25 @@ From the version detail modal you can click **Restore this version**. Confirmati
 
 Restore semantics:
 
-- The current title and content are replaced by the selected
+- The current title and content are replaced by the selected version's title and content.
 
-version's title and content.
+- A **new** version is recorded on top, with the commit message "Restored from earlier version". The version log therefore never loses history — you can undo the restore by restoring the version before the restore.
 
-- A **new** version is recorded on top, with the commit message
+- Coalesce does not apply to restores. A restore always lands as a fresh version regardless of author or timing.
 
-"Restored from earlier version". The version log therefore never loses history — you can undo the restore by restoring the version before the restore.
-
-- Coalesce does not apply to restores. A restore always lands as a
-
-fresh version regardless of author or timing.
-
-- Every translation of this article is marked stale (the source
-
-changed), and the sidebar's auto-translate button appears if not already visible.
+- Every translation of this article is marked stale (the source changed), and the sidebar's auto-translate button appears if not already visible.
 
 ## Translations interaction
 
 Every version is per-language, so:
 
-- Editing the primary-language body produces a new primary-language
+- Editing the primary-language body produces a new primary-language version. Existing translations become stale (their reference now points at an older primary-language version).
 
-version. Existing translations become stale (their reference now points at an older primary-language version).
+- Editing a translation directly produces a new version in that target language's stream. The primary-language stream is not touched.
 
-- Editing a translation directly produces a new version in that
+- Auto-translate produces a new version in each target-language stream that received a translation. Each translation version is stamped so the dashboard knows it is fresh.
 
-target language's stream. The primary-language stream is not touched.
-
-- Auto-translate produces a new version in each target-language
-
-stream that received a translation. Each translation version is stamped so the dashboard knows it is fresh.
-
-See [Translations](/post-translations) for the full staleness model and the tools to keep translations in sync as versions accumulate.
+See [Translations](/translations) for the full staleness model and the tools to keep translations in sync as versions accumulate.
 
 ### Why coalesce interacts with staleness
 
@@ -186,11 +154,7 @@ Deleting a post does not remove its version history. The versions remain in plac
 ## Related
 
 - [Post editor](/post-editor) — where saves happen.
-- [Post management overview](/post-management)
-- [Translations](/post-translations) — how versions interact with
+- [Post management overview](/prispevky-overview)
+- [Translations](/translations) — how versions interact with per-language freshness.
 
-per-language freshness.
-
-- [Visibility and lifecycle](/post-visibility-and-lifecycle) — the
-
-soft-delete + restore semantics that preserve version history.
+- [Visibility and lifecycle](/visibility-and-lifecycle) — the soft-delete + restore semantics that preserve version history.

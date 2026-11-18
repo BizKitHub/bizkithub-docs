@@ -27,7 +27,7 @@ Comprehensive guides, API reference, tutorials, and code examples to help you in
 
 ### Community Forum
 
-Connect with developers, share knowledge, and find solutions from the community. Join at [/community](/community).
+Connect with developers, share knowledge, and find solutions from the community. Join at [Community](/community-2).
 
 ### Email Support
 
@@ -64,7 +64,7 @@ Yes, webhooks provide instant notifications when events occur. Configure endpoin
 
 ### How do I report bugs or request features?
 
-Submit bug reports and feature requests through our GitHub repository. For urgent production issues, contact support directly for priority assistance. See [community](/community).
+Submit bug reports and feature requests through our GitHub repository. For urgent production issues, contact support directly for priority assistance. See [community](/community-2).
 
 ## System Status
 

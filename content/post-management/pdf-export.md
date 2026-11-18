@@ -26,47 +26,29 @@ The generated PDF is not persisted to storage — every click produces a fresh r
 
 The PDF layout, top to bottom:
 
-- **Header** with the organisation's name and (if configured)
-
-logo. Same visual identity as the public site.
+- **Header** with the organisation's name and (if configured) logo. Same visual identity as the public site.
 
 - **Article title** as a large heading.
 - **Perex** as an italic paragraph below the title.
-- **Metadata line** — main author, publication date, main
+- **Metadata line** — main author, publication date, main category, word count / reading time.
 
-category, word count / reading time.
+- **Main image** if the post has one — rendered at document width.
 
-- **Main image** if the post has one — rendered at document
+- **Body content** — the full article body, formatted as HTML and rendered with print-friendly typography. All inline images and gallery embeds are rendered.
 
-width.
-
-- **Body content** — the full article body, formatted as HTML
-
-and rendered with print-friendly typography. All inline images and gallery embeds are rendered.
-
-- **Reference identifier** at the footer — the article's
-
-external identifier, so a reader with the printed page can find the source post in the admin later.
+- **Reference identifier** at the footer — the article's external identifier, so a reader with the printed page can find the source post in the admin later.
 
 The PDF is styled for printability: black text on white background, generous margins, page breaks that avoid orphan lines.
 
 ## What is NOT included
 
-- **Attachments** are NOT embedded. The Downloads section on
+- **Attachments** are NOT embedded. The Downloads section on the public article page does not appear in the PDF; only the article body is exported. If you want the PDF and the attached files together, download each separately.
 
-the public article page does not appear in the PDF; only the article body is exported. If you want the PDF and the attached files together, download each separately.
+- **Comments and reader ratings** are NOT included. The PDF is the article, not the whole page.
 
-- **Comments and reader ratings** are NOT included. The PDF is
+- **Related-post suggestions** and other admin-side navigation are NOT included.
 
-the article, not the whole page.
-
-- **Related-post suggestions** and other admin-side navigation
-
-are NOT included.
-
-- **Interactive elements** (video players, embedded forms) are
-
-rendered as their static markup only — a video player renders as its preview image, not as a playable element.
+- **Interactive elements** (video players, embedded forms) are rendered as their static markup only — a video player renders as its preview image, not as a playable element.
 
 ## Locale selection
 
@@ -82,35 +64,21 @@ The downloaded file is named `post-{externalId}.pdf` — for example, `post-XxnF
 
 Practical scenarios:
 
-- **Compliance / audit archival** — you need a snapshot of the
+- **Compliance / audit archival** — you need a snapshot of the article as it appeared on a specific date, signed and archived off-platform.
 
-article as it appeared on a specific date, signed and archived off-platform.
+- **Physical distribution** — printing the article for in-person events, mail-outs, waiting-room reading, or training materials.
 
-- **Physical distribution** — printing the article for
+- **Sharing with someone who does not use the platform** — a reviewer or stakeholder without admin access can read the PDF and comment via any PDF annotation tool.
 
-in-person events, mail-outs, waiting-room reading, or training materials.
+- **Handout companion to a presentation** — attach the PDF alongside slides.
 
-- **Sharing with someone who does not use the platform** — a
-
-reviewer or stakeholder without admin access can read the PDF and comment via any PDF annotation tool.
-
-- **Handout companion to a presentation** — attach the PDF
-
-alongside slides.
-
-- **Offline reading** — a PDF works anywhere; a live article
-
-page does not.
+- **Offline reading** — a PDF works anywhere; a live article page does not.
 
 Less useful scenarios (use the public article URL instead):
 
-- **Sharing with someone who could read the live page.** The
+- **Sharing with someone who could read the live page.** The URL is dynamic, always up to date, and offers comments and interaction.
 
-URL is dynamic, always up to date, and offers comments and interaction.
-
-- **SEO** — PDFs are indexed by some search engines but rank
-
-weakly compared to HTML.
+- **SEO** — PDFs are indexed by some search engines but rank weakly compared to HTML.
 
 ## Print quality
 
@@ -122,45 +90,29 @@ For long articles (10+ pages), the automatic page-break logic attempts to keep h
 
 There is no bulk-export-to-PDF action. Each PDF is generated per-post on demand. If you need PDFs of a hundred articles, open each in turn.
 
-For at-scale archival, prefer the [Git workflow](/post-git-workflow) export — it produces a zip of Markdown files, which can be converted to PDFs off-platform using any Markdown-to-PDF toolchain if PDF specifically is required.
+For at-scale archival, prefer the [Git workflow](/git-workflow) export — it produces a zip of Markdown files, which can be converted to PDFs off-platform using any Markdown-to-PDF toolchain if PDF specifically is required.
 
 ## Caveats
 
-- **Fonts** — the PDF uses standard web-safe fonts. Very
+- **Fonts** — the PDF uses standard web-safe fonts. Very specific typographic identities (custom fonts loaded from the public site's CSS) may not render in the PDF.
 
-specific typographic identities (custom fonts loaded from the public site's CSS) may not render in the PDF.
+- **Dark-mode** — the PDF is always light-mode (black on white). The public site's dark-mode variant does not affect the export.
 
-- **Dark-mode** — the PDF is always light-mode (black on
+- **Very large articles** — articles with hundreds of embedded images produce large PDF files (tens of megabytes). Trim the gallery before exporting if size is a concern.
 
-white). The public site's dark-mode variant does not affect the export.
-
-- **Very large articles** — articles with hundreds of embedded
-
-images produce large PDF files (tens of megabytes). Trim the gallery before exporting if size is a concern.
-
-- **HTML that assumes JavaScript** — dynamic components
-
-(interactive charts, embedded widgets that require JavaScript) render as static placeholders in the PDF.
+- **HTML that assumes JavaScript** — dynamic components (interactive charts, embedded widgets that require JavaScript) render as static placeholders in the PDF.
 
 ## Tips
 
-- **Export the locale you're going to share.** A reviewer who
+- **Export the locale you're going to share.** A reviewer who reads Czech should get the Czech PDF, not the English one.
 
-reads Czech should get the Czech PDF, not the English one.
+- **Preview before printing bulk.** Open one PDF, check the layout, then generate the rest. Small styling issues (a main image that renders too large, an unfortunate page break) are easier to spot when you have one to look at first.
 
-- **Preview before printing bulk.** Open one PDF, check the
-
-layout, then generate the rest. Small styling issues (a main image that renders too large, an unfortunate page break) are easier to spot when you have one to look at first.
-
-- **Keep the external identifier visible.** The footer
-
-identifier is the fastest way for someone reading the PDF to find the source article in the admin later. Do not crop it out when redesigning the PDF for external distribution.
+- **Keep the external identifier visible.** The footer identifier is the fastest way for someone reading the PDF to find the source article in the admin later. Do not crop it out when redesigning the PDF for external distribution.
 
 ## Related
 
-- [Post management overview](/post-management)
+- [Post management overview](/prispevky-overview)
 - [Post editor](/post-editor)
-- [Gallery and images](/post-gallery-and-images)
-- [Git workflow](/post-git-workflow) — for at-scale Markdown
-
-export as an alternative to per-post PDF.
+- [Gallery and images](/gallery-and-images)
+- [Git workflow](/git-workflow) — for at-scale Markdown export as an alternative to per-post PDF.

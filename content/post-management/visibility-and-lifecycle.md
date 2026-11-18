@@ -23,33 +23,21 @@ This article covers the four visibility values, the five derived statuses, the s
 
 - `public` — anyone can read the article on the public site.
 - `private` — nobody outside the admin can read the article.
-- `unlisted` — hidden from category pages, feeds, sitemap, and
-
-internal search, but readable by anyone with the direct URL.
+- `unlisted` — hidden from category pages, feeds, sitemap, and internal search, but readable by anyone with the direct URL.
 
 - `subscribe` — visible only to authenticated subscribers.
 
 **Status** is the label the grid, badges, and admin UI use to describe the article's current state. It is derived from `(visibility, publication_date, deleted_date)`:
 
-- `draft` — never been live; visibility `private` with no publication
+- `draft` — never been live; visibility `private` with no publication date set.
 
-date set.
+- `scheduled` — publication date is in the future and visibility is `public`. Auto-flips to `published` at that timestamp.
 
-- `scheduled` — publication date is in the future and visibility is
+- `published` — currently live to whichever audience the visibility permits.
 
-`public`. Auto-flips to `published` at that timestamp.
+- `private` — was live at some point (publication date is set) but has since been flipped to `private`. Effectively "unpublished but historically remembered".
 
-- `published` — currently live to whichever audience the visibility
-
-permits.
-
-- `private` — was live at some point (publication date is set) but has
-
-since been flipped to `private`. Effectively "unpublished but historically remembered".
-
-- `archived` — soft-deleted. Not visible anywhere on the public site;
-
-still restorable from the admin.
+- `archived` — soft-deleted. Not visible anywhere on the public site; still restorable from the admin.
 
 The distinction matters because you rarely set the status directly — you set visibility (and optionally the date) and the platform computes the status. The four quick-action buttons in the sidebar (Publish now, Schedule, Make draft, Unpublish) are shortcuts that set the underlying visibility + date combinations for you.
 
@@ -69,13 +57,9 @@ The table below covers every reachable combination.
 
 Two nuances:
 
-- **Deletion trumps visibility.** An article with a deletion timestamp
+- **Deletion trumps visibility.** An article with a deletion timestamp is `archived` regardless of what visibility or publication date is set.
 
-is `archived` regardless of what visibility or publication date is set.
-
-- **Publication date in the future with `private` visibility** is
-
-effectively a `draft` — the future date is ignored until visibility becomes `public`.
+- **Publication date in the future with `private` visibility** is effectively a `draft` — the future date is ignored until visibility becomes `public`.
 
 ## Visibility values in detail
 
@@ -95,17 +79,11 @@ Not on the public site. The URL returns a "not found" response for non-admins. N
 
 The article is readable by anyone who has the direct URL, but it does not appear in any listing surface: no category archive, no sitemap, no RSS, no search index, no `/api/v1/post/list` result. Use for:
 
-- **Test drives** — you want a stakeholder to preview the article
+- **Test drives** — you want a stakeholder to preview the article before it goes public, without committing to a full launch.
 
-before it goes public, without committing to a full launch.
+- **Internal-only reference pages** that need to be linkable from documentation elsewhere but should not be discoverable.
 
-- **Internal-only reference pages** that need to be linkable from
-
-documentation elsewhere but should not be discoverable.
-
-- **Beta articles** that are ready to publish but need a stealth
-
-launch first.
+- **Beta articles** that are ready to publish but need a stealth launch first.
 
 `unlisted` is the fine-grained middle ground between `public` and `private`.
 
@@ -132,17 +110,11 @@ You want the article to go live at a specific future moment, but not yet. The si
 
 Scheduling is useful for:
 
-- **Coordinated launches** — a product announcement that must go live
+- **Coordinated launches** — a product announcement that must go live at the same moment as an email campaign.
 
-at the same moment as an email campaign.
+- **Off-hours publication** — an article ready today but meant to appear at Monday 09:00 for weekday readers.
 
-- **Off-hours publication** — an article ready today but meant to
-
-appear at Monday 09:00 for weekday readers.
-
-- **Time-zone alignment** — the platform stores timestamps in UTC but
-
-the picker accepts your local time and converts.
+- **Time-zone alignment** — the platform stores timestamps in UTC but the picker accepts your local time and converts.
 
 To schedule: pick a future date/time in the publication-date field and set visibility to `public`. Or use the sidebar's **Schedule** button, which sets both in one click with a default of "one hour from now, rounded up to the next 5-minute mark".
 
@@ -166,13 +138,9 @@ The article is not physically removed. Its ID, external ID, canonical URL histor
 
 Scheduling is available for any post with `public` visibility. The scheduling flow:
 
-1. In the sidebar, set **Publication date** to the desired future
+1. In the sidebar, set **Publication date** to the desired future moment.
 
-moment.
-
-2. Set **Visibility** to `public` (or use the **Schedule** quick
-
-action, which does both at once).
+2. Set **Visibility** to `public` (or use the **Schedule** quick action, which does both at once).
 
 3. Save.
 
@@ -196,13 +164,9 @@ If you want to keep the historical publication date but take the article out of 
 
 Storage is in UTC. Confirm by hovering the date pill in the grid — it shows both.
 
-- **Very short windows**: scheduling less than a minute in the future
+- **Very short windows**: scheduling less than a minute in the future behaves the same as publishing now, because the read-time evaluation might happen after the scheduled moment.
 
-behaves the same as publishing now, because the read-time evaluation might happen after the scheduled moment.
-
-- **No pre-publication preview URL**: to preview a scheduled article
-
-before it goes live, set it to `unlisted` first, share the URL with reviewers, then flip to `public` with the scheduled date once approved.
+- **No pre-publication preview URL**: to preview a scheduled article before it goes live, set it to `unlisted` first, share the URL with reviewers, then flip to `public` with the scheduled date once approved.
 
 ## Soft-delete and restore
 
@@ -210,9 +174,7 @@ Deleting an article does not remove it from the database. Instead, the deletion 
 
 - **Every previous version** in the history log.
 - **Every reader comment** and moderation decision.
-- **Every canonical URL** that ever pointed to the article, so
-
-redirects can be resurrected.
+- **Every canonical URL** that ever pointed to the article, so redirects can be resurrected.
 
 - **Every metadata entry** and integration reference.
 
@@ -220,13 +182,9 @@ redirects can be resurrected.
 
 Two paths:
 
-- **From the sidebar** on the post detail page — the **Delete** button
+- **From the sidebar** on the post detail page — the **Delete** button at the bottom, with a confirmation dialog.
 
-at the bottom, with a confirmation dialog.
-
-- **From the row context menu** in the grid — right-click a row →
-
-Delete, with the same confirmation.
+- **From the row context menu** in the grid — right-click a row → Delete, with the same confirmation.
 
 The confirmation dialog is deliberate; there is no undo-toast. Once you confirm, the article moves to `archived` immediately and disappears from the standard grid view.
 
@@ -236,7 +194,7 @@ From the article grid, filter to include archived posts (there is a toggle in th
 
 ### Bulk delete and bulk restore
 
-The multi-select bulk-action bar supports bulk delete but not bulk restore. Restore one at a time. See [Bulk actions](/post-bulk-actions).
+The multi-select bulk-action bar supports bulk delete but not bulk restore. Restore one at a time. See [Bulk actions](/bulk-actions).
 
 ### Hard delete
 
@@ -246,13 +204,9 @@ There is no hard-delete button in the standard admin. Deletion is always reversi
 
 Every post carries a **kind** — a discriminator that separates regular blog articles from other content that lives in the same underlying storage. Kinds currently in use:
 
-- `post` — the default. Regular blog article; appears in the grid, on
+- `post` — the default. Regular blog article; appears in the grid, on the public site, in the RSS feed, in the sitemap, in the API.
 
-the public site, in the RSS feed, in the sitemap, in the API.
-
-- `branch` — a branch-owned document. Used for internal per-location
-
-content that shouldn't appear in the main blog feed. The grid filters these out by default; select "branch only" from the kind filter to see them.
+- `branch` — a branch-owned document. Used for internal per-location content that shouldn't appear in the main blog feed. The grid filters these out by default; select "branch only" from the kind filter to see them.
 
 The kind is set at creation and rarely changes. If you find yourself wanting to change a kind, it usually means the post was created in the wrong module — most editors will never need to touch this.
 
@@ -260,48 +214,34 @@ The kind is set at creation and rarely changes. If you find yourself wanting to 
 
 The typical article lifecycle:
 
-1. **Create** — editor clicks **Add**, writes a draft. Visibility
-
-defaults to `private`, no date. Status: `draft`.
+1. **Create** — editor clicks **Add**, writes a draft. Visibility defaults to `private`, no date. Status: `draft`.
 
 2. **Edit** — editor works on the article across multiple sessions.
 
 Status stays `draft`.
 
-3. **Schedule** — editor sets a future date and flips visibility to
+3. **Schedule** — editor sets a future date and flips visibility to `public`. Status: `scheduled`.
 
-`public`. Status: `scheduled`.
-
-4. **Auto-publish** — the scheduled moment arrives, the platform
-
-flips the article to `published` automatically.
+4. **Auto-publish** — the scheduled moment arrives, the platform flips the article to `published` automatically.
 
 5. **Live** — readers arrive, comments appear, views tick up.
 6. **Withdraw** (optional) — editor spots an issue, clicks
 
 **Unpublish**. Visibility becomes `private`, date preserved. Status: `private`.
 
-7. **Re-publish** (optional) — editor flips visibility back to
-
-`public`. Status: `published` again.
+7. **Re-publish** (optional) — editor flips visibility back to `public`. Status: `published` again.
 
 8. **Retire** — years later, the article is genuinely obsolete.
 
 Editor clicks **Delete**. Status: `archived`. The URL now returns a "not found" for anonymous readers.
 
-9. **Restore** (rare, but always possible) — the article is undeleted
-
-from the archived filter. Original visibility and date are preserved.
+9. **Restore** (rare, but always possible) — the article is undeleted from the archived filter. Original visibility and date are preserved.
 
 ## Related
 
-- [Post management overview](/post-management)
+- [Post management overview](/prispevky-overview)
 - [Post editor](/post-editor)
-- [Bulk actions](/post-bulk-actions)
-- [Routing and URLs](/post-routing-and-urls) — for how visibility
+- [Bulk actions](/bulk-actions)
+- [Routing and URLs](/routing-and-urls) — for how visibility affects canonical URL generation.
 
-affects canonical URL generation.
-
-- [API integration](/post-api-integration) — for how visibility
-
-filters the public API responses.
+- [API integration](/api-integration) — for how visibility filters the public API responses.

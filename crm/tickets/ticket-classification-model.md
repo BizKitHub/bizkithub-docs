@@ -20,7 +20,7 @@ precisely than a single "status" field ever could.
 This article is the reference for what each label means, how the
 platform uses it, and why the model is designed this way. If you are new
 to the ticket module and want the end-to-end tour first, read
-[Tickets](/tickets) and come back here when you need the details.
+[Tickets](/issue-overview) and come back here when you need the details.
 
 ## Urgent versus important
 
@@ -335,5 +335,5 @@ the cracks without opening each one.
 
 ## Related
 
-- [Tickets](/tickets) — module overview: intake channels, AI workflow,
+- [Tickets](/issue-overview) — module overview: intake channels, AI workflow,
   assignment, deadlines, spam filter.

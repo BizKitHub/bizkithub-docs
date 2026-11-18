@@ -25,9 +25,7 @@ Open any post from `/post` → the detail page has a **Gallery** tab right next 
 
 Two paths:
 
-- **Drop a file** into the upload area. Supports one or many files at
-
-once; every dropped file is uploaded in parallel.
+- **Drop a file** into the upload area. Supports one or many files at once; every dropped file is uploaded in parallel.
 
 - **Click to browse** — the standard file picker opens.
 
@@ -45,13 +43,9 @@ The main image is what gets used for:
 
 - The **thumbnail** in the admin article grid.
 - The **hero image** at the top of the public article page.
-- The **OpenGraph og:image** tag emitted when the article URL is
+- The **OpenGraph og:image** tag emitted when the article URL is shared to social media. Facebook, LinkedIn, X, and every messenger app read this tag to build a rich-preview card.
 
-shared to social media. Facebook, LinkedIn, X, and every messenger app read this tag to build a rich-preview card.
-
-- The **fallback** for RSS-feed items and API responses that expose
-
-a single article-summary image.
+- The **fallback** for RSS-feed items and API responses that expose a single article-summary image.
 
 A post can have zero main images. In that case the grid shows a placeholder icon, the public hero renders as text-only, and the OpenGraph tag is omitted. The SEO health-score pill penalises posts without a main image.
 
@@ -59,17 +53,11 @@ A post can have zero main images. In that case the grid shows a placeholder icon
 
 Click and drag a thumbnail to a new position. The new order persists immediately without a save button. The order matters for:
 
-- The **lightbox navigation** — readers who click one image can page
+- The **lightbox navigation** — readers who click one image can page through the gallery in the order you set.
 
-through the gallery in the order you set.
+- The **public API response** — the gallery array is returned in the order you set.
 
-- The **public API response** — the gallery array is returned in the
-
-order you set.
-
-- **AI-generated moodboards** — if the reference-image library uses
-
-gallery images from an existing post, the order acts as a priority.
+- **AI-generated moodboards** — if the reference-image library uses gallery images from an existing post, the order acts as a priority.
 
 ## Removing images
 
@@ -89,17 +77,11 @@ If the organisation has set up a reference-image library (managed under `/settin
 
 The generation flow:
 
-1. **Prompt** — describe what you want. "A minimalist illustration of
+1. **Prompt** — describe what you want. "A minimalist illustration of a laptop with a coffee cup on a wooden desk, warm morning light".
 
-a laptop with a coffee cup on a wooden desk, warm morning light".
+2. **Aspect ratio** — one of `3:2` (default), `16:9`, `4:3`, `1:1`, `9:16`. Match the aspect to where the image will be used — `16:9` for hero images, `1:1` for social cards, `3:2` for general illustration.
 
-2. **Aspect ratio** — one of `3:2` (default), `16:9`, `4:3`, `1:1`,
-
-`9:16`. Match the aspect to where the image will be used — `16:9` for hero images, `1:1` for social cards, `3:2` for general illustration.
-
-3. **Style intent** — carried by the reference-image library (see
-
-below); the images you activate in the library act as a moodboard steering the model toward a consistent visual style.
+3. **Style intent** — carried by the reference-image library (see below); the images you activate in the library act as a moodboard steering the model toward a consistent visual style.
 
 Click **Generate**. The AI produces an image within a few seconds. Preview it, and if you like it click **Add to gallery** — the image is uploaded to the post's storage and appears in the thumbnail grid just like a manually uploaded one. You can regenerate as many times as you want; each attempt is a discrete generation call, so generating five variations and keeping the best is a common flow.
 
@@ -115,9 +97,7 @@ The reference-image library is an organisation-wide setting that controls the vi
 
 Marking them **active** signals the model to treat them as visual examples. Inactive images stay in the library but do not influence generation.
 
-- **Default aspect ratio** — the aspect used when a per-post
-
-generation form does not specify one.
+- **Default aspect ratio** — the aspect used when a per-post generation form does not specify one.
 
 The library is one-per-organisation. Everyone generating images for any post uses the same moodboard, which keeps the site's visual identity consistent even when many authors are contributing.
 
@@ -144,72 +124,48 @@ The markdown syntax `![alt text](url)` includes an alt-text field. **Fill it in 
 
 - **Screen readers** for visually impaired visitors.
 - **Search engines** as an indexing signal.
-- **Image loading fallbacks** when a browser cannot render the
-
-image.
+- **Image loading fallbacks** when a browser cannot render the image.
 
 An empty alt (`![](url)`) is a strong accessibility signal for "decorative image, ignore" — do not use it unless the image is genuinely decorative.
 
 ## What is exposed on the public site and API
 
-- **Main image URL** — exposed in article summaries (grid pages, RSS,
+- **Main image URL** — exposed in article summaries (grid pages, RSS, API `mainImageUrl` field, OpenGraph tag).
 
-API `mainImageUrl` field, OpenGraph tag).
+- **Gallery** — exposed in the article detail (article page, API `gallery` field), in the order set by the admin.
 
-- **Gallery** — exposed in the article detail (article page,
-
-API `gallery` field), in the order set by the admin.
-
-The public API returns absolute HTTPS URLs; embedding an article in another product typically just uses those URLs directly. See [API integration](/post-api-integration).
+The public API returns absolute HTTPS URLs; embedding an article in another product typically just uses those URLs directly. See [API integration](/api-integration).
 
 ## Storage and lifecycle
 
 Every uploaded image is stored in blob storage. Storage lifecycle:
 
 - **Upload** — new file, live immediately.
-- **Delete** — the gallery entry is removed. The underlying blob may
+- **Delete** — the gallery entry is removed. The underlying blob may remain in storage for a grace period before physical deletion, so a deleted-then-restored gallery entry may still resolve.
 
-remain in storage for a grace period before physical deletion, so a deleted-then-restored gallery entry may still resolve.
+- **Post deletion** — soft-deleting the post does not delete gallery images. The images remain and are visible again when the post is restored.
 
-- **Post deletion** — soft-deleting the post does not delete gallery
-
-images. The images remain and are visible again when the post is restored.
-
-There is no admin-side "download all gallery images" — for a backup of one post's images, use the [PDF export](/post-pdf-export) which embeds all images inline in the exported PDF, or use the [Git export](/post-git-workflow) which references every image URL in the markdown body.
+There is no admin-side "download all gallery images" — for a backup of one post's images, use the [PDF export](/pdf-export) which embeds all images inline in the exported PDF, or use the [Git export](/git-workflow) which references every image URL in the markdown body.
 
 ## Tips
 
-- **Set the main image early.** SEO health, grid thumbnails, and
+- **Set the main image early.** SEO health, grid thumbnails, and social cards all depend on it. The article looks incomplete on every listing without one.
 
-social cards all depend on it. The article looks incomplete on every listing without one.
+- **Reuse images across posts.** Every gallery is per-post storage, but the URL of an image uploaded to one post's gallery can be referenced from another post's body. This is common for organisation logos, disclaimer badges, or a signature graphic.
 
-- **Reuse images across posts.** Every gallery is per-post storage,
+- **Trim your reference-image library.** Ten actively curated reference images produce better generation than fifty half-hearted ones. Deactivate rather than delete when in doubt.
 
-but the URL of an image uploaded to one post's gallery can be referenced from another post's body. This is common for organisation logos, disclaimer badges, or a signature graphic.
+- **Aspect ratios matter for social sharing.** LinkedIn and Facebook prefer 1.91:1 (close to 16:9); Twitter/X prefers 16:9 wide or 1:1 square. Generate at the right ratio for the first-place-you-share it.
 
-- **Trim your reference-image library.** Ten actively curated
-
-reference images produce better generation than fifty half-hearted ones. Deactivate rather than delete when in doubt.
-
-- **Aspect ratios matter for social sharing.** LinkedIn and
-
-Facebook prefer 1.91:1 (close to 16:9); Twitter/X prefers 16:9 wide or 1:1 square. Generate at the right ratio for the first-place-you-share it.
-
-- **Photograph over stock illustration** when the article is a case
-
-study or a story. Stock illustrations start to feel generic when every article uses them.
+- **Photograph over stock illustration** when the article is a case study or a story. Stock illustrations start to feel generic when every article uses them.
 
 ## Related
 
 - [Post editor](/post-editor)
-- [Post management overview](/post-management)
-- [Attachments](/post-attachments) — for non-image files (PDFs,
+- [Post management overview](/prispevky-overview)
+- [Attachments](/attachments) — for non-image files (PDFs, spreadsheets, downloadables) that also live with the post but are not gallery images.
 
-spreadsheets, downloadables) that also live with the post but are not gallery images.
+- [AI tools](/ai-tools) — for the full picture of AI-assisted authoring across the module.
 
-- [AI tools](/post-ai-tools) — for the full picture of AI-assisted
-
-authoring across the module.
-
-- [PDF export](/post-pdf-export)
-- [API integration](/post-api-integration)
+- [PDF export](/pdf-export)
+- [API integration](/api-integration)

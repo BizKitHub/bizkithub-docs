@@ -28,25 +28,15 @@ The initial author on a newly-created post is the admin member who clicked **Add
 
 The main author (first in the list) is used by:
 
-- **The public article page** — the byline shows the main author's
+- **The public article page** — the byline shows the main author's name and, when available, their profile photo. Co-authors appear in smaller text or as "and N others" links.
 
-name and, when available, their profile photo. Co-authors appear in smaller text or as "and N others" links.
+- **The article grid in the admin** — the Main Author column displays this person, linked to their contact detail. Filtering by author in the grid narrows to articles where they are the main author.
 
-- **The article grid in the admin** — the Main Author column
+- **RSS feed** — the `<author>` tag of each item is the main author's email address.
 
-displays this person, linked to their contact detail. Filtering by author in the grid narrows to articles where they are the main author.
+- **OpenGraph meta tags** — the article's `article:author` tag points at the main author.
 
-- **RSS feed** — the `<author>` tag of each item is the main
-
-author's email address.
-
-- **OpenGraph meta tags** — the article's `article:author` tag
-
-points at the main author.
-
-- **API responses** — the `mainAuthorId` field returns the main
-
-author's external identifier.
+- **API responses** — the `mainAuthorId` field returns the main author's external identifier.
 
 Everyone in the list, main or co-author, appears in the full byline. But the main author is the "face" of the article.
 
@@ -54,17 +44,11 @@ Everyone in the list, main or co-author, appears in the full byline. But the mai
 
 Common cases for multiple authors:
 
-- **Co-written articles** — two people contributed equally. Add
+- **Co-written articles** — two people contributed equally. Add both; the first-added is the main author by default (drag to reorder if the split-billing needs a different order).
 
-both; the first-added is the main author by default (drag to reorder if the split-billing needs a different order).
+- **Editorial + expert** — a subject-matter expert wrote the first draft, an editor polished it. Credit both.
 
-- **Editorial + expert** — a subject-matter expert wrote the
-
-first draft, an editor polished it. Credit both.
-
-- **Legal / compliance signoffs** — some organisations attribute
-
-the compliance reviewer as a co-author.
+- **Legal / compliance signoffs** — some organisations attribute the compliance reviewer as a co-author.
 
 There is no maximum. Practically, more than three or four authors on one article becomes hard to read in the byline; consider grouping under a team name (a contact set up for the team) instead.
 
@@ -80,9 +64,7 @@ When a reader clicks an author's name on the public article page, they land on t
 
 The author profile shows:
 
-- The person's name and, when available, a photo, short bio, and
-
-external links (LinkedIn, personal site, etc.).
+- The person's name and, when available, a photo, short bio, and external links (LinkedIn, personal site, etc.).
 
 - Every non-internal post they have authored, most recent first.
 - Optionally, tags they most frequently write about.
@@ -101,38 +83,24 @@ The public API exposes author information as follows:
 
 - **`mainAuthorId`** — the external identifier of the main author.
 - **`mainAuthorName`** — the display name of the main author.
-- **`authorIds`** — the full ordered list of author external
+- **`authorIds`** — the full ordered list of author external identifiers on the article detail endpoint. The order matches the admin's ordering.
 
-identifiers on the article detail endpoint. The order matches the admin's ordering.
-
-Author details (photo, bio, external links) are fetched separately via the contacts endpoint. See [API integration](/post-api-integration).
+Author details (photo, bio, external links) are fetched separately via the contacts endpoint. See [API integration](/api-integration).
 
 ## Tips
 
-- **Keep contact records tidy.** The byline is only as good as the
+- **Keep contact records tidy.** The byline is only as good as the contact's name and photo. Filling in a photo on the contact is the single biggest improvement to how the public article page looks.
 
-contact's name and photo. Filling in a photo on the contact is the single biggest improvement to how the public article page looks.
+- **Attribute honestly.** If an intern wrote the draft, an editor polished it, and a lawyer signed off, three-way co-authorship is the right answer. Under-attribution is a compliance risk and an editorial-team retention risk.
 
-- **Attribute honestly.** If an intern wrote the draft, an editor
+- **Prefer real people over "Editorial team"** for articles that have an actual author. A named byline is more trustworthy to readers. Reserve team-level attribution for genuinely team-authored pieces like release notes.
 
-polished it, and a lawyer signed off, three-way co-authorship is the right answer. Under-attribution is a compliance risk and an editorial-team retention risk.
-
-- **Prefer real people over "Editorial team"** for articles that
-
-have an actual author. A named byline is more trustworthy to readers. Reserve team-level attribution for genuinely team-authored pieces like release notes.
-
-- **When an author leaves the organisation**, keep their contact
-
-active if you still want their historical bylines linked. Delete or archive the contact only if you also want to strip attribution (which is a rare and destructive choice — historical bylines are usually preserved).
+- **When an author leaves the organisation**, keep their contact active if you still want their historical bylines linked. Delete or archive the contact only if you also want to strip attribution (which is a rare and destructive choice — historical bylines are usually preserved).
 
 ## Related
 
 - [Post editor](/post-editor)
-- [Post management overview](/post-management)
-- [Post categories](/post-categories) — for the taxonomy authors
+- [Post management overview](/prispevky-overview)
+- [Post categories](/post-category-overview) — for the taxonomy authors fit into.
 
-fit into.
-
-- [API integration](/post-api-integration) — for how bylines are
-
-surfaced to integrators.
+- [API integration](/api-integration) — for how bylines are surfaced to integrators.

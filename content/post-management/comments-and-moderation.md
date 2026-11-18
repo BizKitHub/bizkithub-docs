@@ -20,17 +20,11 @@ This article covers the comment submission flow from the reader's perspective, t
 
 At the bottom of every published article on the public site, below the body and any attachments, sits a comments section. Its structure depends on the site theme, but typically:
 
-- A **comment form** with a name field, an email field, and a
+- A **comment form** with a name field, an email field, and a free-text comment field. Some themes require the visitor to log in first; others accept anonymous submissions with captcha protection.
 
-free-text comment field. Some themes require the visitor to log in first; others accept anonymous submissions with captcha protection.
+- A **thread of existing comments**, sorted chronologically or by "most liked" depending on theme.
 
-- A **thread of existing comments**, sorted chronologically or
-
-by "most liked" depending on theme.
-
-- A **reply button** on each comment that opens a nested reply
-
-form.
+- A **reply button** on each comment that opens a nested reply form.
 
 On submission, the comment lands immediately in the article's comment thread (or, on organisations with pre-moderation enabled, waits in a review queue — check with your theme configuration).
 
@@ -55,13 +49,9 @@ The table is paginated, filterable by status (active vs deleted), searchable by 
 
 Right-click any comment row (or click the row's ⋮ menu) and choose an action:
 
-- **Delete** — soft-deletes the comment. A confirmation dialog
+- **Delete** — soft-deletes the comment. A confirmation dialog appears; on confirm the comment is removed from the public thread and marked deleted in the admin. It remains in the database and can be restored.
 
-appears; on confirm the comment is removed from the public thread and marked deleted in the admin. It remains in the database and can be restored.
-
-- **Restore** — for a comment previously deleted, restores it to
-
-the public thread.
+- **Restore** — for a comment previously deleted, restores it to the public thread.
 
 There is no edit-comment action. If a comment has substantive content that needs correction, delete it and (optionally) contact the commenter via the recorded email to invite a re-submission.
 
@@ -69,9 +59,7 @@ There is no edit-comment action. If a comment has substantive content that needs
 
 Multiple comments can be selected via checkboxes on each row (if your theme supports bulk actions in the comments tab). The bulk-action bar exposes:
 
-- **Bulk delete** — soft-delete every selected comment in one
-
-operation.
+- **Bulk delete** — soft-delete every selected comment in one operation.
 
 Bulk restore is not currently a distinct action; restore one at a time.
 
@@ -80,17 +68,11 @@ Bulk restore is not currently a distinct action; restore one at a time.
 Comments respect the article's visibility:
 
 - **Public article** — comments are visible to any reader.
-- **Private / unlisted article** — the comment form is present on
+- **Private / unlisted article** — the comment form is present on the article page, but the comments are visible only to whoever can also see the article. Since unlisted articles are readable by anyone with the URL, treat unlisted comments as "URL-secret, not private".
 
-the article page, but the comments are visible only to whoever can also see the article. Since unlisted articles are readable by anyone with the URL, treat unlisted comments as "URL-secret, not private".
+- **Subscribe-only article** — the comment form is subscriber-only; anonymous readers see the article gated. Comments made are visible to other subscribers.
 
-- **Subscribe-only article** — the comment form is subscriber-only;
-
-anonymous readers see the article gated. Comments made are visible to other subscribers.
-
-- **Archived article** — the article is not visible to readers,
-
-so its comments are not visible either. Comments survive the archive and are visible again if the article is restored.
+- **Archived article** — the article is not visible to readers, so its comments are not visible either. Comments survive the archive and are visible again if the article is restored.
 
 ## Comment translation
 
@@ -104,9 +86,7 @@ This is deliberate — reader voice matters as-is. Auto-translating a commenter'
 
 - Disappears from the public article page immediately.
 - Is marked as deleted in the admin table with a red badge.
-- Its author, email, content, and thread position are all
-
-preserved.
+- Its author, email, content, and thread position are all preserved.
 
 - Can be restored to the public thread with one right-click.
 
@@ -116,17 +96,11 @@ There is no admin action for hard-delete. If a comment must be permanently expun
 
 Depending on organisation settings, the following events may trigger notifications:
 
-- **New comment submitted** — an email to the article's main
+- **New comment submitted** — an email to the article's main author, giving them the option to reply directly.
 
-author, giving them the option to reply directly.
+- **Reply to your comment** — an email to the original commenter (using the email they submitted with) letting them know someone responded.
 
-- **Reply to your comment** — an email to the original commenter
-
-(using the email they submitted with) letting them know someone responded.
-
-- **Comment flagged as spam** — an email to configured
-
-moderators.
+- **Comment flagged as spam** — an email to configured moderators.
 
 Notification preferences are managed in the organisation's communication settings — outside the Posts module.
 
@@ -134,13 +108,9 @@ Notification preferences are managed in the organisation's communication setting
 
 The platform applies basic anti-spam heuristics before a comment lands (typical honeypots, rate limits, user-agent checks). What survives shows up in the admin table as normal comments. Two practical steps:
 
-- **Set up moderator notifications** so a suspicious comment
+- **Set up moderator notifications** so a suspicious comment reaches you promptly rather than waiting for a scan.
 
-reaches you promptly rather than waiting for a scan.
-
-- **Delete decisively.** A deleted comment is fully reversible;
-
-err on the side of removing anything that reads like spam or abuse. The commenter is not notified of the deletion.
+- **Delete decisively.** A deleted comment is fully reversible; err on the side of removing anything that reads like spam or abuse. The commenter is not notified of the deletion.
 
 For persistent abuse from a specific email or IP, contact support for a platform-level block.
 
@@ -148,44 +118,28 @@ For persistent abuse from a specific email or IP, contact support for a platform
 
 The public API exposes:
 
-- **`commentsCount`** on the article list and detail — the
+- **`commentsCount`** on the article list and detail — the number of active (non-deleted) comments.
 
-number of active (non-deleted) comments.
+- **`/api/v1/post/{id}/comments`** — the full comment thread for an article, in chronological order, with author name (but not email — email is admin-only).
 
-- **`/api/v1/post/{id}/comments`** — the full comment thread for
-
-an article, in chronological order, with author name (but not email — email is admin-only).
-
-Integrators building custom article renderers can use this to present a comments section outside the platform's own theme. See [API integration](/post-api-integration).
+Integrators building custom article renderers can use this to present a comments section outside the platform's own theme. See [API integration](/api-integration).
 
 ## Tips
 
-- **Reply from your admin identity, not from the anonymous
+- **Reply from your admin identity, not from the anonymous form.** If your main author account is set up, log in via the reply link in the notification email and post as your named self. Anonymous replies from an editor read poorly.
 
-form.** If your main author account is set up, log in via the reply link in the notification email and post as your named self. Anonymous replies from an editor read poorly.
+- **Delete spam quickly.** A single unreplied spam comment attracts more spam; the platform's heuristics work better when the visible thread is clean.
 
-- **Delete spam quickly.** A single unreplied spam comment
+- **Do not delete disagreement.** A reader who disagrees with an article and says so politely is a signal of engagement. Delete only when the comment is spam, abuse, or otherwise policy-violating — not when it makes the editor uncomfortable.
 
-attracts more spam; the platform's heuristics work better when the visible thread is clean.
-
-- **Do not delete disagreement.** A reader who disagrees with an
-
-article and says so politely is a signal of engagement. Delete only when the comment is spam, abuse, or otherwise policy-violating — not when it makes the editor uncomfortable.
-
-- **Consider closing very old articles' comments.** Once a
-
-post is a few years old, drive-by spam outweighs new legitimate discussion. Some themes let you close comments per-post; check your configuration.
+- **Consider closing very old articles' comments.** Once a post is a few years old, drive-by spam outweighs new legitimate discussion. Some themes let you close comments per-post; check your configuration.
 
 ## Related
 
-- [Post management overview](/post-management)
+- [Post management overview](/prispevky-overview)
 - [Post editor](/post-editor)
-- [Reader feedback](/post-reader-feedback) — the star-rating
+- [Reader feedback](/reader-feedback) — the star-rating companion.
 
-companion.
+- [Visibility and lifecycle](/visibility-and-lifecycle) — how article visibility affects comment visibility.
 
-- [Visibility and lifecycle](/post-visibility-and-lifecycle) —
-
-how article visibility affects comment visibility.
-
-- [API integration](/post-api-integration)
+- [API integration](/api-integration)

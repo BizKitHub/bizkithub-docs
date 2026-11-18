@@ -90,5 +90,5 @@ VIES does not distinguish §94 from §6i either, and the distinction does not ma
 
 ## Related
 
-- [Invoices](/invoices) — how VAT rates surface on issued documents and how the automatic pairing with bank transactions works.
+- [Invoices](/invoice-overview) — how VAT rates surface on issued documents and how the automatic pairing with bank transactions works.
 - [Company registry data](/company-registry) — what the platform stores about a Czech company alongside VAT status, and how it refreshes from ARES.

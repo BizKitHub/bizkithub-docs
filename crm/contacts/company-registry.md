@@ -121,4 +121,4 @@ The result is that an OSVČ profile syncs cleanly with three green timestamps an
 
 - [Contacts](/contacts) — the enclosing module and how registry enrichment fits into the wider automatic-profile-update pipeline.
 - [VAT handling and registration types](/vat) — how the VAT registration flag from ARES is interpreted and how it drives invoice output.
-- [Invoices](/invoices) — how the buyer's company data lands on issued documents.
+- [Invoices](/invoice-overview) — how the buyer's company data lands on issued documents.

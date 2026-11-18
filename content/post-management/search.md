@@ -32,17 +32,11 @@ The search collapses accented characters to their base form before comparing. Se
 
 Practical implications:
 
-- Czech and Slovak content is easily searchable by readers who type
+- Czech and Slovak content is easily searchable by readers who type without diacritics (mobile keyboards, non-native speakers).
 
-without diacritics (mobile keyboards, non-native speakers).
+- Product names with intentional accents (`Renée`) are still findable when typed as `renee`.
 
-- Product names with intentional accents (`Renée`) are still
-
-findable when typed as `renee`.
-
-- The matching applies uniformly across every language in the
-
-organisation.
+- The matching applies uniformly across every language in the organisation.
 
 ## Substring, not word-boundary
 
@@ -70,53 +64,33 @@ The filter operates in real time. As you type, the grid re-fetches matching resu
 
 ## API-side search
 
-The public API exposes the same search primitive through the `filterFulltextQuery` parameter on `/api/v1/post/list`. Supply a query string and receive articles that match on title, body, or perex in the requested locale. See [API integration](/post-api-integration) for the endpoint contract.
+The public API exposes the same search primitive through the `filterFulltextQuery` parameter on `/api/v1/post/list`. Supply a query string and receive articles that match on title, body, or perex in the requested locale. See [API integration](/api-integration) for the endpoint contract.
 
 ## What is NOT searched
 
-- **Tags** — searching for a tag code does not find articles
+- **Tags** — searching for a tag code does not find articles carrying that tag. Use the tag filter instead.
 
-carrying that tag. Use the tag filter instead.
+- **Categories** — same. Use the category filter or the category URL.
 
-- **Categories** — same. Use the category filter or the category
+- **Authors** — searching for an author's name does not find their articles. Filter by author instead (available on the API).
 
-URL.
+- **Comments** — comments live on their own tab and are not part of the article search.
 
-- **Authors** — searching for an author's name does not find their
+- **Attachment filenames** — the search does not open attached files. Only text you have entered into the article body, perex, or title is indexed.
 
-articles. Filter by author instead (available on the API).
-
-- **Comments** — comments live on their own tab and are not part
-
-of the article search.
-
-- **Attachment filenames** — the search does not open attached
-
-files. Only text you have entered into the article body, perex, or title is indexed.
-
-- **Custom metadata** — the key–value list on the post is not
-
-searched.
+- **Custom metadata** — the key–value list on the post is not searched.
 
 If you want an attribute like a tag, author, or category to be searchable via the search field, add it into the article body or perex explicitly.
 
 ## Writing findable articles
 
-- **The title is your strongest search signal.** Words in the
+- **The title is your strongest search signal.** Words in the title win over the same words in the body, from the reader's perspective — matches in title feel more relevant. Include the words a reader would actually type.
 
-title win over the same words in the body, from the reader's perspective — matches in title feel more relevant. Include the words a reader would actually type.
+- **Use the perex for synonyms.** The primary keyword goes in the title, but a variant phrasing in the perex catches searchers using different vocabulary. "Migrating from Stripe to GoPay" in the title, "payment gateway migration" in the perex.
 
-- **Use the perex for synonyms.** The primary keyword goes in the
+- **Do not stuff keywords.** The search is a substring match, not a relevance-weighted ranker — piling keywords into the body does not push an article up the results. It just makes the article annoying to read.
 
-title, but a variant phrasing in the perex catches searchers using different vocabulary. "Migrating from Stripe to GoPay" in the title, "payment gateway migration" in the perex.
-
-- **Do not stuff keywords.** The search is a substring match, not
-
-a relevance-weighted ranker — piling keywords into the body does not push an article up the results. It just makes the article annoying to read.
-
-- **Search-test your own articles after publication.** Search for
-
-the words a reader would use and check that your article appears. If not, adjust the title or perex to include them.
+- **Search-test your own articles after publication.** Search for the words a reader would use and check that your article appears. If not, adjust the title or perex to include them.
 
 ## Public-site search
 
@@ -124,36 +98,24 @@ The public site's search box (visible on themes that enable it) uses the same pr
 
 - Searches the current visitor's active locale.
 - Excludes private, unlisted, and archived posts.
-- Respects the subscribe-only rule (subscribers see subscribe-only
-
-hits; anonymous readers do not).
+- Respects the subscribe-only rule (subscribers see subscribe-only hits; anonymous readers do not).
 
 - Highlights matching terms in the result snippets.
-- Falls back to a "no results" panel with a suggestion to broaden
-
-the query when nothing matches.
+- Falls back to a "no results" panel with a suggestion to broaden the query when nothing matches.
 
 ## Tips
 
-- **Use quotes for exact-order phrases.** Some public-site themes
+- **Use quotes for exact-order phrases.** Some public-site themes support quoted queries (`"exact phrase"`) that treat the whole string as one substring. The admin grid does not — quotes are treated as literal characters, which usually returns zero hits.
 
-support quoted queries (`"exact phrase"`) that treat the whole string as one substring. The admin grid does not — quotes are treated as literal characters, which usually returns zero hits.
+- **Search from the RSS feed.** If a reader arrives via RSS with a specific phrase they want to find more articles about, share the search URL (`?q=phrase`) directly.
 
-- **Search from the RSS feed.** If a reader arrives via RSS with a
-
-specific phrase they want to find more articles about, share the search URL (`?q=phrase`) directly.
-
-- **Combine with the tag filter.** Fulltext search on a category
-
-page or tag page produces a much shorter, more relevant result set than site-wide search. Deep-link both filters together.
+- **Combine with the tag filter.** Fulltext search on a category page or tag page produces a much shorter, more relevant result set than site-wide search. Deep-link both filters together.
 
 ## Related
 
-- [Post management overview](/post-management)
+- [Post management overview](/prispevky-overview)
 - [Post editor](/post-editor)
-- [Post categories](/post-categories) — for taxonomy-based
+- [Post categories](/post-category-overview) — for taxonomy-based filtering that complements search.
 
-filtering that complements search.
-
-- [Tags](/post-tags)
-- [API integration](/post-api-integration)
+- [Tags](/tags)
+- [API integration](/api-integration)

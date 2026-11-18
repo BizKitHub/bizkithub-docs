@@ -29,17 +29,11 @@ That is the whole model. Everything below is a consequence.
 
 Every translation of every article is in one of three states relative to a given locale:
 
-- **Fresh** — a translation row exists and its reference matches the
+- **Fresh** — a translation row exists and its reference matches the current source snapshot. In sync.
 
-current source snapshot. In sync.
+- **Stale** — a translation row exists but its reference points at an older source snapshot, or the reference is missing entirely (a legacy row from before the platform tracked references). Out of date; the source has been edited since translation.
 
-- **Stale** — a translation row exists but its reference points at an
-
-older source snapshot, or the reference is missing entirely (a legacy row from before the platform tracked references). Out of date; the source has been edited since translation.
-
-- **Missing** — no translation row exists in this locale at all. The
-
-article has never been translated to it.
+- **Missing** — no translation row exists in this locale at all. The article has never been translated to it.
 
 The article grid renders these three states as coloured badges next to each article title:
 
@@ -57,26 +51,16 @@ Clicking the button triggers the translation pipeline for that article:
 
 1. The platform reads the current primary-locale title and body.
 2. For every enabled locale that is either missing or stale:
-- It sends the primary-locale text plus the target locale code to
-
-the translation model.
+- It sends the primary-locale text plus the target locale code to the translation model.
 
 - It receives back a translated title and body.
-- It validates the response — non-empty content when the source
+- It validates the response — non-empty content when the source had content, plausible length ratio versus the source, and that the model did not simply echo the source verbatim.
 
-had content, plausible length ratio versus the source, and that the model did not simply echo the source verbatim.
+- On failure of any validation, it retries against the next model in a fallback chain (three models total, spanning two providers). The failure of one model does not abort the run — only the failure of every model does.
 
-- On failure of any validation, it retries against the next model
+- On success, it upserts the translation into the article's locale row and stamps the current source-snapshot reference.
 
-in a fallback chain (three models total, spanning two providers). The failure of one model does not abort the run — only the failure of every model does.
-
-- On success, it upserts the translation into the article's
-
-locale row and stamps the current source-snapshot reference.
-
-3. The article's canonical URL routes are ensured for every locale
-
-that received a translation.
+3. The article's canonical URL routes are ensured for every locale that received a translation.
 
 The whole operation is atomic per locale: either the translation for a given locale is saved in full and stamped as fresh, or nothing lands for that locale and the row keeps its previous state (missing or old-stale) so the next run can retry it. Partial writes are impossible.
 
@@ -84,13 +68,9 @@ The whole operation is atomic per locale: either the translation for a given loc
 
 The response-validation step rejects two common failure modes that would otherwise produce silent bad data:
 
-- **Empty translation** — the model returned a title but no content
+- **Empty translation** — the model returned a title but no content for a source that had substantial content. Historically this was the cause of "titles-only" translations in the corpus and the most damaging failure mode because it looks successful.
 
-for a source that had substantial content. Historically this was the cause of "titles-only" translations in the corpus and the most damaging failure mode because it looks successful.
-
-- **Extreme length mismatch** — the translated content is either
-
-less than 30 % or more than 300 % of the source (measured in UTF-8 bytes, so CJK targets are compared fairly). Usually indicates truncation, hallucination, or a refusal to translate.
+- **Extreme length mismatch** — the translated content is either less than 30 % or more than 300 % of the source (measured in UTF-8 bytes, so CJK targets are compared fairly). Usually indicates truncation, hallucination, or a refusal to translate.
 
 Both trigger a rejection, the run moves to the next model, and if every model fails the target locale is left untouched.
 
@@ -106,13 +86,9 @@ The moment you save any change to the article in the primary locale, the platfor
 
 You control when to regenerate. The stale badges are a **signal**, not a trigger — nothing happens automatically. Two reasons for that:
 
-- **Cost control** — every translation call uses AI credits. You
+- **Cost control** — every translation call uses AI credits. You might edit an article five times in one editing session, and you want to regenerate once at the end, not five times.
 
-might edit an article five times in one editing session, and you want to regenerate once at the end, not five times.
-
-- **Editorial discretion** — some edits are minor (typo fixes) and
-
-the existing translations are still fine to leave as-is until the next major refresh.
+- **Editorial discretion** — some edits are minor (typo fixes) and the existing translations are still fine to leave as-is until the next major refresh.
 
 That said, the recommended default workflow is: edit, save, click auto-translate at the end of the session. For bulk cases across many articles, use the tooling on the Translations tab (see below).
 
@@ -129,13 +105,9 @@ Shows the organisation's primary locale (marked with a star), the full list of e
 Three coloured cards summarise how many articles are in each state, with a percentage of the total:
 
 - **Fully translated** (green) — every non-source locale is fresh.
-- **Partially translated** (amber) — at least one locale is fresh
+- **Partially translated** (amber) — at least one locale is fresh and at least one is missing, stale, or suspiciously short.
 
-and at least one is missing, stale, or suspiciously short.
-
-- **Untranslated** (rose) — no translation exists in any non-source
-
-locale.
+- **Untranslated** (rose) — no translation exists in any non-source locale.
 
 For a single-locale organisation, every article counts as fully translated (nothing to translate to).
 
@@ -162,33 +134,19 @@ When a locale row has any stale or missing counts, a small **opravit** link appe
 
 A horizontal bar of one-click actions, each of which opens the admin terminal and streams the command output live:
 
-- **Show overview** — lists every article with per-language status
+- **Show overview** — lists every article with per-language status in a table view. No writes.
 
-in a table view. No writes.
+- **Show missing** — lists articles that are entirely missing every non-source locale.
 
-- **Show missing** — lists articles that are entirely missing every
+- **Show broken** — lists articles with any locale not in the fresh state (missing, stale, or short). Broader than "missing".
 
-non-source locale.
+- **Translate missing** — regenerates translations only for entirely-missing locales. Skips stale and short rows. Fastest, cheapest.
 
-- **Show broken** — lists articles with any locale not in the fresh
+- **Translate all broken** — regenerates translations for every missing, stale, or short locale on every article. Longer and more expensive; use for a full refresh.
 
-state (missing, stale, or short). Broader than "missing".
+- **Fix routes** — creates canonical URLs for existing translations that do not yet have one. No AI call, cheap.
 
-- **Translate missing** — regenerates translations only for
-
-entirely-missing locales. Skips stale and short rows. Fastest, cheapest.
-
-- **Translate all broken** — regenerates translations for every
-
-missing, stale, or short locale on every article. Longer and more expensive; use for a full refresh.
-
-- **Fix routes** — creates canonical URLs for existing translations
-
-that do not yet have one. No AI call, cheap.
-
-- **Refresh statistics** — invalidates the dashboard cache and
-
-reloads the numbers.
+- **Refresh statistics** — invalidates the dashboard cache and reloads the numbers.
 
 Every action executes as a streaming command in the admin terminal panel — you see progress in real time, per-article and per-locale counters tick up as work happens, errors surface immediately, and you can leave the panel open to watch or close it and let the command run in the background.
 
@@ -196,21 +154,13 @@ Every action executes as a streaming command in the admin terminal panel — you
 
 An expandable panel below the table shows deeper metrics:
 
-- **Posts with version history** vs **without (legacy)** — how many
+- **Posts with version history** vs **without (legacy)** — how many articles have at least one recorded snapshot. Legacy articles without any snapshot cannot have their translations marked stale (there is nothing to compare against). Running any translate action once on such an article seeds a snapshot and enables stale detection going forward.
 
-articles have at least one recorded snapshot. Legacy articles without any snapshot cannot have their translations marked stale (there is nothing to compare against). Running any translate action once on such an article seeds a snapshot and enables stale detection going forward.
+- **Average versions per post** — a health signal about editing activity.
 
-- **Average versions per post** — a health signal about editing
+- **Orphan canonical routes total** — safe to leave, but they occupy URL slugs that new articles cannot reuse. Delete translations you no longer want, then either recreate or leave the route to redirect.
 
-activity.
-
-- **Orphan canonical routes total** — safe to leave, but they
-
-occupy URL slugs that new articles cannot reuse. Delete translations you no longer want, then either recreate or leave the route to redirect.
-
-- **Suspiciously short translations** — the count from the "Short"
-
-column across every locale, summed. Non-zero usually means an older bulk translation run failed halfway; "Translate all broken" clears these.
+- **Suspiciously short translations** — the count from the "Short" column across every locale, summed. Non-zero usually means an older bulk translation run failed halfway; "Translate all broken" clears these.
 
 ## Terminal tooling
 
@@ -223,9 +173,7 @@ Prints a table of every article with per-locale status glyphs:
 - `★` — source locale (this article's origin language)
 - `✓` — fresh translation
 - `↻` — stale (source edited since translation)
-- `◐` — partial (title only, or content dramatically shorter than
-
-source)
+- `◐` — partial (title only, or content dramatically shorter than source)
 
 - `✗` — missing (no translation row)
 
@@ -235,9 +183,7 @@ The optional filter narrows the output:
 - `missing` — articles with every non-source locale missing.
 - `partial` — articles with any partial-by-length locale.
 - `stale` — articles with any stale locale.
-- `broken` — union of missing + partial + stale (anything not fully
-
-translated).
+- `broken` — union of missing + partial + stale (anything not fully translated).
 
 - `ok` or `translated` — fully translated only.
 
@@ -251,22 +197,14 @@ With a `postId` argument, only that specific article is processed. Useful for ta
 
 The command streams progress live. For each article and each target locale you see:
 
-- The plan (which mode: fresh translation, refresh, content-only
-
-repair, title-only repair).
+- The plan (which mode: fresh translation, refresh, content-only repair, title-only repair).
 
 - A payload size hint and expected duration.
-- A heartbeat tick every five seconds while the AI is generating,
+- A heartbeat tick every five seconds while the AI is generating, so a slow response does not look frozen.
 
-so a slow response does not look frozen.
+- The success confirmation with the final title, content length, and elapsed time.
 
-- The success confirmation with the final title, content length,
-
-and elapsed time.
-
-- On failure, the error message and which model in the chain was
-
-responsible.
+- On failure, the error message and which model in the chain was responsible.
 
 A summary table at the end lists every article touched, whether the result was ok or partial, and which locales succeeded or failed.
 
@@ -276,13 +214,9 @@ Creates canonical routes for existing translations that do not have one. Idempot
 
 Use when:
 
-- You imported translations from an external system and only the
+- You imported translations from an external system and only the content rows were created, not the routes.
 
-content rows were created, not the routes.
-
-- A previous translate run crashed after saving the content but
-
-before creating the route.
+- A previous translate run crashed after saving the content but before creating the route.
 
 - A route was accidentally deleted.
 
@@ -314,13 +248,9 @@ The result reflects your source-side edit uniformly across every locale.
 
 Some fields are locale-independent and are not translated. They apply to every locale equally:
 
-- **Category assignment** — the same category tree serves every
+- **Category assignment** — the same category tree serves every locale, though category names themselves are translated separately in the category module.
 
-locale, though category names themselves are translated separately in the category module.
-
-- **Tags** — the same tag chips apply to every locale, though tag
-
-labels are translated in the tag library.
+- **Tags** — the same tag chips apply to every locale, though tag labels are translated in the tag library.
 
 - **Authors** — the same author list.
 - **Publication date and visibility.**
@@ -338,17 +268,11 @@ The existing translations do NOT reshuffle — every row keeps its content. What
 
 ## Related
 
-- [Post management overview](/post-management)
+- [Post management overview](/prispevky-overview)
 - [Post editor](/post-editor)
-- [Post history and versioning](/post-history-and-versioning) — how
+- [Post history and versioning](/history-and-versioning) — how source snapshots are stored.
 
-source snapshots are stored.
+- [Routing and URLs](/routing-and-urls) — how per-locale canonical routes are generated and healed.
 
-- [Routing and URLs](/post-routing-and-urls) — how per-locale
-
-canonical routes are generated and healed.
-
-- [Bulk actions](/post-bulk-actions)
-- [API integration](/post-api-integration) — how the public API
-
-exposes per-locale content.
+- [Bulk actions](/bulk-actions)
+- [API integration](/api-integration) — how the public API exposes per-locale content.
