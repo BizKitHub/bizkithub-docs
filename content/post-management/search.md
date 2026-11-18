@@ -84,24 +84,28 @@ If you want an attribute like a tag, author, or category to be searchable via th
 
 ## Writing findable articles
 
-- **The title is your strongest search signal.** Words in the title win over the same words in the body, from the reader's perspective — matches in title feel more relevant. Include the words a reader would actually type.
+- **The title is your strongest search signal.** The public search ranks a word in the title above the same word anywhere else, followed by section headings. Include the words a reader would actually type, and give sections descriptive headings so deep links land well.
 
 - **Use the perex for synonyms.** The primary keyword goes in the title, but a variant phrasing in the perex catches searchers using different vocabulary. "Migrating from Stripe to GoPay" in the title, "payment gateway migration" in the perex.
 
-- **Do not stuff keywords.** The search is a substring match, not a relevance-weighted ranker — piling keywords into the body does not push an article up the results. It just makes the article annoying to read.
+- **Do not stuff keywords.** Repeated mentions in the body add only a small, capped bonus. Piling keywords into the body barely moves an article up the results and makes it annoying to read; a clear title and section headings work far better.
 
 - **Search-test your own articles after publication.** Search for the words a reader would use and check that your article appears. If not, adjust the title or perex to include them.
 
 ## Public-site search
 
-The public site's search box (visible on themes that enable it) uses the same primitive as the admin grid. Behaviour:
+The public site's search box and the public search endpoint (`/api/v1/post/search`) share one engine. The admin grid filter described above stays a plain substring filter; the public search is a relevance-ranked search built for readers:
 
-- Searches the current visitor's active locale.
-- Excludes private, unlisted, and archived posts.
-- Respects the subscribe-only rule (subscribers see subscribe-only hits; anonymous readers do not).
+- Searches the visitor's locale, excludes private, unlisted and archived posts, and respects the subscribe-only rule.
+- **Word-prefix matching.** Each word of the query must start a word in the article: `invoic` finds "invoices", but `api` does not match "kapitola". Accents and letter case are ignored.
+- **Inflection.** Czech and English word forms used in your content are matched together: `faktury` also finds "faktura" and "fakturu", `invoices` finds "invoice".
+- **Ranking.** A word in the title counts most, then a section heading, the category or a tag, the perex, and finally the body. Articles containing every word come first; a short title made of the query words (the topic's overview page) wins.
+- **Typo correction.** A word that appears nowhere in your content is corrected to the closest word that does (`vouchr` → "voucher"). The response reports it in `didYouMean`, and `autoCorrected: true` when the results already use the correction.
+- **Other languages.** When nothing matches in the requested locale, the search looks at the other translations and returns the matching articles in the requested language where a translation exists (`crossLocale: true`).
+- **Section deep links.** When the words occur in one section of a long article, the hit carries `section` (heading and anchor id) and the snippet is cut from that section.
+- **Filtering and paging.** `mainCategory` restricts the search to a category and its subcategories, `facets` lists the categories of all matches with counts, and `offset` with `limit` pages through the results.
 
-- Highlights matching terms in the result snippets.
-- Falls back to a "no results" panel with a suggestion to broaden the query when nothing matches.
+Organisations with a very large archive (over roughly 1,500 article translations) use a simpler substring search without typo correction, sections or facets.
 
 ## Tips
 
