@@ -1,6 +1,6 @@
 ---
 id: "9hl0yMA3TZx5pOvC"
-category: "legal-and-company/organization"
+category: "about/organization"
 tags: []
 published_at: "2026-07-24T19:26:40.755Z"
 ---
