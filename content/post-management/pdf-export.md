@@ -112,7 +112,7 @@ For at-scale archival, prefer the [Git workflow](/git-workflow) export — it pr
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Post editor](/post-editor)
 - [Gallery and images](/gallery-and-images)
 - [Git workflow](/git-workflow) — for at-scale Markdown export as an alternative to per-post PDF.

@@ -154,7 +154,7 @@ Configuration surfaces:
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Translations](/translations) — the biggest AI feature.
 - [Gallery and images](/gallery-and-images) — image generation detail.
 

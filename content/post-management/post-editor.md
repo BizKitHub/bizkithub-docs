@@ -218,7 +218,7 @@ Sidebar-only edits (tags, metadata) save inline on their own, without touching t
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Visibility and lifecycle](/visibility-and-lifecycle)
 - [Gallery and images](/gallery-and-images)
 - [Attachments](/attachments)

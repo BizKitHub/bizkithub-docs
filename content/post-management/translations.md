@@ -268,7 +268,7 @@ The existing translations do NOT reshuffle — every row keeps its content. What
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Post editor](/post-editor)
 - [Post history and versioning](/history-and-versioning) — how source snapshots are stored.
 

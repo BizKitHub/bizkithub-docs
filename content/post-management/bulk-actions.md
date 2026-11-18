@@ -135,7 +135,7 @@ The log preserves who did what and when — useful for after-the-fact review if 
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Visibility and lifecycle](/visibility-and-lifecycle)
 - [Translations](/translations) — for bulk translate.
 - [Git workflow](/git-workflow) — for larger-scale batch operations.

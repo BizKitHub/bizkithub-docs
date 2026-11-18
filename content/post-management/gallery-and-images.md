@@ -162,7 +162,7 @@ There is no admin-side "download all gallery images" — for a backup of one pos
 ## Related
 
 - [Post editor](/post-editor)
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Attachments](/attachments) — for non-image files (PDFs, spreadsheets, downloadables) that also live with the post but are not gallery images.
 
 - [AI tools](/ai-tools) — for the full picture of AI-assisted authoring across the module.

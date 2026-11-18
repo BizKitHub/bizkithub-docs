@@ -113,7 +113,7 @@ The public site's search box (visible on themes that enable it) uses the same pr
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Post editor](/post-editor)
 - [Post categories](/post-category-overview) — for taxonomy-based filtering that complements search.
 

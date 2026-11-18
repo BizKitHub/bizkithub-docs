@@ -1,6 +1,6 @@
 ---
 id: "uZD07gSIa74ZJp7P"
-category: "legal-and-company/backup"
+category: "platform/backup"
 tags: []
 published_at: "2026-07-24T19:26:36.067Z"
 ---

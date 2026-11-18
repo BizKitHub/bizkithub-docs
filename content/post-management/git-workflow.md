@@ -201,7 +201,7 @@ That means an import can update body content without disturbing the admin-manage
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Post editor](/post-editor) — the admin alternative for single-article editing.
 
 - [Bulk actions](/bulk-actions) — the admin alternative for at-scale visibility changes.

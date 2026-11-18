@@ -1,6 +1,6 @@
 ---
 id: "5iYUoGB88lb85hw3"
-category: "legal-and-company/monitoring"
+category: "platform/monitoring"
 tags: []
 published_at: "2026-07-24T19:26:38.006Z"
 ---

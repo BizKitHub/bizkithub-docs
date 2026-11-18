@@ -154,7 +154,7 @@ Deleting a post does not remove its version history. The versions remain in plac
 ## Related
 
 - [Post editor](/post-editor) — where saves happen.
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Translations](/translations) — how versions interact with per-language freshness.
 
 - [Visibility and lifecycle](/visibility-and-lifecycle) — the soft-delete + restore semantics that preserve version history.

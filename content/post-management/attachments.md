@@ -114,7 +114,7 @@ For genuinely confidential files, do not attach them to a `public` post. The sto
 
 - [Post editor](/post-editor)
 - [Gallery and images](/gallery-and-images)
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Visibility and lifecycle](/visibility-and-lifecycle) — attachment access follows post visibility.
 
 - [API integration](/api-integration)

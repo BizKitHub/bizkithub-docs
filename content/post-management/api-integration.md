@@ -224,7 +224,7 @@ The full machine-readable OpenAPI spec is available at `https://docs.bizkithub.c
 ## Related
 
 - [API key](/api-key-overview) — how authentication works.
-- [Post management overview](/prispevky-overview) — the admin surface the API mirrors.
+- [Post management overview](/post-management-overview) — the admin surface the API mirrors.
 
 - [Translations](/translations) — for how locale parameter interacts with translation freshness.
 

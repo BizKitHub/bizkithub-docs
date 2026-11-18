@@ -1,6 +1,6 @@
 ---
 id: "jtGQLwgPRj0udQSS"
-category: "legal-and-company/infrastructure"
+category: "platform/infrastructure"
 tags: []
 published_at: "2026-07-24T19:26:39.763Z"
 ---

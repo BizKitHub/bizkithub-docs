@@ -137,7 +137,7 @@ The daily snapshot series is not currently exposed on the public API. It is admi
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Post editor](/post-editor) — the sidebar's view chart.
 - [Translations](/translations) — cross-locale view comparison context.
 

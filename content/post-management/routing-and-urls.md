@@ -144,7 +144,7 @@ See [API integration](/api-integration).
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Translations](/translations) — the route generator that runs during auto-translate.
 
 - [Post categories](/post-category-overview) — for category URL lifecycle.

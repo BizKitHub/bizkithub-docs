@@ -100,7 +100,7 @@ Author details (photo, bio, external links) are fetched separately via the conta
 ## Related
 
 - [Post editor](/post-editor)
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Post categories](/post-category-overview) — for the taxonomy authors fit into.
 
 - [API integration](/api-integration) — for how bylines are surfaced to integrators.

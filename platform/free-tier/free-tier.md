@@ -1,6 +1,6 @@
 ---
 id: "dh90yT6skL95J4xY"
-category: "legal-and-company/free-tier"
+category: "platform/free-tier"
 tags: []
 published_at: "2026-07-24T19:26:37.294Z"
 ---

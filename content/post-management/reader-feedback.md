@@ -100,7 +100,7 @@ Ratings cannot be individually deleted or moderated by editors. The aggregate re
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Comments and moderation](/comments-and-moderation) — for the free-text companion.
 
 - [Views and analytics](/views-and-analytics) — the other reader-signal to combine with ratings.

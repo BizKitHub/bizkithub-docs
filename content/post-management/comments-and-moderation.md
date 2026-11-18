@@ -136,7 +136,7 @@ Integrators building custom article renderers can use this to present a comments
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Post editor](/post-editor)
 - [Reader feedback](/reader-feedback) — the star-rating companion.
 

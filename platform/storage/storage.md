@@ -1,6 +1,6 @@
 ---
 id: "aJRNDBkxWYXGQMj7"
-category: "legal-and-company/storage"
+category: "platform/storage"
 tags: []
 published_at: "2026-07-24T19:26:38.817Z"
 ---

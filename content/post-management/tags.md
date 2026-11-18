@@ -129,6 +129,6 @@ There is no bulk-tag operation in the article grid. To attach the same tag to ma
 - [Post editor](/post-editor)
 - [Post categories](/post-category-overview) — for the hierarchical taxonomy that tags complement.
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [API integration](/api-integration)
 - [Git workflow](/git-workflow) — for bulk tag operations.

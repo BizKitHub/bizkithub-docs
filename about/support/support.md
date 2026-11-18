@@ -1,6 +1,6 @@
 ---
 id: "UXZern2slYg3V9kE"
-category: "legal-and-company/support"
+category: "about/support"
 tags: []
 published_at: "2026-07-24T19:26:41.622Z"
 ---

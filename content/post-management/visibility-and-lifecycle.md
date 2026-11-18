@@ -239,7 +239,7 @@ Editor clicks **Delete**. Status: `archived`. The URL now returns a "not found" 
 
 ## Related
 
-- [Post management overview](/prispevky-overview)
+- [Post management overview](/post-management-overview)
 - [Post editor](/post-editor)
 - [Bulk actions](/bulk-actions)
 - [Routing and URLs](/routing-and-urls) — for how visibility affects canonical URL generation.
