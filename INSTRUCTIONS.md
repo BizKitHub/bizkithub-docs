@@ -32,6 +32,9 @@
 - Before committing, run `node scripts/lint.mjs --links` (no dependencies,
   Node 20+). It enforces the disclosure policy in `AUTHORING.md` § 3 and the
   rules above.
+- `node scripts/report.mjs [--stale=180]` lists articles whose body has not
+  changed for the given number of days, and the translation coverage of
+  each locale on the live site.
 
 ## For AI agents
 

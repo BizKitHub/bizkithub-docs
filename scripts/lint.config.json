@@ -2,8 +2,13 @@
   "sitemap": "https://docs.bizkithub.com/sitemap.xml",
   "allow": {
     "legal-and-company/subprocessors/subprocessors.md": {
-      "rules": ["internal-stack", "ai-vendor"],
+      "rules": [
+        "internal-stack",
+        "ai-vendor"
+      ],
       "reason": "The sub-processor list must name every vendor that processes customer data."
     }
-  }
+  },
+  "publicDocsApiKey": "PROD176s232uwy6ej6bjXBEmUvmwLhil",
+  "publicDocsApiKeyNote": "Public read-only key of the documentation organisation; the docs site ships the same key. Used by scripts/report.mjs."
 }
