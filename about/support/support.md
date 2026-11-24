@@ -68,7 +68,7 @@ Submit bug reports and feature requests through our GitHub repository. For urgen
 
 ## System Status
 
-All systems are operational. Our infrastructure maintains 99.99% uptime with real-time monitoring and automatic failover. View the live status page at [https://status.bizkithub.com](https://status.bizkithub.com).
+The live state of every service, together with current and past incidents, is on the status page at [https://status.bizkithub.com](https://status.bizkithub.com). The guaranteed availability is defined in the [SLA](/sla-overview).
 
 ## Quick Resources
 

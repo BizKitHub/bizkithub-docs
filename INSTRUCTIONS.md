@@ -27,6 +27,11 @@
 - The title lives directly under the frontmatter as the underlined H1 — that
   is where the post title is edited. Do not add a `title:` field back into
   the frontmatter; it would be redundant with the H1 and ignored on import.
+- A post without `published_at` is imported as an unpublished draft. Remove
+  the line to take a page off the site; deleting the file does not.
+- Before committing, run `node scripts/lint.mjs --links` (no dependencies,
+  Node 20+). It enforces the disclosure policy in `AUTHORING.md` § 3 and the
+  rules above.
 
 ## For AI agents
 

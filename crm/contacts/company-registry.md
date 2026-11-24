@@ -1,4 +1,5 @@
 ---
+code: "company-registry"
 category: "crm/contacts"
 tags: ["companies", "ares", "registries", "compliance"]
 published_at: "2026-09-11T00:00:00.000Z"
@@ -119,6 +120,6 @@ The result is that an OSVČ profile syncs cleanly with three green timestamps an
 
 ## Related
 
-- [Contacts](/contacts) — the enclosing module and how registry enrichment fits into the wider automatic-profile-update pipeline.
+- [Contacts](/contact-overview) — the enclosing module and how registry enrichment fits into the wider automatic-profile-update pipeline.
 - [VAT handling and registration types](/vat) — how the VAT registration flag from ARES is interpreted and how it drives invoice output.
 - [Invoices](/invoice-overview) — how the buyer's company data lands on issued documents.

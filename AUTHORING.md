@@ -98,8 +98,8 @@ crosses paths with it.
 
 **Never leak internal implementation.** Not table names, not column names,
 not function names, not file paths, not Git commit references, not
-microservice names, not queue names, not internal HTTP endpoints (`/bff/*`
-is internal — never mention it), not schema migration numbers, not names of
+microservice names, not queue names, not internal HTTP endpoints, not
+schema migration numbers, not names of
 internal libraries, not names of internal cron jobs, not names of feature
 flags. **Not even in an "example" or a "for the curious" aside.**
 
@@ -128,6 +128,58 @@ rename, restructure, split, or delete any internal component at any time.
 still be true and still be helpful if the platform team refactored the
 whole underlying implementation next week?" If no, rewrite it in
 behavioural terms or delete it.
+
+### 3.1 Infrastructure, vendors and AI
+
+The same rule covers how and where the platform runs. Customers need
+**guarantees**, not topology.
+
+| You may publish | You must not publish |
+|---|---|
+| Data is processed in the EU; the database runs in France. | Server names, host names, IP addresses, port numbers, network layout. |
+| Backups are continuous, point-in-time, write-once, kept with two providers. | Bucket names, paths, scripts, retention internals. |
+| Updates roll out without downtime; services are separated. | Process managers, proxies, deploy scripts, instance counts per host. |
+| A relational database, object storage, an edge network. | Frameworks, ORMs, cache products, queue products, library names and versions. |
+| "The assistant classifies incoming e-mail." | AI model names, AI vendors, prompts, token budgets. |
+| Vendor names **on the sub-processor page only**, because the law requires it. | Vendor names anywhere else, including "powered by" asides. |
+
+Never claim a certification, a control or a guarantee you have not
+verified (for example "SOC 2", "SSO", "24/7 incident team", a specific
+uptime figure). Say less rather than say something false; the SLA and the
+sub-processor pages are contractual documents.
+
+### 3.2 The session interface (`/bff/*`)
+
+The administration talks to its own session-based interface under
+`/bff/*`. It is listed in the API explorer for transparency, and the
+[BFF](/bff-overview) article explains that it is not meant for third-party
+integrations. Module articles describe the public `/api/v1/*` API only;
+do not document `/bff/*` routes in prose or examples elsewhere.
+
+### 3.3 Operator-only features
+
+Some screens exist only for BizKitHub staff (the cross-organisation
+panel, the cron monitor, global rate limits). Do not write manuals for
+them here: this repository is public. When customers have a legitimate
+interest, such as how staff can access their organisation, describe the
+**policy and safeguards** instead (see
+[Support access to your organisation](/administrace-systemu-overview)).
+
+### 3.4 Unpublishing a page
+
+Removing a file does not delete the post. To take a page off the site,
+remove the `published_at` line: the importer then stores the post as an
+unpublished draft. Rewrite the body of a draft so it holds no internal
+detail either, because the repository itself is public.
+
+### 3.5 Automated check
+
+`node scripts/lint.mjs` enforces this section: internal table names,
+source paths, IP addresses, internal host names, internal stack and vendor
+names, AI model names, internal HTTP surfaces and leftover placeholder
+text are errors. Exceptions are listed in `scripts/lint.config.json`, each
+with a reason. `node scripts/lint.mjs --links` also checks internal links
+against the live sitemap. Run it before every commit.
 
 ---
 
@@ -692,10 +744,8 @@ Read your article through, top to bottom, then check each item:
 - [ ] Exactly one H1, underlined with `===`.
 - [ ] All subsequent headings are `##` or lower and use sentence case.
 - [ ] The first two paragraphs stand on their own as an executive summary.
-- [ ] The article contains no internal identifiers (table names, column
-      names, function names, cron job names, internal URLs, feature-flag
-      names). Do a `grep -Ei 'shop__|content__|/bff/|src/features/'` on
-      your article before you commit.
+- [ ] The article contains no internal identifiers or infrastructure
+      details (§ 3). `node scripts/lint.mjs --links` passes with no errors.
 - [ ] Every claim is falsifiable — no hedging, no marketing adjectives.
 - [ ] At least one concrete example, ideally three.
 - [ ] Every code block has a language hint and a realistic-looking value.

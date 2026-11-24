@@ -65,4 +65,4 @@ We will not pursue legal action against researchers who follow responsible discl
 
 ## Found a security issue?
 
-We appreciate responsible disclosure of security vulnerabilities. Contact our security team at <jan@barasek.com> — subject `[SECURITY] Vulnerability Report` — for any security-related concerns. You can also refer to the machine-readable [security.txt](/.well-known/security.txt).
+We appreciate responsible disclosure of security vulnerabilities. Contact our security team at <jan@barasek.com> — subject `[SECURITY] Vulnerability Report` — for any security-related concerns. You can also refer to the machine-readable [security.txt](https://bizkithub.com/.well-known/security.txt).

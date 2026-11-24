@@ -17,7 +17,7 @@ Our multi-layered security approach ensures your data is protected at every leve
 
 ### Data hosting
 
-BizKitHub infrastructure runs on AWS with SOC 2, ISO 27001, FedRAMP, PCI-DSS, and HIPAA certifications.
+The database and application servers run on dedicated hardware in a data centre in France (EU), operated by a provider certified to ISO/IEC 27001. See [Infrastructure](/infrastructure-overview).
 
 ### Data segregation
 
@@ -31,36 +31,20 @@ Production environment access is restricted with least-privilege principles and 
 
 Real-time monitoring of all operations with automated alerts for system anomalies and failures.
 
-## Infrastructure &amp; certifications
+## Infrastructure
 
-BizKitHub infrastructure runs on AWS, certified according to global security standards.
+Customer records are processed in the European Union. The data centre that hosts the database and the application servers is certified to ISO/IEC 27001; payment card data never reaches BizKitHub at all, because card payments are handled entirely by the connected [payment gateways](/payment-gateway-overview).
 
-<table>
-<thead>
-<tr><th>Certification</th><th>Description</th></tr>
-</thead>
-<tbody>
-<tr><td>SOC 2</td><td>Service Organization Control 2</td></tr>
-<tr><td>ISO 27001</td><td>Information Security Management</td></tr>
-<tr><td>FedRAMP</td><td>Federal Risk Authorization</td></tr>
-<tr><td>PCI-DSS</td><td>Payment Card Security Standard</td></tr>
-<tr><td>HIPAA</td><td>Health Data Protection</td></tr>
-</tbody>
-</table>
+### Separate services
 
-### Microservices architecture
-
-The entire platform is divided into small, independently functional parts (microservices architecture) that communicate through documented APIs.
-
-Communication between all services occurs through encrypted and monitored protocols over a secured network. Partner services only receive the minimum data necessary to process a request.
+The platform is split into independent services (API, administration, PDF generation, asset delivery, background workers) that communicate over encrypted connections. Partner services receive only the minimum data needed to process a request.
 
 ### Data storage
 
-At BizKitHub we believe the only correct way to store data is internally. All data is managed in a single secured cloud environment.
-
-- **Database** hosted by Neon (AWS-based).
-- **Files** stored on Cloudflare CDN.
-- **Emails** delivered via Resend, AWS SES, and Google.
+- **Records** live in a relational database in the EU that is not reachable from the public internet.
+- **Files** are kept in object storage with redundant copies, encrypted at rest. See [Storage](/storage-overview).
+- **Backups** are write-once and kept with two independent providers. See [Backup and recovery](/backup-overview).
+- **E-mails** are delivered through the providers listed on the [sub-processors](/subprocessors-overview) page.
 
 ## Data segregation
 
@@ -97,7 +81,6 @@ Comprehensive security controls across all aspects of our operations.
 ### Application security
 
 - Role-based access control (RBAC)
-- Single sign-on (SSO) support
 - Continuous access monitoring
 - Documented approval processes
 

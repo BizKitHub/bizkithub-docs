@@ -1,0 +1,9 @@
+{
+  "sitemap": "https://docs.bizkithub.com/sitemap.xml",
+  "allow": {
+    "legal-and-company/subprocessors/subprocessors.md": {
+      "rules": ["internal-stack", "ai-vendor"],
+      "reason": "The sub-processor list must name every vendor that processes customer data."
+    }
+  }
+}

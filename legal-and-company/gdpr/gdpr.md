@@ -2,7 +2,6 @@
 id: "4P15DY0X0Tj6v9kw"
 category: "legal-and-company/gdpr"
 tags: []
-published_at: "2026-07-24T18:25:24.558Z"
 ---
 
 

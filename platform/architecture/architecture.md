@@ -9,165 +9,70 @@ published_at: "2026-07-24T19:26:42.501Z"
 Architecture
 ============
 
-BizKitHub is a comprehensive digital platform for business management that combines CRM, e-commerce, payments, invoicing, communication, and automation into one unified system. It is built on modern technologies with a modular architecture that enables flexibility, scalability, and seamless integration.
+BizKitHub is one platform for running a business: CRM, e-commerce, payments, invoicing and accounting, communication and automation share one data model instead of being glued together from separate products. This article explains how the platform is organised, from the point of view of someone who uses it or integrates with it.
 
-## Business modules
+## One organisation, one data set
 
-The platform is organized into specialized modules, each handling a specific business domain while sharing a unified data layer.
+Everything in BizKitHub belongs to an **organisation**: a company, a shop, a club or any other entity you run. An organisation has members, and each member has roles and permissions that decide what they can see and change.
 
-### Core business
+Every record (a contact, an order, an invoice, a file) belongs to exactly one organisation. Every request, whether it comes from the administration or from the API, is resolved to one organisation first, and the platform only ever reads and writes that organisation's data. One person can be a member of several organisations and switch between them; the data of the organisations never mixes.
 
-- **CRM &amp; Contacts** — customer management, groups, credits.
-- **Orders** — order lifecycle, payments, invoices.
-- **Products** — catalog, variants, categories.
-- **Invoicing** — invoices, receipts, tax documents.
+## Modules
 
-### Communication
-
-- **Email system** — transactional emails, templates.
-- **Newsletter** — campaigns, segmentation, analytics.
-- **Calendar** — events, reservations, reminders.
-
-### Payments
-
-- **Payment gateways** — support for multiple providers.
-- **Bank integration** — automated transaction matching.
-- **Vouchers** — discounts and promo codes.
-
-### Automation
-
-- **Workflow engine** — end-to-end process automation.
-- **Scheduled tasks** — background jobs and cron.
-- **AI assistant** — analysis, matching, automation.
-
-## System overview
-
-The platform follows a layered architecture with clear separation between presentation, business logic, and data layers.
-
-### Frontend applications
+Features are grouped into modules that follow the main menu of the administration:
 
 <table>
 <thead>
-<tr><th>Application</th><th>Role</th><th>URL</th></tr>
+<tr><th>Area</th><th>Modules</th></tr>
 </thead>
 <tbody>
-<tr><td>bizkithub.com</td><td>Main platform</td><td>https://bizkithub.com</td></tr>
-<tr><td>admin.bizkithub.com</td><td>Administration</td><td>https://admin.bizkithub.com</td></tr>
-<tr><td>docs.bizkithub.com</td><td>Documentation</td><td>https://docs.bizkithub.com</td></tr>
-<tr><td>status.bizkithub.com</td><td>Status page</td><td>https://status.bizkithub.com</td></tr>
-<tr><td>cdn.bizkithub.com</td><td>Static assets</td><td>https://cdn.bizkithub.com</td></tr>
-<tr><td>pdf.bizkithub.com</td><td>PDF generation</td><td>https://pdf.bizkithub.com</td></tr>
+<tr><td>Sales</td><td>Shop, products and categories, orders, basket, vouchers, branches, complaints, warehouse, fulfillment, shipping</td></tr>
+<tr><td>CRM</td><td>Contacts, calendar and bookings, tickets, forms, projects, time tracking</td></tr>
+<tr><td>Finance</td><td>Invoices, payment gateways, bank transactions, contracts, VAT, accounting</td></tr>
+<tr><td>Communication</td><td>E-mail, templates and layouts, newsletters, notifications, team chat</td></tr>
+<tr><td>Content</td><td>Posts and categories, RSS feeds, file storage, glossary, knowledge base</td></tr>
+<tr><td>System</td><td>Organisation settings, members and permissions, API keys, system log, analytics, smart locks and IoT</td></tr>
 </tbody>
 </table>
 
-### API layers
+Modules share the same records. An order refers to a contact and products, its payment arrives through a payment gateway or a bank transaction, the invoice is generated from it and e-mailed with a template, and every step is visible in the contact's history.
 
-#### Public REST API
-
-External integrations with API key authentication. Base URL: `api.bizkithub.com/api/v1/`
-
-- Rate limiting
-- API key authentication
-- JSON responses
-- Webhook support
-
-#### BFF layer
-
-Optimized endpoints for frontend applications. Base URL: `api.bizkithub.com/bff/`
-
-- Session authentication
-- Optimized queries
-- Real-time sync
-- Frontend-specific responses
-
-### Business logic layer
-
-A modular architecture with 30+ specialized modules handling all business operations, including: Account, Contact, Order, Product, Payment, Emailer, Calendar, Workflow.
-
-### Data layer
-
-BizKitHub uses several storage systems side by side. Each is chosen for the shape of data it holds best, and every system is covered by strict backup, replication and access-control policies regardless of where it sits in the stack.
+## Ways in
 
 <table>
 <thead>
-<tr><th>Store</th><th>Role</th></tr>
+<tr><th>Surface</th><th>Address</th><th>For</th></tr>
 </thead>
 <tbody>
-<tr><td>PostgreSQL</td><td>Primary relational database — the source of truth for every business record.</td></tr>
-<tr><td>Blob storage</td><td>Uploaded images, generated PDFs, user files, backups and any other binary content.</td></tr>
-<tr><td>Redis</td><td>Ephemeral real-time data, cache and session storage where the ratio of writes to reads is high.</td></tr>
-<tr><td>Edge cache</td><td>Cached responses assembled from several sources — most commonly API responses, transformed images and other static output — served from the region nearest the caller.</td></tr>
-<tr><td>Git-backed filesystem</td><td>Version-controlled static assets distributed through the platform CDN. Content lives in Git and moves to the edge on deploy.</td></tr>
+<tr><td>Administration</td><td><code>admin.bizkithub.com</code></td><td>Members of an organisation, in the browser.</td></tr>
+<tr><td>Public REST API</td><td><code>api.bizkithub.com/api/v1/</code></td><td>Your e-shop, website, mobile app or any other system. Authenticated with an <a href="/api-key-overview">API key</a>.</td></tr>
+<tr><td>Public pages</td><td>Your own domain or a BizKitHub address</td><td>Your customers: order detail and payment, forms, newsletter subscription, ticket follow-up.</td></tr>
+<tr><td>Services</td><td><code>pdf.</code>, <code>cdn.</code>, <code>status.</code>, <code>support.bizkithub.com</code></td><td>PDF generation, asset delivery, platform status and support.</td></tr>
 </tbody>
 </table>
 
-## Data flow
+The [API explorer](/swagger) lists every endpoint. The administration uses its own session-based interface, which is documented in the explorer for transparency but is not intended for third-party integrations (see [BFF](/bff-overview)).
 
-Understanding how requests are processed through the platform layers.
+## What happens with a request
 
-1. **Request authentication** — API requests are authenticated via API keys or session tokens with rate limiting applied.
-2. **Business logic processing** — requests are routed to the appropriate modules where business rules and validations are applied.
-3. **Data persistence** — data is stored in PostgreSQL with full ACID compliance and referential integrity.
-4. **Response &amp; events** — responses are returned with optional webhook notifications for subscribed events.
+1. **Edge.** The request reaches the nearest location of the edge network, which terminates TLS and filters abusive traffic.
+2. **Identity.** The platform resolves the API key or the signed-in session to one organisation and, for members, to their permissions. Rate limits apply per key.
+3. **Validation.** Every parameter is validated against the published schema. Invalid input is rejected with a `422` error that names the field.
+4. **Business rules.** The module applies its rules, for example stock reservation, price and VAT calculation or the order workflow, and saves all changes in one transaction.
+5. **Side effects.** E-mails, PDF documents, notifications and integrations with payment gateways or carriers run after the change is saved, many of them in the background.
+6. **Response.** JSON with a stable shape. Errors carry an `errorCode`, a human-readable message and a `requestId` (see [API error codes](/errors)).
 
-## Security architecture
+## Background work
 
-Multiple layers of security protect your data and ensure compliance.
+Work that does not need to happen during a request runs on schedule: bank synchronisation, processing of incoming e-mails, reminders, imports, renewal of subscriptions and others. Every run is monitored; see [Monitoring](/monitoring-overview).
 
-- **API key authentication** — secure API access with rotating keys.
-- **Rate limiting** — protection against abuse.
-- **Role-based access** — granular permissions system.
-- **Data encryption** — TLS 1.3 in transit and encryption at rest.
+## Languages
 
-## Technology stack
+The administration is available in Czech, English, German, Italian, Polish and Slovak. Content such as posts, products and e-mail templates can be kept in several languages per organisation.
 
-Built with modern, battle-tested technologies for reliability and performance.
+## Related
 
-<table>
-<thead>
-<tr><th>Category</th><th>Technology</th><th>Role</th></tr>
-</thead>
-<tbody>
-<tr><td>Frontend</td><td>Next.js 14</td><td>App Router</td></tr>
-<tr><td>Database</td><td>PostgreSQL</td><td>Primary database</td></tr>
-<tr><td>Database</td><td>Drizzle ORM</td><td>Type-safe queries</td></tr>
-<tr><td>Cache</td><td>Redis</td><td>Caching layer</td></tr>
-<tr><td>Storage</td><td>S3 Storage</td><td>File storage</td></tr>
-<tr><td>Language</td><td>TypeScript</td><td>End-to-end types</td></tr>
-</tbody>
-</table>
-
-## Platform capabilities
-
-### Architecture advantages
-
-- Modular business logic separation
-- Unified API across all services
-- Horizontal scalability
-- Multi-tenant architecture
-- Real-time event processing
-- Automated workflow execution
-
-### Key features
-
-- Full-text search across all entities
-- Intelligent data linking
-- Multi-language support (CS, EN, SK, PL)
-- High availability (99.9% uptime)
-- Audit logging
-- GDPR compliance
-
-## API integration
-
-All platform features are accessible through a comprehensive REST API, enabling seamless integration with external systems.
-
-### Available API modules
-
-- Contacts
-- Products
-- Orders
-- Payments
-- Calendar
-- Emailer
-- Vouchers
-- Webhooks
+- [Infrastructure](/infrastructure-overview)
+- [Security](/security-overview)
+- [Storage](/storage-overview)
+- [API quickstart](/api-quickstart)

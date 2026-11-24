@@ -2,7 +2,6 @@
 id: "YdF8W93cmN7zQl65"
 category: "legal-and-company/data-protection"
 tags: []
-published_at: "2026-07-24T17:59:18.793Z"
 ---
 
 

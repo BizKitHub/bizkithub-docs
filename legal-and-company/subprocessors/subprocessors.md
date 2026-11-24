@@ -15,7 +15,7 @@ To deliver the BizKitHub platform we partner with a small number of specialist v
 
 ### Last updated
 
-May 12, 2025.
+November 24, 2026.
 
 ## Current sub-processors
 
@@ -24,10 +24,12 @@ May 12, 2025.
 <tr><th>Vendor</th><th>Category</th><th>Location</th><th>Purpose</th></tr>
 </thead>
 <tbody>
+<tr><td><strong>OVHcloud</strong></td><td>Infrastructure</td><td>France, EU</td><td>Dedicated servers hosting the database and the application.</td></tr>
+<tr><td><strong>Hetzner</strong></td><td>Infrastructure</td><td>EU</td><td>Secondary storage of database backups.</td></tr>
 <tr><td><strong>AWS</strong></td><td>Infrastructure</td><td>Global (EU, US, AP)</td><td>Cloud infrastructure — compute, storage, networking.</td></tr>
 <tr><td><strong>Vercel</strong></td><td>Hosting</td><td>Global (EU, US)</td><td>Frontend hosting and edge deployment.</td></tr>
-<tr><td><strong>Neon</strong></td><td>Database</td><td>EU, US</td><td>Managed PostgreSQL hosting.</td></tr>
-<tr><td><strong>Cloudflare</strong></td><td>Security</td><td>Global</td><td>CDN, DDoS protection, DNS, edge compute.</td></tr>
+<tr><td><strong>Neon</strong></td><td>Database</td><td>EU</td><td>Former managed database hosting; holds a snapshot until decommissioning.</td></tr>
+<tr><td><strong>Cloudflare</strong></td><td>Security, storage</td><td>Global</td><td>CDN, DDoS protection, DNS, edge compute, file storage and primary storage of database backups.</td></tr>
 <tr><td><strong>Google Analytics</strong></td><td>Analytics</td><td>Global</td><td>Website analytics and behaviour tracking.</td></tr>
 <tr><td><strong>Google Workspace</strong></td><td>Productivity</td><td>Global</td><td>E-mail, document collaboration, productivity tools.</td></tr>
 <tr><td><strong>Stripe</strong></td><td>Payments</td><td>Global (EU, US)</td><td>Payment processing and financial transactions.</td></tr>
@@ -57,7 +59,7 @@ May 12, 2025.
 
 ### European Union
 
-All sub-processors handling EU customer data comply with GDPR. Transfers outside the EU are protected by the European Commission's Standard Contractual Clauses. EU-anchored processors — **Neon**, **Comgate**, and EU regions of **AWS** / **Cloudflare** — allow data to stay within the block for customers that require it.
+All sub-processors handling EU customer data comply with GDPR. Transfers outside the EU are protected by the European Commission's Standard Contractual Clauses. The primary database and application servers are hosted by **OVHcloud** in France, and database backups are mirrored to **Hetzner** in the EU. **Comgate** and the EU regions of **AWS** and **Cloudflare** also keep data within the block for customers that require it.
 
 ### United States
 

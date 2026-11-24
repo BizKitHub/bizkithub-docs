@@ -2,7 +2,6 @@
 id: "vn2JKt15ERpB4WvF"
 category: "whats-new/welcome-to-whats-new"
 tags: []
-published_at: "2026-07-24T17:59:22.750Z"
 ---
 
 

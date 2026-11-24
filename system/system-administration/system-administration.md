@@ -6,88 +6,36 @@ published_at: "2026-04-24T06:57:24.759Z"
 ---
 
 
-System administration
-=====================
+Support access to your organisation
+===================================
 
-The `/admin` page is used for **system administration of organizations and their users**. It is primarily intended for internal system administrators who need an overview across all organizations and tools for resolving customer incidents — account blocking, changing organization context, auditing system events.
+BizKitHub staff sometimes need to look into an organisation to resolve a support ticket or an incident. This article explains who can do that, what they can do, and which safeguards apply, so you know exactly how your data is handled.
 
-> ⚠️ Access to the module requires membership in the internal administrator group. Regular users do not have access here, and all attempts to open the page are rejected.
+## Who has access
 
-## Tabs
+Access across organisations is limited to a small group of BizKitHub operators. It is a separate role that is not connected to membership in any customer organisation: being the owner or a root member of your own organisation does not grant it, and operators do not appear in your member list.
 
-- **Organizations** — an overview of all organizations in the system with filtering and full-text search
-- **User Search** — searching for a user by login name (email) and displaying all organizations they belong to
+## When operators look into an organisation
 
-## Organizations Overview
+- **You asked for help.** A ticket in [support](https://support.bizkithub.com) describes a problem that can only be diagnosed with your data in view.
+- **An incident.** Monitoring reports errors that affect your organisation, for example a failing bank synchronisation or rejected e-mails.
+- **Abuse or a legal obligation.** For example a reported phishing campaign sent through the platform, or a valid request from an authority.
 
-The table displays a list of all organizations in the system, sorted according to internal logic (usually by creation date or activity). **Table Columns:**
+## What operators can do
 
-- **Emoji** — organization icon (either manually selected or automatically generated using AI)
-- **Name** — clickable link opening organization details
-- **Slug** — technical URL-safe organization ID, used in addresses and system commands
-- **Number of Members** — number of active (unblocked) members
-- **Description** — free text, if filled in
+- **See organisation details and the system log**, which lists errors and events that concern your organisation. This is usually enough to diagnose a problem.
+- **Switch into the organisation** to see the administration exactly as a member would. Operators do this only when the problem cannot be diagnosed otherwise, and they do not change your data without your consent, except to stop ongoing abuse.
+- **Block a member account** in the case of a compromised account or abuse. Blocking also disables that member's API keys. It can be reversed, and the last active member of an organisation can never be blocked.
+- **Revoke a leaked API key** immediately, without waiting for your organisation to notice. Create a new key afterwards in the administration.
 
-**Search:**
+## Safeguards
 
-- Above the table is a full-text field that searches simultaneously in the organization's name and slug.
-- Results are paginated, and pagination preserves the current filter.
+- Every switch into an organisation and every action taken there is recorded in the organisation's activity history under the operator's own identity. It is never attributed to one of your members.
+- Operators never need, and never ask for, your password. If someone claiming to be BizKitHub support asks for it, report it to [support](https://support.bizkithub.com).
+- Processing of personal data follows the [privacy policy](/zasady-ochrany-soukromi-a-gdpr) and the data processing terms.
 
-> 💡 If you need to find an organization by a specific user, use the **User Search** tab — it will display all organizations where the given user has membership.
+## Related
 
-## Organization Details
-
-Clicking on the name in the overview opens the detailed organization window, divided into tabs:
-
-### Members
-
-The table displays all members of the given organization, including blocked ones. **Table Columns:**
-
-- **Name** — full name of the user
-- **Username** — login email
-- **Email** — contact email address (may differ from login email)
-- **Blocking** — colored indicator (yes / no)
-- **Date Added** — date when the user gained membership in the organization
-
-**Search:** above the table is a full-text field that searches in the name, login name, and personal number. **Actions:**
-
-- **Add Member** — a button in the top right corner opens a form for adding an existing user (by email) to the given organization. If the user is not yet a member, new membership is created, and a welcome email is sent. If they are already a member, the operation merely returns existing membership.
-- **Block Member** — **long-clicking** (press-and-hold) on a member's row opens a blocking dialog. Upon confirmation, all API keys of the blocked member are blocked, and a notification email is sent to them. The last active member of an organization cannot be blocked.
-
-> ⚠️ Blocking is a reversible operation — an administrator can undo it in the future. However, in addition to the user being unable to log in, their API keys will also be invalidated, which then need to be regenerated.
-
-### System Logs
-
-The table displays a chronological list of system events for the given organization, sorted from newest. It paginates by 50 records. **Table Columns:**
-
-- **Level** — severity of the event (`error`, `warning`, `info`, `debug`). More severe levels are highlighted in color.
-- **Message** — event text (may contain entity identifiers or error messages)
-- **Date** — timestamp of the record's creation
-
-> 💡 System logs are a key tool for diagnosing customer incidents. When resolving a ticket, it is advisable to first check the logs of the given organization for errors within the relevant time frame.
-
-## Context Menu
-
-A context menu with system actions is available for each organization in both the overview and detail views.
-
-### Switch to Organization (Switch To)
-
-This action switches the administrator's current session into the context of the selected organization. A new identity is created, and an authentication cookie is set, so after switching, you behave as if you were directly logged into the organization.
-
-> ⚠️ Switching is a powerful tool for customer support — in the target organization, you see and control data as if you were a regular member. Respect GDPR and internal policies; switch only when necessary to resolve an incident, and do not make any changes in a foreign organization without the owner's consent.
-
-### Change Slug
-
-Modification of the organization's technical URL identifier. The slug must be unique across the system and must not conflict with existing public paths (e.g., `/new`, `/admin`).
-
-> ⚠️ Changing the slug will break all older links to the organization. Public URLs, unsubscribe links in newsletters, and feed paths will stop working. Use only in extreme cases and with awareness of the impacts.
-
-## User Search
-
-This tab allows you to find a user by login name (email) and display all organizations they belong to. **The displayed list contains:**
-
-- **Organization Name** and **Slug**
-- **Blocking** — whether the given membership is blocked
-- **Date of Entry** — when the user became a member
-
-The main purpose is to support customer cases where the same user contacts support from different organizations, and you need to quickly find out where they operate and what the status of their membership is.
+- [Security](/security-overview)
+- [Organization](/organisation-overview)
+- [Password](/password-overview)
