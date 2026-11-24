@@ -1,135 +1,84 @@
 ---
 id: "w2u8rb9yShcVqH29"
 category: "developers/integration"
-tags: ["type-guide"]
+tags: ["type-overview", "api", "integrations"]
 published_at: "2026-07-24T19:26:32.541Z"
 ---
 
 
-Integration
-===========
+Integrations
+============
 
-Everything you need to integrate your systems with BizKitHub. Build custom solutions powered by our robust API. Whether you are building a custom e-commerce frontend, connecting your ERP system, or creating automated workflows — this guide will help you get started.
+BizKitHub connects to outside services in two ways. **Built-in connectors** link the platform to payment gateways, your bank, carriers, public registries and devices; you switch them on in the administration and enter your own credentials, with no code. **Your own integrations** use the public REST API and webhooks to connect your e-shop, website, ERP or any other system.
 
-## Why Integrate with BizKitHub?
+This page lists both, so you can see what works out of the box and what you build yourself.
 
-BizKitHub provides a complete business management platform accessible through a modern REST API. Connect your systems and unlock powerful capabilities.
-
-- **Complete API access** — Full REST API access to all BizKitHub modules including CRM, orders, products, payments, and more.
-- **Flexible architecture** — Build any type of integration: custom storefronts, mobile apps, ERP connections, or automated workflows.
-- **Real-time webhooks** — Subscribe to events and receive instant notifications when orders, payments, or other entities change.
-- **Enterprise security** — API key authentication, rate limiting, TLS 1.3 encryption, and GDPR-compliant data handling.
-
-## How Integration Works
-
-Your systems communicate with BizKitHub through our REST API using secure authentication.
-
-Your system (custom frontend, ERP, mobile app, or any application — web app, mobile, ERP) talks to the **BizKitHub API** at `api.bizkithub.com/api/v1/` over REST. The API exposes the complete business platform with all modules (CRM, orders, payments, and more).
-
-## Getting Started
-
-Follow these steps to begin your integration with BizKitHub.
-
-### 1. Request API access
-
-Contact your BizKitHub account manager or request API credentials through the admin panel. See [Get API Key](/api-key-overview).
-
-### 2. Review API documentation
-
-Explore our comprehensive API reference and interactive Swagger documentation. See [API Reference](/swagger).
-
-### 3. Set up development environment
-
-Use your `DEV_` prefixed API key for development and testing before going to production. See [API Overview](/api).
-
-### 4. Implement &amp; test
-
-Build your integration, handle error codes properly, and respect rate limits. See [Error Codes](/error-codes-reference).
-
-## Available API Modules
-
-Access all BizKitHub functionality through our comprehensive API endpoints.
+## Built-in connectors
 
 <table>
 <thead>
-<tr><th>Module</th><th>Description</th><th>Endpoint</th></tr>
+<tr><th>Area</th><th>Connector</th><th>What it does</th><th>Read more</th></tr>
 </thead>
 <tbody>
-<tr><td>Contacts</td><td>Customer management, CRM data</td><td><code>/api/v1/contact</code></td></tr>
-<tr><td>Products</td><td>Catalog, variants, categories</td><td><code>/api/v1/product</code></td></tr>
-<tr><td>Orders</td><td>Order lifecycle management</td><td><code>/api/v1/order</code></td></tr>
-<tr><td>Payments</td><td>Payment processing, status</td><td><code>/api/v1/payment</code></td></tr>
-<tr><td>Webhooks</td><td>Event subscriptions</td><td><code>/api/v1/webhook</code></td></tr>
-<tr><td>Calendar</td><td>Events, reservations</td><td><code>/api/v1/calendar</code></td></tr>
+<tr><td>Payments</td><td>GoPay, Comgate, Stripe</td><td>Online card and bank payments for orders, payment status updates, recurring payments (Stripe).</td><td><a href="/payment-gateway-overview">Payment gateways</a></td></tr>
+<tr><td>Banking</td><td>Fio banka</td><td>Downloads account transactions with a read-only token and pairs incoming payments with orders and invoices.</td><td><a href="/bank-transaction-overview">Bank transactions</a></td></tr>
+<tr><td>Shipping</td><td>Zásilkovna, GLS</td><td>Creates shipments and labels, tracks parcels and updates the order. Other carriers can be saved but cannot create shipments yet.</td><td><a href="/shipments-and-carriers">Shipments and carriers</a></td></tr>
+<tr><td>Company data</td><td>Czech company registry</td><td>Fills in a company's name, address and VAT details from its company ID.</td><td><a href="/company-registry">Company registry</a></td></tr>
+<tr><td>Product data</td><td>XML product feeds, Shoptet export</td><td>Imports and regularly updates products from a feed; exports your catalogue to comparison sites.</td><td><a href="/product-overview">Products</a>, <a href="/product-feed-api">Product feed API</a></td></tr>
+<tr><td>Smart locks</td><td>TTLock</td><td>Issues door codes tied to reservations, opens doors remotely, monitors battery and events.</td><td><a href="/iot-lock-overview">Smart locks</a></td></tr>
+<tr><td>Content</td><td>RSS feeds</td><td>Reads external news sources for the newsroom and your website.</td><td><a href="/rss-feed-overview">RSS feeds</a></td></tr>
+<tr><td>E-mail</td><td>Sending and receiving</td><td>Sends transactional e-mails and newsletters from your domain; receives replies and tickets.</td><td><a href="/emailer-overview">E-mail</a></td></tr>
 </tbody>
 </table>
 
-See the full [API reference](/swagger) for every endpoint.
+Credentials for payment gateways, the bank and carriers belong to your organisation. They are stored per organisation and used only for its own requests.
 
-## Integration Types
+## Your own integrations
 
-Choose the integration approach that best fits your needs.
+### REST API
 
-### Custom E-commerce Frontend
+Every public endpoint lives under `https://api.bizkithub.com/api/v1/` and is authenticated with your organisation's [API key](/api-key-overview), passed as the `apiKey` parameter in the query string or the JSON body. Requests and responses are JSON. The [API explorer](/swagger) lists every endpoint with its parameters and response schema.
 
-Build your own storefront using BizKitHub as a headless commerce backend. Full control over design and UX.
-
-Use cases: online stores, mobile commerce apps, Progressive Web Apps. See [E-Shop Quickstart](/eshop-quickstart-overview).
-
-### ERP &amp; Business Systems
-
-Connect your existing business systems to synchronize orders, inventory, and customer data.
-
-Use cases: order sync, inventory management, financial systems. See [API Overview](/api).
-
-### Marketing &amp; Analytics
-
-Integrate with marketing platforms, analytics tools, and customer engagement systems.
-
-Use cases: email marketing, analytics platforms, CRM sync. See [API reference](/swagger).
-
-### Custom Automation
-
-Build automated workflows triggered by BizKitHub events using webhooks and API calls.
-
-Use cases: order processing, notifications, data pipelines. See [workflow](/workflow-overview).
-
-## Technical Requirements
-
-Basic technical specifications for integrating with BizKitHub API.
+Common starting points:
 
 <table>
 <thead>
-<tr><th>Requirement</th><th>Value</th></tr>
+<tr><th>Goal</th><th>Endpoints</th><th>Read more</th></tr>
 </thead>
 <tbody>
-<tr><td>API Base URL</td><td><code>api.bizkithub.com/api/v1/</code></td></tr>
-<tr><td>Authentication</td><td><code>Bearer token (API Key)</code></td></tr>
-<tr><td>Content Type</td><td><code>application/json</code></td></tr>
-<tr><td>TLS Version</td><td>1.2 or higher (1.3 recommended)</td></tr>
-<tr><td>Rate Limits</td><td>Varies by endpoint (see docs)</td></tr>
-<tr><td>Response Format</td><td>JSON</td></tr>
+<tr><td>Show products on your website</td><td><code>/api/v1/product/feed</code>, <code>/api/v1/product/detail</code>, <code>/api/v1/product-category/tree</code></td><td><a href="/product-feed-api">Product feed API</a></td></tr>
+<tr><td>Take orders and payments</td><td><code>/api/v1/shop/order/create</code>, <code>/api/v1/shop/order/create-payment</code></td><td><a href="/order-create-api">Creating orders via the API</a></td></tr>
+<tr><td>Sync orders to an ERP</td><td><code>/api/v1/shop/order/list</code>, <code>/api/v1/shop/order/detail-full</code>, <code>/api/v1/shop/order/set-status</code></td><td><a href="/workflow-automation">Workflow automation</a></td></tr>
+<tr><td>Publish articles and a glossary</td><td><code>/api/v1/post/*</code>, <code>/api/v1/glossary/*</code></td><td><a href="/post-management-overview">Posts</a></td></tr>
+<tr><td>Bookings and events</td><td><code>/api/v1/calendar/*</code></td><td><a href="/calendar-overview">Calendar</a></td></tr>
+<tr><td>Read the books</td><td><code>/api/v1/ledger/*</code></td><td><a href="/accounting-overview">Accounting</a></td></tr>
 </tbody>
 </table>
 
-## Security Checklist
+### Webhooks and notifications
 
-Ensure your integration follows security best practices.
+Instead of polling, let BizKitHub call you:
 
-- **Critical:** Store API keys securely in environment variables.
-- **Critical:** Never expose API keys in client-side code.
-- **Critical:** Use HTTPS for all API communications.
-- Implement proper error handling.
-- Respect rate limits (see documentation).
-- **Critical:** Validate webhook signatures.
-- **Critical:** Handle sensitive customer data according to GDPR.
-- Use `DEV_` keys for testing, `PROD_` for production.
+- **[Webhooks](/webhooks)** send signed events about shipments to an HTTPS endpoint you register under **Settings → Webhooks**.
+- **`notificationUrl`** on an order is called whenever that order's state changes, including payment.
 
-## Related Resources
+### Typical integration types
 
-- [E-Shop Quickstart](/eshop-quickstart-overview)
-- [Platform Architecture](/architecture-overview)
-- [Security](/security-overview)
-- [Rate Limiting](/rate-limiting-overview)
-- [Get API Key](/api-key-overview)
-- [Contact Support](/support-overview)
+- **Headless e-shop.** Your storefront renders products from the API and sends orders back; BizKitHub handles customers, payments, invoices and shipping. Start with the [E-shop quickstart](/eshop-quickstart-overview).
+- **ERP or accounting sync.** A scheduled job reads new orders and paid invoices and writes status changes back.
+- **Website content.** Your site reads posts, categories and glossary terms from the API, so editors work in one place.
+
+## Before you go live
+
+- Keep the API key on your server. Never put it in browser code or a mobile app bundle.
+- Use a development key while you build and a production key in production.
+- Handle errors by their `errorCode` (see [API error codes](/errors)) and respect [rate limits](/rate-limiting-overview).
+- Verify the signature of every webhook and ignore deliveries you have already processed.
+- Process personal data of customers in line with your own GDPR obligations; see [Security](/security-overview).
+
+## Related
+
+- [API quickstart](/api-quickstart)
+- [Architecture](/architecture-overview)
+- [Webhooks](/webhooks)
+- [Support](/support-overview)
