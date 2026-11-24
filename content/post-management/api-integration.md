@@ -21,7 +21,7 @@ This article covers the endpoints, authentication, the response shapes, common i
 
 Every request needs a valid API key. See the [API key](/api-key-overview) article for how keys are issued, formatted, rotated, and passed on the request. The short version:
 
-- Include the key as `apiKey` in the query string or JSON body.
+- Include the key as `apiKey` in the query string.
 - Every response respects the organisation scope of the key — you never see posts from another organisation, even if you know their identifier.
 
 - Rate limits apply per key tier.

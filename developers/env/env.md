@@ -6,8 +6,8 @@ published_at: "2026-07-24T19:26:34.621Z"
 ---
 
 
-env
-===
+Environment variables
+=====================
 
 Complete reference of all configurable environment variables in BizKitHub. Customize your application settings and integrate with external services through a centralized configuration system.
 

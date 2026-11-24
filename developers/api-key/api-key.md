@@ -28,28 +28,17 @@ The full pattern is `/^(PROD|DEV_|ROOT)[a-zA-Z0-9]{28}$/`. Keys are generated wi
 
 ## Passing the key
 
-Include the key as the `apiKey` parameter in either the query string or the JSON body. Every endpoint accepts both.
-
-**Query string**
+Include the key as the `apiKey` parameter in the query string of every request, including `POST` requests with a JSON body. The API does not read the key from the body or from an `Authorization` header.
 
 ```
 GET https://api.bizkithub.com/api/v1/order/list?apiKey=YOUR_API_KEY
-```
-
-**Request body**
-
-```json
-{
-  "apiKey": "YOUR_API_KEY",
-  "customerId": "cus_abc123"
-}
 ```
 
 ## Verification pipeline
 
 Each request is validated in the following order:
 
-1. Presence — the key must be provided in the query or body.
+1. Presence — the key must be provided in the query string.
 2. Format — must match the prefix + 28-character pattern.
 3. Registry — the key must exist and be active in the organisation database.
 4. Expiration — expired or revoked keys are rejected.

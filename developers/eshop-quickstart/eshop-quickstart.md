@@ -7,8 +7,8 @@ published_at: "2026-07-26T18:33:15.639Z"
 ---
 
 
-Eshop Quickstart
-================
+E-shop quickstart
+=================
 
 ## Overview
 
