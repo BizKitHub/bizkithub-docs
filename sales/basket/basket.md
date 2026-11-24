@@ -1,7 +1,7 @@
 ---
 id: "oGcZlCTB5LEn2959"
 category: "sales/basket"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:25.427Z"
 ---
 

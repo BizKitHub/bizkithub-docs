@@ -1,7 +1,7 @@
 ---
 id: "aJRNDBkxWYXGQMj7"
 category: "platform/storage"
-tags: []
+tags: ["type-concept"]
 published_at: "2026-07-24T19:26:38.817Z"
 ---
 

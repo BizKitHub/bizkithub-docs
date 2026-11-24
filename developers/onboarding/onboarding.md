@@ -1,7 +1,7 @@
 ---
 id: "20j6R7PUPMBhJ51w"
 category: "developers/onboarding"
-tags: []
+tags: ["type-guide"]
 published_at: "2026-07-24T19:26:31.221Z"
 ---
 

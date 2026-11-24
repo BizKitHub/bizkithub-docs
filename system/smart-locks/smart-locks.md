@@ -1,7 +1,7 @@
 ---
 id: "x7bgI0FdYCzlvvxl"
 category: "system/smart-locks"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:26.914Z"
 ---
 

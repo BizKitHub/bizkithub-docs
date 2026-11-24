@@ -1,7 +1,7 @@
 ---
 id: "3AStbh1KmuNZwLNQ"
 category: "crm/forms"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:26.683Z"
 ---
 

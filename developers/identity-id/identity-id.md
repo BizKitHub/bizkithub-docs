@@ -1,7 +1,7 @@
 ---
 id: "U4r3wMqS8bH41CIz"
 category: "developers/identity-id"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-24T19:26:35.377Z"
 ---
 

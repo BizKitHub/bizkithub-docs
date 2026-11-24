@@ -1,7 +1,7 @@
 ---
 id: "v2VAeMdqB5BZ4tHb"
 category: "finance/banking-transaction"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:25.047Z"
 ---
 

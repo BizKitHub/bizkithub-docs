@@ -1,7 +1,7 @@
 ---
 id: "ldcO0Qx1NkhHHvTm"
 category: "sales/order-workflow"
-tags: []
+tags: ["type-concept"]
 published_at: "2026-04-24T06:57:29.370Z"
 ---
 

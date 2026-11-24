@@ -1,7 +1,7 @@
 ---
 id: "KRcexS9kpsLDnY3O"
 category: "sales/discount-vouchers"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:29.247Z"
 ---
 

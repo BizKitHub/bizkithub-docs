@@ -1,7 +1,7 @@
 ---
 id: "90waL5T2Bt14718z"
 category: "platform/security"
-tags: []
+tags: ["type-concept"]
 published_at: "2026-07-24T19:26:43.540Z"
 ---
 

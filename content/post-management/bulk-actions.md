@@ -5,6 +5,7 @@ tags:
   - "posts"
   - "bulk"
   - "operations"
+tags: ["type-overview"]
 published_at: "2026-08-02T15:04:31.134Z"
 ---
 

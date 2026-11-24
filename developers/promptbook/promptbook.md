@@ -1,7 +1,7 @@
 ---
 id: "NO1CL6adJjVI1gd2"
 category: "developers/promptbook"
-tags: []
+tags: ["type-guide"]
 published_at: "2026-07-24T19:26:33.272Z"
 ---
 

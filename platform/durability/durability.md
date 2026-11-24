@@ -1,7 +1,7 @@
 ---
 id: "4Rz0O5Lqen8Kcnm6"
 category: "platform/durability"
-tags: []
+tags: ["type-concept"]
 published_at: "2026-07-24T19:26:36.674Z"
 ---
 

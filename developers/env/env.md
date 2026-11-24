@@ -1,7 +1,7 @@
 ---
 id: "6Iq04yEHl7pVK7h2"
 category: "developers/env"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-24T19:26:34.621Z"
 ---
 

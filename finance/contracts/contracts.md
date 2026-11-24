@@ -1,7 +1,7 @@
 ---
 id: "K04jRlYbjg1a6Zbt"
 category: "finance/contracts"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:25.954Z"
 ---
 

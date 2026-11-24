@@ -1,7 +1,7 @@
 ---
 id: "hgzA2CTAf11F0BMj"
 category: "finance/payment-gateways"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:28.256Z"
 ---
 

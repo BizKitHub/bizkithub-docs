@@ -1,7 +1,7 @@
 ---
 id: "IF2P1Blh9pUTLRcv"
 category: "developers/bff"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-26T08:11:40.094Z"
 ---
 

@@ -1,7 +1,7 @@
 ---
 id: "5iYUoGB88lb85hw3"
 category: "platform/monitoring"
-tags: []
+tags: ["type-concept"]
 published_at: "2026-07-24T19:26:38.006Z"
 ---
 

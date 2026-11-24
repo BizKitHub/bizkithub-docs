@@ -1,7 +1,7 @@
 ---
 id: "glrAUmhiOSk6aYVJ"
 category: "system/io-t-overview"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:27.033Z"
 ---
 

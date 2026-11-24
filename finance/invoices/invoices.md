@@ -1,7 +1,7 @@
 ---
 id: "UiS3wbwvy7V04z3w"
 category: "finance/invoices"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:26.796Z"
 ---
 

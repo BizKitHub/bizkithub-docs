@@ -2,7 +2,7 @@
 id: "hY3UqThX9I6F3ng0"
 code: "frontend-migration-security-acknowledgments"
 category: "platform/security-acknowledgments"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-26T18:53:37.032Z"
 ---
 

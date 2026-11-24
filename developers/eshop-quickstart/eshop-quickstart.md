@@ -2,7 +2,7 @@
 id: "gVp5BJ2JJgE9z82p"
 code: "docs-migration-eshop-quickstart"
 category: "developers/eshop-quickstart"
-tags: []
+tags: ["type-guide"]
 published_at: "2026-07-26T18:33:15.639Z"
 ---
 

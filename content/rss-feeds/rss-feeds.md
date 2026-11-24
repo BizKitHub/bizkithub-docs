@@ -1,7 +1,7 @@
 ---
 id: "0utsc1ABKHCVKqM1"
 category: "content/rss-feeds"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:28.800Z"
 ---
 

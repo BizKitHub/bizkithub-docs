@@ -1,7 +1,7 @@
 ---
 id: "Etqb3gWWI2284rsS"
 category: "system/system-administration"
-tags: []
+tags: ["type-concept"]
 published_at: "2026-04-24T06:57:24.759Z"
 ---
 

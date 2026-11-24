@@ -1,7 +1,7 @@
 ---
 id: "dh90yT6skL95J4xY"
 category: "platform/free-tier"
-tags: []
+tags: ["type-concept"]
 published_at: "2026-07-24T19:26:37.294Z"
 ---
 

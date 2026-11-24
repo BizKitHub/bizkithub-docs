@@ -2,7 +2,7 @@
 id: "HX5Du5QX2ES2i5Gp"
 code: "docs-migration-logo"
 category: "content/logo"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-26T18:33:17.168Z"
 ---
 

@@ -1,7 +1,7 @@
 ---
 id: "igyi3OAhqVoYab5Y"
 category: "platform/architecture"
-tags: []
+tags: ["type-concept"]
 published_at: "2026-07-24T19:26:42.501Z"
 ---
 

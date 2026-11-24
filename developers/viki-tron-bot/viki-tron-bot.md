@@ -1,7 +1,7 @@
 ---
 id: "nz0KkmDgE1uDc1TI"
 category: "developers/viki-tron-bot"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-24T19:26:33.987Z"
 ---
 

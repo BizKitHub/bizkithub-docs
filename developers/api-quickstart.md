@@ -1,7 +1,7 @@
 ---
 code: "api-quickstart"
 category: "developers"
-tags: ["api"]
+tags: ["type-guide", "api"]
 published_at: "2026-11-24T12:00:00.000Z"
 ---
 

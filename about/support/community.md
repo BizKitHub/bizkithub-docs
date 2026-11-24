@@ -1,7 +1,7 @@
 ---
 id: "Nb2o5YiAw1SOZuJ8"
 category: "about/support"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-08-01T00:00:00.000Z"
 ---
 

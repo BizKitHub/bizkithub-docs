@@ -1,6 +1,6 @@
 ---
 category: "crm/tickets"
-tags: ["tickets", "priority", "status", "workflow"]
+tags: ["type-reference", "tickets", "priority", "status", "workflow"]
 published_at: "2026-08-08T00:00:00.000Z"
 ---
 

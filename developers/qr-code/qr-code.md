@@ -2,7 +2,7 @@
 id: "g39960L0J53ZPHXW"
 code: "docs-migration-qr-code"
 category: "developers/qr-code"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-26T18:33:23.035Z"
 ---
 

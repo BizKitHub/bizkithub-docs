@@ -1,7 +1,7 @@
 ---
 id: "5Ok75MqAqhxZWvSl"
 category: "system/utils"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-08-01T00:00:00.000Z"
 ---
 

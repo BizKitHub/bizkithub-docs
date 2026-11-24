@@ -1,7 +1,7 @@
 ---
 id: "mzIIYVHJfCTHnwwj"
 category: "system/search"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:28.912Z"
 ---
 

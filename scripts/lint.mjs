@@ -41,6 +41,7 @@ const RULES = [
 ];
 
 // Below MIN_WORDS a page is a stub (error); below SHORT_WORDS it is flagged for review.
+const ARTICLE_TYPES = ['type-overview', 'type-guide', 'type-reference', 'type-concept', 'type-troubleshooting'];
 const MIN_WORDS = 100;
 const SHORT_WORDS = 150;
 
@@ -63,11 +64,25 @@ const problems = [];
 const report = (file, line, level, rule, message) => problems.push({ file, line, level, rule, message });
 const links = []; // { file, line, slug }
 const localCodes = new Set();
+/*
+ * The importer resolves `category` against categories that already exist in
+ * the CMS and never creates one: an unknown path lands the post
+ * uncategorised and invisible in the navigation. Paths used by imported
+ * posts (those with an `id`) are known to exist; a new post on any other
+ * path is flagged.
+ */
+const knownCategories = new Set();
+const newPostCategories = []; // { file, category }
 
 for (const path of files) {
   const file = relative(ROOT, path);
   const text = readFileSync(path, 'utf8');
   const ownCode = /^code:\s*"?([a-z0-9-]+)"?\s*$/m.exec(text)?.[1];
+  const ownCategory = /^category:\s*"?([^"\n]+)"?\s*$/m.exec(text)?.[1];
+  if (ownCategory) {
+    if (/^id:/m.test(text)) knownCategories.add(ownCategory);
+    else newPostCategories.push({ file, category: ownCategory });
+  }
   if (ownCode) localCodes.add(ownCode); // every file, so filtered runs still resolve links to new articles
   if (only.length && !only.some((prefix) => file.startsWith(prefix))) continue;
   const lines = text.split('\n');
@@ -92,6 +107,18 @@ for (const path of files) {
   if (/^title:/m.test(fm[1])) report(file, 2, 'error', 'frontmatter', 'title belongs in the underlined H1, not the frontmatter');
   const published = field('published_at');
   const draft = !published; // the importer stores a post without published_at as an unpublished draft
+  // Article type (AUTHORING § 6): exactly one `type-*` tag on every published post.
+  const tagLine = /^tags:\s*(\[.*\])\s*$/m.exec(fm[1])?.[1];
+  let tags = [];
+  try {
+    tags = tagLine ? JSON.parse(tagLine) : [];
+  } catch {
+    report(file, 2, 'error', 'frontmatter', 'tags must be a JSON-style flow list, for example ["type-guide", "api"]');
+  }
+  const typeTags = tags.filter((tag) => tag.startsWith('type-'));
+  if (!draft && (typeTags.length !== 1 || !ARTICLE_TYPES.includes(typeTags[0]))) {
+    report(file, 2, 'error', 'article-type', `needs exactly one of ${ARTICLE_TYPES.join(', ')} in tags (found ${typeTags.join(', ') || 'none'})`);
+  }
   if (published && Number.isNaN(Date.parse(published))) report(file, 2, 'error', 'frontmatter', `published_at "${published}" is not a date`);
 
   const bodyStart = fm[0].split('\n').length - 1;
@@ -127,6 +154,15 @@ for (const path of files) {
     report(file, bodyStart + 1, 'error', 'min-words', `only ${words} words of prose (minimum ${MIN_WORDS}): write the article or merge it into a related one`);
   } else if (words < SHORT_WORDS && !allowed(file, 'min-words')) {
     report(file, bodyStart + 1, 'warning', 'short', `${words} words of prose: check the article covers the module (AUTHORING § 11)`);
+  }
+}
+
+for (const { file, category } of newPostCategories) {
+  if (only.length && !only.some((prefix) => file.startsWith(prefix))) continue;
+  const parent = category.split('/').slice(0, -1).join('/');
+  const known = knownCategories.has(category) || [...knownCategories].some((c) => c.startsWith(`${category}/`));
+  if (!known) {
+    report(file, 3, 'error', 'category', `category "${category}" is not used by any imported post: create it in the CMS first, or use an existing one${parent ? ` (for example "${parent}")` : ''}`);
   }
 }
 

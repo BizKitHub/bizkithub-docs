@@ -1,7 +1,7 @@
 ---
 id: "EmHNQpk5UHan3f5c"
 category: "crm/contacts"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:25.835Z"
 ---
 

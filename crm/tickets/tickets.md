@@ -1,7 +1,7 @@
 ---
 id: "pOwQ0CCSuqvVK4uF"
 category: "crm/tickets"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:27.236Z"
 ---
 

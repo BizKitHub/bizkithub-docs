@@ -1,7 +1,7 @@
 ---
 id: "aZ0ryTFiDVWHdBem"
 category: "communication/email-layouts"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:26.255Z"
 ---
 

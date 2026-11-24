@@ -2,7 +2,7 @@
 id: "XxnF99hw5Ll9GdRK"
 code: "docs-migration-api-key"
 category: "developers/api-key"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-26T18:33:08.685Z"
 ---
 

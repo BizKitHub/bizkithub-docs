@@ -1,7 +1,7 @@
 ---
 id: "D06P6TBNphvoxEJP"
 category: "content/file-storage"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:26.136Z"
 ---
 

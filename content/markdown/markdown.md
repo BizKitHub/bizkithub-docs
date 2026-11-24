@@ -2,7 +2,7 @@
 id: "5dKmxfPZpM9x67j3"
 code: "docs-migration-markdown"
 category: "content/markdown"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-26T18:33:18.465Z"
 ---
 

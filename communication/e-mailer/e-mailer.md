@@ -1,7 +1,7 @@
 ---
 id: "TW4OTwoBjs8ugSGU"
 category: "communication/e-mailer"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:26.497Z"
 ---
 

@@ -1,7 +1,7 @@
 ---
 id: "N3ZrGODJb3FqBMe8"
 category: "crm/calendar"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:25.312Z"
 ---
 

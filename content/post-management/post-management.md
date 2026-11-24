@@ -5,6 +5,7 @@ tags:
   - "posts"
   - "overview"
   - "content"
+tags: ["type-overview"]
 published_at: "2026-04-07T15:18:08.877Z"
 ---
 

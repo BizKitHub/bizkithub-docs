@@ -253,9 +253,23 @@ in day-to-day authorship:
 | --------------- | --------------------------------------------------------------------------------- |
 | `id`            | **Never.** Omit when creating a new post; the importer assigns and writes it back. Never edit an existing one — it is the immutable link to the DB row. |
 | `code`          | Only when the URL slug needs to differ from the filename slug, or when an external integration needs a stable idempotency key. Otherwise leave empty. |
-| `category`      | **Always.** Slash-separated slug path matching the intended category tree (e.g. `sales/orders`). This — not the folder — is what the platform reads. |
-| `tags`          | Zero, one, or many tag codes. Tags cross-cut the category tree and drive filters / related-article widgets. Prefer tags that a reader would actually filter by (e.g. `webhooks`, `security`, `beta`). |
+| `category`      | **Always.** Slash-separated slug path matching the intended category tree (e.g. `sales/orders`). This — not the folder — is what the platform reads. The category must already exist in the CMS: the importer never creates one, and a post on an unknown path lands uncategorised. |
+| `tags`          | **Always** one article-type tag (see below), first in the list, plus any number of topic tags. Topic tags cross-cut the category tree and drive filters / related-article widgets. Prefer tags that a reader would actually filter by (e.g. `webhooks`, `security`, `beta`). |
 | `published_at`  | ISO date of first publication. Omit for drafts. Do not backdate to game the sort order. |
+
+### Article type
+
+Every published post carries exactly one type tag. The docs site shows it
+as a label and lets readers filter by it, so pick the one that matches
+what the reader will do with the page:
+
+| Tag | The reader wants to | Template (§ 11) |
+|---|---|---|
+| `type-overview` | understand what a module or feature does and when to use it | Module overview |
+| `type-guide` | reach a goal by following steps | How-to guide |
+| `type-reference` | look up a contract: an endpoint, a field, a code, a limit | Reference |
+| `type-concept` | understand how something works or why it is designed that way | Module overview, without the admin tour |
+| `type-troubleshooting` | fix a specific problem | Troubleshooting |
 
 Do NOT add fields the importer does not recognise (`title:`, `author:`,
 `draft:`, `visibility:`, `meta_title:`, `meta_description:`, `perex:`).

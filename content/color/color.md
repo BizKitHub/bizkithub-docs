@@ -2,7 +2,7 @@
 id: "w0d9gJQ6f0hzgWOD"
 code: "docs-migration-color"
 category: "content/color"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-26T18:33:13.549Z"
 ---
 

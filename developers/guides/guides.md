@@ -1,7 +1,7 @@
 ---
 id: "1kM3mTSyucCwoD3G"
 category: "developers/guides"
-tags: []
+tags: ["type-guide"]
 published_at: "2026-07-24T19:26:31.879Z"
 ---
 

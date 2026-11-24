@@ -1,7 +1,7 @@
 ---
 id: "E4YxcV4bweMGXzdf"
 category: "system/organization-settings"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:29.035Z"
 ---
 

@@ -1,7 +1,7 @@
 ---
 id: "BMUqbFZTT4kf9vee"
 category: "system/new-organization"
-tags: []
+tags: ["type-guide"]
 published_at: "2026-04-24T06:57:27.492Z"
 ---
 

@@ -1,7 +1,7 @@
 ---
 id: "rWktIswXewbDhozp"
 category: "sales/complaint"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:25.614Z"
 ---
 

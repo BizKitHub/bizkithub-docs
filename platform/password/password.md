@@ -2,7 +2,7 @@
 id: "O659h0cqmmn99xCS"
 code: "docs-migration-password"
 category: "platform/password"
-tags: []
+tags: ["type-concept"]
 published_at: "2026-07-26T18:33:19.958Z"
 ---
 

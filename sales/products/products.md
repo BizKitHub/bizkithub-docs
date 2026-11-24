@@ -1,7 +1,7 @@
 ---
 id: "ieaF1eYDU6kuL2oz"
 category: "sales/products"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:28.685Z"
 ---
 

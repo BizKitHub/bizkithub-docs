@@ -1,7 +1,7 @@
 ---
 id: "7a7i0vcWpns0XuZD"
 category: "system/configuration"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:25.726Z"
 ---
 

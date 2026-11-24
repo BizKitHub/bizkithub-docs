@@ -6,6 +6,7 @@ tags:
   - "translations"
   - "i18n"
   - "multilingual"
+tags: ["type-concept"]
 published_at: "2026-08-02T17:11:10.179Z"
 ---
 

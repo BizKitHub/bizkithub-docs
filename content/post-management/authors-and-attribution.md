@@ -5,6 +5,7 @@ tags:
   - "posts"
   - "authors"
   - "attribution"
+tags: ["type-overview"]
 published_at: "2026-08-02T17:10:52.383Z"
 ---
 

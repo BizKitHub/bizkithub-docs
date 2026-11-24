@@ -1,7 +1,7 @@
 ---
 id: "54yLjTp0WuSKUmRf"
 category: "system/organization"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:28.149Z"
 ---
 

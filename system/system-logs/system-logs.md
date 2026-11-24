@@ -1,7 +1,7 @@
 ---
 id: "BhzGgO19HOqv8iIs"
 category: "system/system-logs"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-04-24T06:57:27.369Z"
 ---
 

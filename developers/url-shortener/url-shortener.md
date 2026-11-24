@@ -2,7 +2,7 @@
 id: "7i09nK55nMi63A2f"
 code: "docs-migration-url-shortener"
 category: "developers/url-shortener"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-26T18:33:25.949Z"
 ---
 

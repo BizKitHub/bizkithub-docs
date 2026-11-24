@@ -1,7 +1,7 @@
 ---
 id: "QEGMz1P9Cdl0WBBL"
 category: "sales/products"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-08-01T00:00:00.000Z"
 ---
 

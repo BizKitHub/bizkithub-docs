@@ -1,7 +1,7 @@
 ---
 id: "s09frzk03Zl3nEby"
 category: "legal-and-company/subprocessors"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-24T18:25:26.433Z"
 ---
 

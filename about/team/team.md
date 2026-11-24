@@ -1,7 +1,7 @@
 ---
 id: "Rm4v4n3PjrqE7QIj"
 category: "about/team"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-07-24T19:26:44.995Z"
 ---
 

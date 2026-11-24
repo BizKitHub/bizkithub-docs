@@ -2,7 +2,7 @@
 id: "doRgJnQolmcx6G24"
 code: "docs-migration-pdf-generator"
 category: "developers/pdf-generator"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-26T18:33:24.538Z"
 ---
 

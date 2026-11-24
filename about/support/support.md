@@ -1,7 +1,7 @@
 ---
 id: "UXZern2slYg3V9kE"
 category: "about/support"
-tags: []
+tags: ["type-guide"]
 published_at: "2026-07-24T19:26:41.622Z"
 ---
 

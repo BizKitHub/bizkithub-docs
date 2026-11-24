@@ -1,7 +1,7 @@
 ---
 id: "koORQ3HzrP7YZu8V"
 category: "developers/rate-limiting"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-24T19:26:28.827Z"
 ---
 

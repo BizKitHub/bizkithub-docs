@@ -5,6 +5,7 @@ tags:
   - "posts"
   - "analytics"
   - "views"
+tags: ["type-overview"]
 published_at: "2026-08-02T00:00:00.000Z"
 ---
 

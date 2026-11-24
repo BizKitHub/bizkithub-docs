@@ -1,7 +1,7 @@
 ---
 id: "6Cn39Y54FJdgz9AH"
 category: "legal-and-company/sla"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-07-24T18:26:40.065Z"
 ---
 

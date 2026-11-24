@@ -1,7 +1,7 @@
 ---
 id: "uM6Hp83wtJW1g1dg"
 category: "sales/products"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-08-01T00:00:00.000Z"
 ---
 

@@ -1,7 +1,7 @@
 ---
 id: "fmbSOiCV61rEH7k1"
 category: "crm/contacts"
-tags: []
+tags: ["type-reference"]
 published_at: "2026-08-01T00:00:00.000Z"
 ---
 

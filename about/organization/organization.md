@@ -1,7 +1,7 @@
 ---
 id: "9hl0yMA3TZx5pOvC"
 category: "about/organization"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-07-24T19:26:40.755Z"
 ---
 

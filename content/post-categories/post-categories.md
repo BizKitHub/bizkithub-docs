@@ -1,7 +1,7 @@
 ---
 id: "fUBeQIgHD3glkPj4"
 category: "content/post-categories"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:28.368Z"
 ---
 

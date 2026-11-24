@@ -1,7 +1,7 @@
 ---
 id: "uZD07gSIa74ZJp7P"
 category: "platform/backup"
-tags: []
+tags: ["type-concept"]
 published_at: "2026-07-24T19:26:36.067Z"
 ---
 

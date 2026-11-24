@@ -1,7 +1,7 @@
 ---
 id: "9gXIj2wmlhzihL35"
 category: "sales/shop"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-04-24T06:57:29.143Z"
 ---
 

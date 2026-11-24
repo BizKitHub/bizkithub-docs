@@ -1,7 +1,7 @@
 ---
 id: "w2u8rb9yShcVqH29"
 category: "developers/integration"
-tags: []
+tags: ["type-guide"]
 published_at: "2026-07-24T19:26:32.541Z"
 ---
 

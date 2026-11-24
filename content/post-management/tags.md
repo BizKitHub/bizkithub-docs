@@ -5,6 +5,7 @@ tags:
   - "posts"
   - "tags"
   - "taxonomy"
+tags: ["type-overview"]
 published_at: "2026-08-02T17:11:10.179Z"
 ---
 

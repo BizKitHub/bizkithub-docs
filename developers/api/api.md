@@ -1,7 +1,7 @@
 ---
 id: "qN8XzbOmBgBddQ5m"
 category: "developers/api"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-07-24T19:26:29.648Z"
 ---
 

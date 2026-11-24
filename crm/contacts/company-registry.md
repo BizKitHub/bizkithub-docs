@@ -1,7 +1,7 @@
 ---
 code: "company-registry"
 category: "crm/contacts"
-tags: ["companies", "ares", "registries", "compliance"]
+tags: ["type-concept", "companies", "ares", "registries", "compliance"]
 published_at: "2026-09-11T00:00:00.000Z"
 ---
 

@@ -2,7 +2,7 @@
 id: "Ja8Wz6cj3N3nLT3L"
 code: "docs-migration-changelog"
 category: "whats-new/changelog"
-tags: []
+tags: ["type-overview"]
 published_at: "2026-07-26T18:33:11.119Z"
 ---
 
