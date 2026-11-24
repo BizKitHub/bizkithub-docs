@@ -47,18 +47,16 @@ For a complete list of all available endpoints, including request parameters and
 
 ## URL Structure
 
-Every public endpoint on `api.bizkithub.com` follows a predictable path template:
+Every public endpoint on `api.bizkithub.com` follows the same path template:
 
 ```
-/<module>/<version>/<service>/<action>
+/api/v1/<module>/<action>
 ```
 
-The **module** identifies the business area (`shop`, `product`, `contact`, `calendar`, `newsletter`, `ping`, …). The **version** is always a `v`-prefixed number (`v1`); if you do not know which version to target, use `v1`. The optional **service** and **action** narrow down to a specific endpoint.
-
-The minimum well-formed path is `/<module>/<version>`, for example `/ping/v1`. A representative fully-qualified URL — creating an order — looks like this:
+The **module** identifies the business area (`shop/order`, `product`, `contact`, `calendar`, `newsletter`, `ping`, …) and the **action** names the operation (`list`, `detail`, `create`, …). All public endpoints are version `v1`. A representative URL, creating an order, looks like this:
 
 ```
-POST https://api.bizkithub.com/shop/v1/order/create
+POST https://api.bizkithub.com/api/v1/shop/order/create
 ```
 
 ## HTTP Method Conventions
@@ -77,7 +75,7 @@ The `apiKey` parameter can be supplied through either channel — pick whichever
 **In the URL query string** (typical for `GET`):
 
 ```
-GET https://api.bizkithub.com/api/v1/ping/v1?apiKey=YOUR_API_KEY
+GET https://api.bizkithub.com/api/v1/ping?apiKey=YOUR_API_KEY
 ```
 
 **In the JSON request body** (typical for `POST`):

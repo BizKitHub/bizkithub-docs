@@ -67,11 +67,11 @@ export async function fetchFromAPI(path: string, init: RequestInit = {}) {
 import { fetchFromAPI } from '@/lib/bizkithub';
 
 export default async function ProductsPage() {
-  const { items } = await fetchFromAPI('/product/list');
+  const { items } = await fetchFromAPI('/product/feed?currency=CZK&limit=24');
   return (
     <ul>
       {items.map((p) => (
-        <li key={p.id}>{p.name} — {p.price} {p.currency}</li>
+        <li key={p.id}>{p.name}: {p.price} CZK</li>
       ))}
     </ul>
   );
@@ -80,26 +80,31 @@ export default async function ProductsPage() {
 
 ## 5. Create an order
 
-Cart contents and a customer identifier are posted to the order endpoint; the response includes an order hash that unlocks the public order page and the payment gateway.
+Post the customer's e-mail and the items to the order endpoint. The response carries the order number, the order `hash` and two ready-made links: the public order page and the payment page. See [Creating orders via the API](/order-create-api) for every field.
 
 ```ts
-const order = await fetchFromAPI('/order/create', {
+// Runs on the server (route handler or server action), never in the browser.
+const order = await fetchFromAPI('/shop/order/create', {
   method: 'POST',
   body: JSON.stringify({
-    items: [{ productId: 'prod_abc', quantity: 1 }],
     customer: { email: 'buyer@example.com' },
+    items: [{ label: 'Cheese Burger', price: 189, count: 1 }],
+    returnUrl: 'https://shop.example.com/thank-you',
   }),
 });
-window.location.href = order.paymentUrl;
+// Send the customer to the hosted payment page.
+redirect(order.links.payLink);
 ```
 
 ## 6. Handle the payment callback
 
-BizKitHub posts a signed webhook to your configured URL when the payment settles. Verify the signature, then mark the local order as paid or trigger the fulfilment flow.
+After paying, the customer returns to your `returnUrl`. Do not trust the redirect alone: read the order with `GET /api/v1/shop/order/detail?hash=…` and check that `paidDate` is set before you show a confirmation or release goods. If you passed a `notificationUrl` when creating the order, BizKitHub also calls it when the payment state changes, so your system learns about payments that complete after the customer has closed the browser.
+
+For shipments, subscribe to [webhooks](/webhooks) to be told when a parcel is created or changes state.
 
 ## Where to go next
 
-- Product catalogue reference — `/api/v1/product`.
-- Cart and pricing rules — `/api/v1/cart`.
-- Payment gateways and recurring tokens — `/api/v1/payment`.
-- Webhook signature format — `/api/v1/webhook`.
+- [Creating orders via the API](/order-create-api): the full order payload.
+- [API explorer](/swagger): product feed, categories, cart and payment endpoints.
+- [Webhooks](/webhooks): signed events and how to verify them.
+- [API error codes](/errors): what each error means and how to react.

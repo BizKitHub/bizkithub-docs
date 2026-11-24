@@ -16,7 +16,7 @@ This article documents the public request and response shapes, the fields you ca
 ## Endpoint
 
 ```
-POST https://api.bizkithub.com/api/v1/order/create
+POST https://api.bizkithub.com/api/v1/shop/order/create
 ```
 
 Authentication is via the standard `apiKey` parameter (see the [API key](/api-key-overview) article). No other headers are required beyond `Content-Type: application/json`.

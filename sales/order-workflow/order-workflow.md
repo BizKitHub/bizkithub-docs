@@ -11,14 +11,16 @@ Order Workflow
 
 ## Overview
 
-The Workflow Engine lets an organisation model how orders, subscriptions, reservations and service requests move through their lifecycle. Instead of hard-coding "when payment arrives → send invoice → mark as processing" in application code, you describe the states, the allowed transitions between them, and the actions to fire on entry — all editable from the admin without a redeploy. It is the backbone of everything transactional in BizKitHub.
+The order workflow describes how orders, subscriptions, reservations and service requests move through their lifecycle. Each organisation defines its own order statuses, sorts them into four fixed groups, and attaches automatic actions to individual statuses. Everything is edited in the administration and takes effect immediately.
 
 ## Key capabilities
 
-- **Visual state builder** — design a workflow visually; states, transitions, and side-effects live in one canvas.
-- **Automated transitions** — rules move an order between states without operator intervention (e.g. payment received → processing).
-- **Event-driven actions** — trigger e-mails, webhooks, and notifications on any state change.
-- **Custom states** — every stage group accepts an unlimited number of custom states so you can match your process, not the platform's opinion of it.
+- **Custom statuses.** Every group accepts any number of statuses, so the list matches your process.
+- **Automatic actions per status.** A status can mark the order as paid, issue an invoice or a receipt, move the order on to another status, and notify the customer or your team.
+- **Payment-driven moves.** A status can name the status an order switches to as soon as it is paid.
+- **API access.** Your systems can read an order's status and change it through the public API.
+
+The actions themselves are described in [Workflow automation](/workflow-automation).
 
 ## Workflow structure
 
@@ -48,26 +50,16 @@ Final resting state for anything successfully delivered. These records feed reve
 
 *Example states:* Delivered · Service provided · Reservation fulfilled · Project completed.
 
-## Intelligent automation
+## Automation
 
-State changes are events. Every event can trigger one or more actions declared alongside the workflow definition. Actions run in order and can be conditional on the target state, the source state, or arbitrary record properties.
+Automatic actions are set on each status, not on the transition between two statuses. When an order enters a status, the platform runs the actions configured for it, for example:
 
-### Common triggers
+- **Awaiting payment**: when paid, switch to *Processing*.
+- **Processing**: issue the invoice and e-mail it to the customer.
+- **Shipped**: notify the customer.
+- **Delivered**: after a delay, move the order on to *Completed*.
 
-- **Order delayed** → send an apology e-mail with an updated ETA.
-- **Package lost** → alert the operations team and start the replacement flow.
-- **Order completed** → send a feedback request and issue loyalty points.
-
-### Example action definition
-
-<pre><code>{
-"trigger": "state_changed",
-"conditions": { "new_state": "delayed" },
-"actions": [
-{ "type": "send_email", "template": "delay_notification", "to": "customer" },
-{ "type": "webhook", "url": "https://api.example.com/notify" }
-]
-}</code></pre>
+See [Workflow automation](/workflow-automation) for every available action, how they combine and their limits.
 
 ## Cancellation scenarios
 
@@ -93,4 +85,4 @@ The *Completed* group is the successful terminal state. Records here have been f
 
 ## Working with the API
 
-Every state transition is available through the public API — external systems can promote an order to the next state, subscribe to state-change events via webhooks, or read the current workflow definition for display. See the API reference for the exact endpoints under `/api/v1/order/*`.
+External systems read an order's current status from the order endpoints and change it with `POST /api/v1/shop/order/set-status`. The status change runs the same automatic actions as a change made in the administration. All order endpoints are listed in the [API explorer](/swagger).
