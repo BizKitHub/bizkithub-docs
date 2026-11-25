@@ -38,7 +38,21 @@ In the chat, Kit **only reads data**. It does not change records. When an action
 - **Task for your organisation**: Kit drafts an issue for your colleagues. It appears in issues only after you click **Create task**.
 - **BizKitHub support ticket**: Kit drafts a ticket for BizKitHub support. Support receives it only after you click **Send to support**.
 
-You can rate each answer as helpful or not helpful. **Clear conversation** deletes the whole conversation and cannot be undone.
+When you ask Kit to change something, it does not make the change. It answers in one of these ways:
+
+- **Where to do it yourself.** Kit finds the right page in the admin, links it and lists the steps from the documentation. This is the usual answer for a single edit, such as an address, a status or a price.
+- **Your own AI agent.** For bulk edits, imports, cleanups and recurring work, Kit shows a card with the task already described. **Connect AI agent** on the card opens the connection dialog with that task included in the prompt. See [Connecting your own AI agent](#connecting-your-own-ai-agent).
+- **A ticket.** Only when a person has to act: BizKitHub support for things only the BizKitHub team can do (recovering deleted data, a migration from another system), or a task for a colleague when you do not have the permission yourself.
+
+You can rate each answer as helpful or not helpful.
+
+### Conversations
+
+Kit keeps your conversations, and only you see them. In the chat window header:
+
+- **New chat** starts an empty conversation. The previous one stays in the history. The keyboard shortcut is Ctrl+Shift+O (Cmd+Shift+O on a Mac).
+- The **history** button opens the list of your chats, grouped by date, with search. Click a chat to continue it. Each chat can be renamed or deleted.
+- **Delete this chat** in the ⋮ menu deletes the open conversation and starts a new one. A deleted chat cannot be restored.
 
 ### Limits
 
@@ -46,10 +60,10 @@ Each member can send a limited number of AI requests within a short window and w
 
 ## Connecting your own AI agent
 
-For larger tasks you can connect an AI client that runs on your own computer. Unlike Kit, such an agent works across the whole BizKitHub API, can change data and uses your own AI subscription.
+For larger tasks you can connect an AI client that runs on your own computer, such as an AI coding assistant. Unlike Kit, such an agent works across the whole BizKitHub API, can change data and uses your own AI subscription. That makes it the right tool for bulk operations (repricing hundreds of products, merging duplicate contacts, importing orders from a spreadsheet) and for automating routine work across the company.
 
 1. Open the user menu and choose **Connect AI agent**.
-2. Click **Copy prompt**. The platform creates a dedicated access credential for this organisation and copies a ready-made prompt that contains it.
+2. Click **Copy prompt**. The platform creates a dedicated access credential for this organisation and copies a ready-made prompt that contains it. When you open the dialog from a Kit card, the prompt also contains the task Kit described.
 3. Paste the prompt into your AI client. On first use the client asks whether it may use the key; confirm it.
 
 The credential:
