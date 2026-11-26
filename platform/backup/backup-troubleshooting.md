@@ -71,7 +71,7 @@ The failed backup stays in the list as a record of the event. It does not count 
 | `PUBLIC_API_KEY_HAS_BEEN_EXPIRED` | The key passed its expiry date. | Create a new key with a later expiry date and replace it on the server. |
 | `PUBLIC_API_KEY_IS_NOT_ACTIVE` | The key was deactivated. | Create a new key. Deactivation cannot be undone. |
 | `PUBLIC_API_KEY_SCOPE_NOT_ALLOWED` | The key is restricted to other scopes, for example only to the cron monitor. | Assign the scope **Backup service only** or create a new key with it. |
-| `PUBLIC_BACKUP_TARIFF_NOT_SUPPORTED` | The organisation of the key is not on the Enterprise tariff. | Check that the key belongs to the right organisation. Contact info@bizkithub.com to change the tariff. |
+| `PUBLIC_BACKUP_TARIFF_NOT_SUPPORTED` | The organisation of the key has no storage plan. | Check that the key belongs to the right organisation. Contact info@bizkithub.com to set up a storage plan. |
 
 ## Upload errors
 
@@ -81,6 +81,22 @@ The failed backup stays in the list as a record of the event. It does not count 
 | `PUBLIC_BACKUP_UPLOAD_INCOMPLETE` | When finishing, some parts were missing or had a wrong `ETag`, or the stored size differed from the declared size. | With the `bkh-backup` client, run the backup again. With your own client, upload the missing parts again and repeat the final call. See the [Backup API](/backup-api#finish-the-upload). |
 | `PUBLIC_BACKUP_INVALID_STATE` | The backup is no longer uploading: it is completed, failed or cancelled. | Read the state of the backup and start a new one. |
 | `PUBLIC_REQUEST_VALIDATION_FAILED` | A value is invalid, for example `--next` in the past or more than one year ahead, or metadata over 8 KB. | Read the `errors` list in the response and fix the value. |
+| `PUBLIC_STORAGE_LIMIT_REACHED` (HTTP 507) | The organisation storage is at its cap. | See [Storage limit reached](#storage-limit-reached). |
+
+## Storage limit reached
+
+**Symptom.** Starting a backup fails with HTTP 507 and the error code `PUBLIC_STORAGE_LIMIT_REACHED`. Uploading a new file to Drive fails with the same error. On the Backups page, the health state shows **Needs attention** when the storage reaches 90 % of its cap, and **Backup problem** when it is full.
+
+**What causes it.** All files of the organisation share one storage: Drive, attachments, images and backups. Its cap is 100 GB without a storage plan, or the included storage of the plan + 20 % (120 GB for Basic, 1.2 TB for Pro, 6 TB for Enterprise). The new file is refused when the stored files, the backup uploads still in progress and the new file together would exceed the cap. Several large backups started at the same time count with their full announced size from the start.
+
+**How to fix it.**
+
+1. Open **System → Backups** and check the organisation storage and the share of the cap it uses. From 90 % the page shows **Needs attention**, so you can act before uploads are refused.
+2. Move the organisation to a higher plan, or set up a plan if it has none. Contact info@bizkithub.com. See [Storage cap](/backup-service#storage-cap).
+3. Or remove Drive files you no longer need. Stored backups cannot be deleted.
+4. Run the backup again.
+
+Backups that were already accepted finish normally, and files the platform generates itself, such as invoices and e-mails, are still stored. Existing backups stay readable and can be restored.
 
 ## Client errors on the server
 

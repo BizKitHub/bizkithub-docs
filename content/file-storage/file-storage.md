@@ -30,6 +30,7 @@ Clicking on a file opens a panel with its metadata and available actions. The di
 Files can be uploaded in three equivalent ways. The **Upload** button opens a standard file selection dialog. Drag & drop works directly from the computer's desktop into the browser window. When multiple files are selected at once, uploads run in parallel, progress is displayed in the bottom right corner, and upon completion, the files automatically appear in the folder.
 
 - **Maximum single file size** — usually 100 MB, the limit can be adjusted in organization settings.
+- **Storage cap**: all files of the organisation (Drive, attachments, images and backups) share one storage, capped at 100 GB without a storage plan, or at the included storage of the plan + 20 %. A new upload, copy or file received through a public file request that would exceed the cap is refused with the error code `PUBLIC_STORAGE_LIMIT_REACHED`. Files the platform generates itself, such as invoices and e-mails, are still stored, and existing files stay available. See [Storage cap](/backup-service#storage-cap).
 - **Supported types** — any binary files, including PDFs, images, documents, archives, and videos.
 - **Security check** — the MIME type is detected from the actual file content, not just the extension, so renaming `.exe` to `.pdf` will not trick the system.
 

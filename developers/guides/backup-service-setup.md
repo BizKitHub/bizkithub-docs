@@ -15,7 +15,7 @@ How the backups are protected is explained in [Backup service](/backup-service).
 
 ## What you need before you start
 
-- An organisation on the **Enterprise** tariff, which includes the backup service. Plans and prices are listed in [Backup service](/backup-service#pricing).
+- An organisation with a storage plan (Basic, Pro or Enterprise), which includes the backup service. Plans, prices and the storage cap are listed in [Backup service](/backup-service#pricing).
 - A user with permission for the **Backups** module in the administration.
 - A Linux server where you can run commands with `sudo`. One-command setup has been tested on current Debian and Ubuntu releases using either the standard service manager timers (`systemctl`) or cron.
 - `curl`, `sha256sum`, `dd`, `stat` and GNU `date` on the server, plus the tool for what you back up: `pg_dump`, `mysqldump`, `tar` or `docker`. The installer checks all of them before it changes anything.
@@ -171,7 +171,8 @@ The client computes the **SHA-256** checksum and sends it with the backup, retri
 | `the Docker daemon is not reachable` | Start Docker (`systemctl start docker`), then run the command again. |
 | `the first backup failed` | Read the output above the message; most often the database is not reachable for the job user. Fix it and run the job by hand. |
 | `PUBLIC_API_KEY_HAS_BEEN_EXPIRED` | The key expired. Run a new install command or create a new key. |
-| `PUBLIC_BACKUP_TARIFF_NOT_SUPPORTED` | The organisation is not on the Enterprise tariff. Contact info@bizkithub.com. |
+| `PUBLIC_BACKUP_TARIFF_NOT_SUPPORTED` | The organisation has no storage plan. Contact info@bizkithub.com. |
+| `PUBLIC_STORAGE_LIMIT_REACHED` | The storage of the organisation is at its cap. See [Storage limit reached](/backup-troubleshooting#storage-limit-reached). |
 
 More cases are in [Backup troubleshooting](/backup-troubleshooting).
 

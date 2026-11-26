@@ -17,7 +17,7 @@ This article explains how your backups are protected and what the service checks
 
 ## Who can use it
 
-The backup service is part of the **Enterprise** tariff. Organisations on other tariffs cannot start a new upload; the API answers with `PUBLIC_BACKUP_TARIFF_NOT_SUPPORTED`. Backups that are already stored stay readable after a tariff change. BizKitHub uses the same service for the snapshots of its own database.
+The backup service requires a **storage plan**: Basic, Pro or Enterprise (see [Pricing](#pricing)). Organisations on the Enterprise organisation tariff that used the service before storage plans existed keep their access. Organisations without a plan cannot start a new upload; the API answers with `PUBLIC_BACKUP_TARIFF_NOT_SUPPORTED`. Backups that are already stored stay readable after a plan change. BizKitHub uses the same service for the snapshots of its own database.
 
 ## Pricing
 
@@ -29,7 +29,7 @@ The backup service is a managed service with an SLA on durability. Uploading bac
 | Pro | CZK 1,490 | 1 TB |
 | Enterprise | CZK 5,990 | 5 TB |
 
-You can choose any plan. Storage above the amount included in your plan costs CZK 1.50 per GB per month.
+You can choose any plan. Storage above the amount included in your plan costs CZK 1.50 per GB per month, up to the [storage cap](#storage-cap) of the plan.
 
 For other sizes or specific projects, pricing and conditions can be agreed individually. Contact info@bizkithub.com.
 
@@ -45,7 +45,28 @@ When you pay for one year in advance, you get a 10 % discount on the whole order
 
 The fixed price also fixes the storage of the chosen plan. When your stored data exceeds it, you pay for the extra GB (CZK 1.50 per GB) in the month in which the plan was exceeded.
 
-With an annual plan, your storage can exceed the plan by at most 20 %: 120 GB for Basic, 1.2 TB for Pro and 6 TB for Enterprise. Beyond that, move the organisation to a higher plan. Otherwise new uploads are blocked: the API rejects requests to start an upload. Stored backups stay readable and can still be restored.
+### Storage cap
+
+Every organisation has one shared storage for all its files: Drive, attachments, images and backups. The storage plan covers all of it, not only backups. Sizes are decimal: 1 GB is 1,000,000,000 bytes and 1 TB is 1,000 GB.
+
+With any plan, paid monthly or annually, your storage can exceed the included amount by at most 20 %. Without a plan, the storage of an organisation is capped at 100 GB.
+
+| Plan | Storage included | Storage cap |
+|---|---|---|
+| No plan | None | 100 GB |
+| Basic | 100 GB | 120 GB |
+| Pro | 1 TB | 1.2 TB |
+| Enterprise | 5 TB | 6 TB |
+
+The cap counts the files already stored, the announced size of backup uploads still in progress, and the new file. When the new file would take the total over the cap, the platform refuses it with HTTP 507 and the error code `PUBLIC_STORAGE_LIMIT_REACHED`. This applies to:
+
+- starting a backup (`POST /api/v1/backup/start`);
+- new files in Drive: uploads in the administration including large files, copies of files, and files received through public file requests;
+- files uploaded through `POST /api/v1/disk/store-blob`.
+
+Some operations are never refused. A backup upload that was already accepted can always be finished. Files the platform generates itself, such as invoices, e-mails, shipping labels and image variants, are always stored. Reading, downloading and restoring existing data always works.
+
+To accept new files again, move the organisation to a higher plan or remove Drive files you no longer need. Stored backups cannot be deleted, so they keep counting towards the storage. To set up or change a plan, contact info@bizkithub.com.
 
 ## When you would use it
 
@@ -146,8 +167,8 @@ The service itself is monitored by the platform: the upload checks, the copying,
 
 The **Backups** page under **System** shows the state of all your backups at a glance.
 
-- **Health state.** One of **All good**, **Needs attention**, **Backup problem** or **No backups yet**, with the reasons. A series past its next backup time, a copy outside its deadline or an integrity mismatch is a problem; failed uploads or a tariff that does not allow new backups need attention.
-- **Key figures.** Stored backups, the share with a copy in the second datacentre, the share of copies made within their deadline over the last 30 days, the integrity results over the last 30 days, uploads running now, and the total storage of the organisation.
+- **Health state.** One of **All good**, **Needs attention**, **Backup problem** or **No backups yet**, with the reasons. A series past its next backup time, a copy outside its deadline, an integrity mismatch or storage at its cap is a problem; failed uploads, an organisation without a storage plan, or storage at 90 % of its cap or more need attention.
+- **Key figures.** Stored backups, the share with a copy in the second datacentre, the share of copies made within their deadline over the last 30 days, the integrity results over the last 30 days, uploads running now, and the total storage of the organisation with the share of the [storage cap](#storage-cap) it uses, uploads in progress included.
 - **Storage chart.** The total size in storage at the end of each day, and below it the amount written per day with its 7-day average. Both charts share the time axis. The daily data can be exported to CSV.
 - **Backup series.** Each series with its state (OK, overdue, failed, uploading, not monitored), the last and the next backup, how many backups have their second copy, the integrity results and the size change.
 - **Folders.** Which monthly folders grow most.
@@ -160,6 +181,7 @@ Two actions start from this page: **Connect a new machine** (see [Backup service
 | Limit | Value |
 |---|---|
 | Size of one backup | 1 TiB |
+| Storage of the organisation | 100 GB without a plan, otherwise the included storage + 20 % (see [Storage cap](#storage-cap)) |
 | Part size | At least 64 MiB, larger for very large files |
 | Metadata attached to one backup | 8 KB of JSON |
 | Validity of upload addresses | 12 hours, renewable |

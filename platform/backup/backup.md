@@ -30,7 +30,7 @@ Together they allow **point-in-time recovery**: the database can be restored to 
 
 Backups are stored outside the production server, with two independent storage providers in different locations. The primary backup store is **write-once**: a backup object cannot be changed or deleted before its retention period ends, not even with administrator credentials. A compromised server or a mistaken command therefore cannot destroy the backups.
 
-Database snapshots are stored through the same [backup service](/backup-service) that is available to Enterprise customers, including its copy in the second datacentre in Nuremberg, Germany. Backup freshness is checked automatically twice a day. If a snapshot or the change stream falls behind, the operations team is alerted.
+Database snapshots are stored through the same [backup service](/backup-service) that is available to customers with a storage plan, including its copy in the second datacentre in Nuremberg, Germany. Backup freshness is checked automatically twice a day. If a snapshot or the change stream falls behind, the operations team is alerted.
 
 ## Recovery
 

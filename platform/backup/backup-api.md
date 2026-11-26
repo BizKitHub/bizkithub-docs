@@ -19,7 +19,8 @@ Every endpoint except the client download and the two installer endpoints takes 
 
 - Use a **production** API key of the organisation that should own the backups. See [API keys](/api-key-overview).
 - Restrict the key to the backup service: **Connect a new machine** on the Backups page creates such a key in one click, or assign the scope **Backup service only** to a key in **System → API keys**. Such a key is accepted by the backup endpoints and rejected by every other endpoint of the platform.
-- Starting an upload requires the **Enterprise** tariff. Reading (`list`, `detail`, `usage`) works on every tariff, so existing backups stay readable after a tariff change.
+- Starting an upload requires a storage plan (Basic, Pro or Enterprise); organisations on the Enterprise organisation tariff that used the service before storage plans existed keep their access. Reading (`list`, `detail`, `usage`) works without a plan, so existing backups stay readable after a plan change. See [Backup service](/backup-service#pricing).
+- Starting an upload is also refused when the new file would take the organisation over its [storage cap](/backup-service#storage-cap). Finishing an upload that was already started is never refused.
 - Requests to the backup endpoints count towards the request quota of the key like any other API call. Part uploads go to the storage and do not count. See [Rate limiting](/rate-limiting-overview).
 
 ## Endpoints
@@ -206,13 +207,26 @@ Returns one backup with all [backup fields](#backup-fields), plus `meta` (your m
 
 | Field | Meaning |
 |---|---|
-| `isUploadAllowed` | `false` when the tariff does not include the backup service. |
+| `isUploadAllowed` | `false` when the organisation has no storage plan that includes the backup service. |
 | `maxFileBytes` | Largest allowed backup in bytes. |
 | `backupCount`, `backupBytes` | Number and total size of stored backups. |
 | `mirroredCount`, `mirroredBytes` | Number and total size of backups with a copy in the second datacentre. |
 | `pendingMirrorCount` | Backups whose second copy is still being made. |
 | `lastBackupAt` | Time of the newest backup. |
 | `mirrorRegion` | Region code of the second datacentre (Nuremberg, Germany). |
+| `storage` | The shared storage of the organisation against its plan, described below. |
+
+The `storage` object covers all files of the organisation (Drive, attachments, images and backups), not only backups. Sizes are in bytes.
+
+| Field | Meaning |
+|---|---|
+| `storage.plan` | `none`, `basic`, `pro` or `enterprise`. |
+| `storage.usedBytes` | All stored files of the organisation. |
+| `storage.pendingBytes` | Announced size of backup uploads still in progress. They count towards the cap. |
+| `storage.includedBytes` | Storage included in the plan. |
+| `storage.limitBytes` | The storage cap: the included storage + 20 %, or 100 GB without a plan. |
+
+A new backup is refused when `usedBytes + pendingBytes` plus its size would exceed `limitBytes`. Check these values before a large upload.
 
 ## Backup fields
 
@@ -313,7 +327,8 @@ Errors use the standard error shape of the API with a stable `errorCode`, descri
 
 | Code | HTTP | When | What to do |
 |---|---|---|---|
-| `PUBLIC_BACKUP_TARIFF_NOT_SUPPORTED` | 403 | `start` in an organisation without the Enterprise tariff. | Check that the key belongs to the right organisation, or change the tariff. |
+| `PUBLIC_BACKUP_TARIFF_NOT_SUPPORTED` | 403 | `start` in an organisation without a storage plan. | Check that the key belongs to the right organisation, or set up a storage plan. |
+| `PUBLIC_STORAGE_LIMIT_REACHED` | 507 | `start` with a file that would take the stored data, the uploads in progress and the new file over the storage cap. | Move the organisation to a higher plan or remove Drive files you no longer need, then start the backup again. |
 | `PUBLIC_BACKUP_FILE_TOO_LARGE` | 413 | The file is larger than 1 TiB. | Split the backup into several files or compress it. |
 | `PUBLIC_BACKUP_NOT_FOUND` | 404 | No backup with this `id` in the organisation of the key. | Use the `id` from `start` and a key of the same organisation. |
 | `PUBLIC_BACKUP_INVALID_STATE` | 409 | `part-urls`, `complete` or `abort` on a backup that is no longer uploading, or an upload that expired in storage. | Read the state with `detail` and start a new backup. |
