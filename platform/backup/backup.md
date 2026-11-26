@@ -43,6 +43,7 @@ Many records are also protected before a backup is ever needed: deleted items ar
 
 ## Related
 
+- [Backup service](/backup-service) for backups of your own servers
 - [Durability](/durability-overview)
 - [Storage](/storage-overview)
 - [Infrastructure](/infrastructure-overview)
