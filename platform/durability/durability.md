@@ -46,6 +46,8 @@ The copy is made for **every** file of the platform, not only for backups. Large
 
 Backups sent to the [backup service](/backup-service) have a stricter deadline: their copy is due within 1 hour after the upload, plus 1 hour per 8 GiB of size. While the copy is made, the platform checks every part and computes the SHA-256 checksum of the whole file, so each backup shows both whether its copy arrived on time and whether its content matches the checksum your client sent.
 
+After that, the platform reads every backup in the backup service that has its second copy back about every 30 days and computes its SHA-256 again, alternating between the primary storage and the copy in the second datacentre. A copy that no longer matches or cannot be found alerts the operations team while the other copy stays available. Damage that appears long after the upload is therefore detected without waiting for a restore.
+
 ### Immutable storage
 
 Backups are stored **write-once**. Backups sent to the backup service cannot be deleted or changed by anyone, not even by a BizKitHub administrator. Backups of the platform database cannot be changed or deleted before their retention period ends, not even with administrator credentials. A compromised server, a stolen password or a mistaken command has nothing to erase.
@@ -64,7 +66,7 @@ Backups are stored **write-once**. Backups sent to the backup service cannot be 
 <tr><td>A half-finished write after a crash</td><td>Every change in the database is committed atomically: a request either saves all of its changes or none of them.</td></tr>
 <tr><td>Operator error at BizKitHub</td><td>Backups are write-once and cannot be deleted, even with administrator credentials. The copies with the second provider use separate credentials.</td></tr>
 <tr><td>Ransomware or a compromised customer server</td><td>A backup API key can upload and read metadata only: it cannot delete, overwrite or download a backup. Every upload gets a unique name, so an encrypted file never replaces a clean backup. See <a href="/backup-service">Backup service</a>.</td></tr>
-<tr><td>Corruption that spreads over time</td><td>Full snapshots and the change archive allow a restore to a point before the corruption began.</td></tr>
+<tr><td>Corruption that spreads over time</td><td>Full snapshots and the change archive allow a restore to a point before the corruption began. Backups in the backup service are read back and checked against their checksum about every 30 days, alternating between both copies.</td></tr>
 </tbody>
 </table>
 

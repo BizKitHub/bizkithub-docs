@@ -51,11 +51,24 @@ The command works **once** and is valid for **24 hours**. Do not share it: it co
 
 ### 2. Run it on the server
 
-Paste the command into a shell on the server. The installer prints each step:
+Paste the command into a shell on the server. The installer prints each step. It runs **every check first** and requests the API key only when all of them pass, so a server that fails a check is left unchanged and no key is created.
 
-1. Checks that it runs as root and that every required command exists. For a folder it checks that the path exists, for Docker that the volume exists, and for PostgreSQL that the `postgres` system user exists.
+1. Runs the checks for the chosen profile, and stops at the first one that fails:
+
+   | Check | Applies to | Message when it fails |
+   |---|---|---|
+   | The installer runs as root. | All | `run as root`, followed by the command to use |
+   | `curl`, `sha256sum`, `dd`, `stat` and `date` exist, plus the tools of the profile: `pg_dump` and `psql`, `mysqldump` and `mysql`, `tar`, or `docker`. | All | `missing command: <name>` |
+   | The Docker volume exists. This check also fails when the Docker daemon is not running. | Docker volume | `Docker volume <name> not found` |
+   | The folder exists. | Folder | `path <path> does not exist` |
+   | The `postgres` system user exists. | PostgreSQL | `system user postgres not found (is PostgreSQL installed here?)` |
+   | The `postgres` system user can log in to PostgreSQL and run a query, in the chosen database if you entered one. | PostgreSQL | `cannot connect to PostgreSQL as user postgres (database <name>)` |
+   | `root` can log in to MySQL or MariaDB and run a query, in the chosen database if you entered one, through `/root/.my.cnf` or socket authentication. The attempt times out after 5 seconds. | MySQL / MariaDB | `cannot connect to MySQL as root: configure /root/.my.cnf or socket auth (database <name>)` |
+   | The Docker daemon answers. | Docker volume | `the Docker daemon is not reachable` |
+
+   The part in brackets with the database name appears only when you entered a database. Each message is printed after `bkh: ERROR:`.
 2. Installs the client to `/usr/local/bin/bkh-backup`.
-3. Creates an API key limited to the backup service and stores it in `/etc/bkh-backup/<series>.conf`, readable by root only. The key appears in **System → API keys** with the description and the host name.
+3. Requests an API key limited to the backup service and stores it in `/etc/bkh-backup/<series>.conf`, readable by root only. The key appears in **System → API keys** with the description and the host name. This step uses up the install command.
 4. Writes the backup job to `/usr/local/sbin/bkh-backup-<series>`.
 5. Schedules the job with a **service manager timer** `bkh-backup-<series>.timer` (listed by `systemctl list-timers`). The start is delayed randomly by up to 10 minutes, and a run missed while the server was off is made up after it starts. On a server without `systemctl`, the installer adds a **cron** entry instead and logs to `/var/log/bkh-backup-<series>.log`.
 6. Runs the **first backup** right away and reports the result, then prints the next scheduled run.
@@ -70,7 +83,7 @@ Database access: the PostgreSQL job connects as the `postgres` system user over 
 
 ### Changing or removing a job
 
-- **Change the schedule or target.** Create a new install command with the **same description** and run it. It replaces the job, the schedule and the key file of that series. The previous key stays valid until you revoke it in **System → API keys**.
+- **Change the schedule or target.** Create a new install command with the **same description** and run it. It replaces the job, the schedule and the key file of that series. The API keys created by earlier install commands of the same series are **deactivated automatically** when the new key is issued, and the organisation's administrators receive a security notification e-mail. If the old key is still needed elsewhere, reactivate it in **System → API keys**.
 - **Remove a job.** Disable the timer (`systemctl disable --now bkh-backup-<series>.timer`) or delete the cron file, then revoke the key in **System → API keys**. Stored backups stay in the service.
 
 ## Manual setup with the client
@@ -150,9 +163,12 @@ The client computes the **SHA-256** checksum and sends it with the backup, retri
 
 | Symptom | Cause and fix |
 |---|---|
-| `This install command was already used or has expired` | The command works once for 24 hours. Create a new one. |
-| `missing command: pg_dump` (or another tool) | Install the tool on the server and run a new install command. |
+| `This install command was already used or has expired (24 h)` | The command works once for 24 hours. Create a new one. |
+| `missing command: pg_dump` (or another tool) | Install the tool on the server and run the same command again. It is still valid, because no key was requested. |
 | `run as root` | Run the command with `sudo bash` as shown. |
+| `cannot connect to PostgreSQL as user postgres` | Check that PostgreSQL runs on this server and that `sudo -u postgres psql -c 'SELECT 1'` works, then run the command again. |
+| `cannot connect to MySQL as root: configure /root/.my.cnf or socket auth` | Make `sudo mysql -e 'SELECT 1'` work without a password prompt, then run the command again. |
+| `the Docker daemon is not reachable` | Start Docker (`systemctl start docker`), then run the command again. |
 | `the first backup failed` | Read the output above the message; most often the database is not reachable for the job user. Fix it and run the job by hand. |
 | `PUBLIC_API_KEY_HAS_BEEN_EXPIRED` | The key expired. Run a new install command or create a new key. |
 | `PUBLIC_BACKUP_TARIFF_NOT_SUPPORTED` | The organisation is not on the Enterprise tariff. Contact info@bizkithub.com. |

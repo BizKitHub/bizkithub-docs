@@ -122,17 +122,30 @@ The failed backup stays in the list as a record of the event. It does not count 
 
 ## Install command errors
 
-A used command has already created a backup-only API key, even when the installation then stopped. Revoke unused keys in **System → API keys**; their description starts with `Backup:` and contains the host name.
+The installer runs all of its checks before it requests an API key. When a check fails, nothing is changed on the server, no key is created and the command stays valid: fix the cause and run the **same command** again within 24 hours. Once the checks pass, the command is used up and a backup-only key exists, even when a later step fails. Such keys appear in **System → API keys**; their description starts with `Backup:` and contains the host name. Every error is printed after `bkh: ERROR:`.
 
 | Message on the server | Cause | Fix |
 |---|---|---|
-| `This install command was already used or has expired (24 h)` | Each command works once and only for 24 hours. | Create a new command with **Connect a new machine** and run it. |
+| `This install command was already used or has expired (24 h)` | The command was already used up by a run whose checks passed, or it is older than 24 hours. | Create a new command with **Connect a new machine** and run it. If an earlier run of the command created a key you do not need, deactivate it in **System → API keys**. |
 | `run as root` | The installer was run without root rights. | Pipe it into `sudo bash`, as shown in the administration. |
-| `missing command: pg_dump` (or `mysqldump`, `tar`, `docker`, `curl`, `sha256sum`) | A required tool is not installed. Nothing was changed on the server. | Install the tool, then create and run a new command. |
+| `missing command: pg_dump` (or `psql`, `mysqldump`, `mysql`, `tar`, `docker`, `curl`, `sha256sum`) | A required tool is not installed. Nothing was changed on the server. | Install the tool, then run the same command again. |
 | `path /var/www does not exist` | The folder in the profile does not exist on this server. | Create a new command with the correct absolute path. |
-| `Docker volume … not found` | The volume name is wrong or the volume is on another host. | Check `docker volume ls` and create a new command. |
+| `Docker volume … not found` | The volume name is wrong, the volume is on another host, or the Docker daemon is not running (this check runs first). | Check `systemctl status docker` and `docker volume ls`. Start Docker and run the same command again, or create a new command with the correct volume name. |
 | `system user postgres not found` | PostgreSQL is not installed on this server, or runs in a container. | Run the installer on the database server, or back up the Docker volume instead. |
+| `cannot connect to PostgreSQL as user postgres` (with `(database …)` when you entered one) | PostgreSQL is not running, the `postgres` user cannot log in over the local socket, or the database does not exist. | Run `sudo -u postgres psql -c 'SELECT 1'` (add `-d` and the database name if you entered one) and fix what it reports, then run the same command again. If the database name was wrong, create a new command. |
+| `cannot connect to MySQL as root: configure /root/.my.cnf or socket auth` | `root` cannot log in to MySQL or MariaDB without a password prompt, the server is not running, or the database does not exist. | Store the credentials in `/root/.my.cnf` (readable by root only) or enable socket authentication for `root`, check that `sudo mysql -e 'SELECT 1'` works, then run the same command again. |
+| `the Docker daemon is not reachable` | Docker is installed, but its daemon does not answer. | Start it with `systemctl start docker`, then run the same command again. |
+| `cannot reach the BizKitHub API` | The server could not connect to the API when requesting the key. | Check outgoing HTTPS from the server and run the same command again. If it then reports that the command was already used, create a new one. |
+| `unexpected answer from the API, nothing was changed` | The answer to the key request was not an API key. | Run a new command. If it happens again, contact info@bizkithub.com. |
 | `the first backup failed` | The job is installed, but its first run failed. | Read the output above the message, fix the cause (most often database access) and run the job by hand with `sudo /usr/local/sbin/bkh-backup-<series>`. |
+
+## Periodic check of stored data
+
+**Symptom.** The backup detail in the administration shows **Periodic check of stored data** with **Copy does not match the checksum** or **Copy not found**, or the API returns `reverifyStatus` `mismatch` or `missing`.
+
+**What causes it.** About every 30 days the platform reads each backup back from one of its two copies, alternating between the primary storage and the second datacentre, and compares its SHA-256 with the stored checksum. A different result means that this one copy is damaged or missing.
+
+**How to fix it.** You do not need to do anything. The operations team is alerted automatically, and the other copy stays available for a restore. If you need to restore this backup, contact info@bizkithub.com with the backup identifier.
 
 ## The second copy is late
 

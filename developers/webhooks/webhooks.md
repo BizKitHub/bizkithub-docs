@@ -81,6 +81,12 @@ If you generate a new secret with **Generate new secret**, the old secret stops 
 |---|---|
 | `shipment.created` | A shipment is created for an order, with a carrier label. |
 | `shipment.state_changed` | The carrier reports a new state of a shipment, for example in transit, ready for pickup or delivered. |
+| `backup.completed` | A backup sent to the [backup service](/backup-service) is stored, also when the platform completes an upload the client never confirmed. |
+| `backup.failed` | An upload could not be completed: the client reported an error, the stored data did not match, or no data arrived for 6 hours. |
+| `backup.mirrored` | The copy of a backup in the second datacentre is confirmed, together with its integrity check. |
+| `backup.overdue` | The next backup announced by a series did not start by the announced time plus 20 % of the interval. Sent once per announcement. |
+| `backup.size_anomaly` | A completed backup is more than 20 % larger or smaller than the previous completed backup of the same source and type. |
+| `backup.integrity_mismatch` | The stored file does not match the SHA-256 checksum the client sent. Sent right after `backup.mirrored` for the same backup. |
 | `webhook.test` | You click **Send test event**. Always delivered, whatever the subscription. |
 
 Both shipment events carry the same `data`:
@@ -106,6 +112,47 @@ Both shipment events carry the same `data`:
 
 `previousState` is `null` for `shipment.created`. `direction` is `return` for return shipments. `cod` holds `amount` and `currency` when the parcel is cash on delivery. See [Shipments and carriers](/shipments-and-carriers) for the meaning of each state.
 
+### Backup events
+
+Every backup event carries the backup in `data.backup`, in the same shape as [`GET /api/v1/backup/detail`](/backup-api#read-one-backup) returns it at the moment the event is sent. Some events add fields next to it:
+
+| Event | Extra fields in `data` |
+|---|---|
+| `backup.completed`, `backup.mirrored` | None. |
+| `backup.failed` | `reason`: why the upload failed, the same text as in the failure e-mail and in the `error` field of the backup. |
+| `backup.overdue` | `overdueSince`: the time (ISO 8601) after which the missing backup counts as overdue. `data.backup` is the last backup of the series, the one that announced the next time. |
+| `backup.size_anomaly` | `previousSize`: size of the previous backup in bytes. `sizeChangePercent`: the change in percent, for example `-35.2`. |
+| `backup.integrity_mismatch` | `computedSha256`: the SHA-256 of the stored file computed by the platform. |
+
+An abbreviated example of `backup.size_anomaly`:
+
+```json
+{
+  "id": "whd_p8s2d4f6g8h0j2k4l6m8",
+  "event": "backup.size_anomaly",
+  "createdAt": "2026-11-26T02:41:09.000Z",
+  "data": {
+    "backup": {
+      "id": "aB3dE5fG7hJ9kL1m",
+      "source": "shop-db",
+      "type": "pg-dump",
+      "filename": "shop-db-20261126-023012_aB3dE5fG7hJ9kL1m.sql.zst",
+      "status": "completed",
+      "size": 34078720,
+      "completedAt": "2026-11-26T02:41:07.000Z",
+      "isMirrored": false,
+      "previousSize": 52428800,
+      "sizeChangePercent": -35,
+      "isSizeAnomaly": true
+    },
+    "previousSize": 52428800,
+    "sizeChangePercent": -35
+  }
+}
+```
+
+The backup events complement the e-mail alerts of the backup service: use them to open a ticket in your own monitoring or to start a follow-up job after a backup is stored. The e-mails are sent either way.
+
 ## Delivery and retries
 
 - Your receiver must answer with an HTTP `2xx` status within 10 seconds. Any other answer, a timeout or a redirect counts as a failure; redirects are not followed.
@@ -119,6 +166,7 @@ Answer quickly and do the real work afterwards, for example by putting the event
 ## Related
 
 - [Shipments and carriers](/shipments-and-carriers)
+- [Backup service](/backup-service)
 - [API quickstart](/api-quickstart)
 - [API key](/api-key-overview)
 - [System log](/log-overview)

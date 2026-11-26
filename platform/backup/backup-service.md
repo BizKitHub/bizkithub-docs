@@ -65,6 +65,12 @@ The result is stored with each backup as its **integrity state**:
 
 A mismatch means that the file stored is not the file your client hashed, for example because the file was still being written during the upload. Both copies are identical to each other; the difference is between your file and the uploaded one. Run the backup again and see [Backup troubleshooting](/backup-troubleshooting#integrity-check-failed).
 
+### Periodic re-verification
+
+A check at upload time proves that the backup arrived intact. To prove that it **stays** intact, the platform reads every stored backup that has its second copy back about every 30 days and computes its SHA-256 again. The runs alternate between the primary storage and the copy in the second datacentre, so both copies are read over time. Backups stored before checksums existed get their checksum on the first run, and later runs compare against it.
+
+The backup detail shows the result under **Periodic check of stored data**: when it last ran, which copy it read, and whether the data is intact. If a copy no longer matches its checksum or cannot be found, the BizKitHub operations team is alerted automatically to restore it from the other copy, which stays available in the meantime. This alert goes to BizKitHub, not to your organisation. The [Backup API](/backup-api#re-verification-fields) returns the result in `reverifiedAt`, `reverifyStatus` and `reverifyCopy`.
+
 ## How an upload works
 
 The file never passes through the API. Your client asks the API to start a backup, receives signed upload addresses, and sends the file in parts **directly to the storage**:
@@ -84,7 +90,7 @@ Ransomware and attackers usually try to delete or encrypt backups first, so that
 - **Write and read only.** The API can start uploads and read backup metadata. It has no operation to delete, overwrite, rename or download a backup. A compromised server can neither destroy your backups nor steal them through the key it holds.
 - **Immutable storage.** A stored backup cannot be deleted or changed, not even by a BizKitHub administrator. A mistaken command or a stolen password has nothing to erase.
 - **Unique names.** Every upload gets its own name. A backup encrypted by ransomware is stored next to the clean ones, and you restore from the last clean one.
-- **A restricted key per machine.** Keys created for backups are limited to the backup service and rejected by every other endpoint of the platform. **Connect a new machine** on the Backups page creates such a key with one click. Use a separate key for each server, so you can revoke exactly one if it leaks.
+- **A restricted key per machine.** Keys created for backups are limited to the backup service and rejected by every other endpoint of the platform. **Connect a new machine** on the Backups page creates such a key with one click. Use a separate key for each server, so you can revoke exactly one if it leaks. When you re-install a series, the key of its previous installation is deactivated and your administrators receive a security e-mail.
 - **Encryption in transit.** All uploads and downloads use HTTPS. For sensitive data, encrypt the file before sending it (for example with `gpg` or `age`) and keep the key outside the server.
 - **Downloads only in the administration.** Downloading requires signing in with permission for the **Backups** module, and every download link is recorded in the activity log. See [Backup restore](/backup-restore).
 
@@ -100,11 +106,13 @@ The service watches the following and sends an e-mail notification to your organ
 | **The size changed suddenly.** Each completed backup is compared with the previous completed backup of the same source and type. | If it is more than 20 % larger or smaller, you receive a warning e-mail. The backup is stored normally. Backups where both files are under 1 MiB are not compared. | `BKP_SIZE_JUMP` |
 | **The integrity check failed.** | You receive a critical e-mail with both checksums. | `BKP_SHA_MISMATCH` |
 
+To feed the same events into your own monitoring or ticketing, subscribe to the backup [webhooks](/webhooks): `backup.completed`, `backup.failed`, `backup.mirrored`, `backup.overdue`, `backup.size_anomaly` and `backup.integrity_mismatch`. The e-mails are sent either way.
+
 A sudden size change often reveals a problem the backup tool did not report: a much smaller dump can mean an empty or unreachable database, a missing table or a permission error; a much larger file can mean logs or a wrong directory in the archive.
 
 The monitoring of the next backup works per **series**: the combination of the `source` and `type` sent with each backup, for example `shop-db` and `pg-dump`. The next backup in the series ends the watch, so every backup has to announce its own next time. The installer and the client's `--every` option do this automatically.
 
-The service itself is monitored by the platform: the upload checks, the copying and the copy deadlines run as monitored jobs, and the operations team is alerted when one of them stops or falls behind. Platform incidents are published on the [status page](https://status.bizkithub.com).
+The service itself is monitored by the platform: the upload checks, the copying, the copy deadlines and the periodic re-verification run as monitored jobs, and the operations team is alerted when one of them stops or falls behind. Platform incidents are published on the [status page](https://status.bizkithub.com).
 
 ## The Backups page
 
@@ -115,7 +123,7 @@ The **Backups** page under **System** shows the state of all your backups at a g
 - **Storage chart.** The total size in storage at the end of each day, and below it the amount written per day with its 7-day average. Both charts share the time axis. The daily data can be exported to CSV.
 - **Backup series.** Each series with its state (OK, overdue, failed, uploading, not monitored), the last and the next backup, how many backups have their second copy, the integrity results and the size change.
 - **Folders.** Which monthly folders grow most.
-- **Backup list and detail.** Every backup with its status, size and size change, checksums, integrity state, metadata, the API key that uploaded it, and its second copy with the time, the delay after the upload and the deadline.
+- **Backup list and detail.** Every backup with its status, size and size change, checksums, integrity state, the result of the periodic check of stored data, metadata, the API key that uploaded it, and its second copy with the time, the delay after the upload and the deadline.
 
 Two actions start from this page: **Connect a new machine** (see [Backup service setup](/backup-service-setup)) and **Restore to a server** in the backup detail (see [Backup restore](/backup-restore)).
 

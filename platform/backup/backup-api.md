@@ -15,7 +15,7 @@ The API can **write and read only**. It starts and finishes uploads and returns 
 
 ## Authentication and access
 
-Every endpoint except the client download and the installer takes the API key in the `apiKey` query parameter, also for `POST` requests with a JSON body. Keys in headers are ignored.
+Every endpoint except the client download and the two installer endpoints takes the API key in the `apiKey` query parameter, also for `POST` requests with a JSON body. Keys in headers are ignored.
 
 - Use a **production** API key of the organisation that should own the backups. See [API keys](/api-key-overview).
 - Restrict the key to the backup service: **Connect a new machine** on the Backups page creates such a key in one click, or assign the scope **Backup service only** to a key in **System → API keys**. Such a key is accepted by the backup endpoints and rejected by every other endpoint of the platform.
@@ -28,6 +28,7 @@ Every endpoint except the client download and the installer takes the API key in
 |---|---|
 | `GET /api/v1/backup/client.sh` | Download the Linux client. No API key needed. |
 | `POST /api/v1/backup/install` | Exchange a one-time install command for the installer script. No API key needed. |
+| `POST /api/v1/backup/install/claim` | Used by the installer after its checks: exchange the install token for a backup-only API key. No API key needed. |
 | `POST /api/v1/backup/start` | Start an upload and receive the first upload addresses. |
 | `POST /api/v1/backup/part-urls` | Get more upload addresses, or fresh ones for a retry. |
 | `POST /api/v1/backup/complete` | Finish the upload and register the backup. |
@@ -82,9 +83,21 @@ This endpoint powers the command that **Connect a new machine** shows in the adm
 curl -sSL https://api.bizkithub.com/api/v1/backup/install -d token=Xq3vB8nKp2LmT7wR9yZc4dFg6hJs1aEu -d host="$(hostname)" | sudo bash
 ```
 
-A valid token is consumed atomically, so it works exactly once even when the command runs twice at the same time. The platform creates a production API key limited to the backup service, with the validity chosen in the administration, and records the installation in the activity log. The returned installer sets up the client, the key, the job and the schedule as described in [Backup service setup](/backup-service-setup#one-command-setup).
+This first step checks the token but does not use it up, and creates no API key. The returned installer checks the machine first: root rights, the required tools, the database login, the Docker daemon or the path. Only when every check passes does it call the claim step below, so a machine that fails a check never leaves an unused key behind. It then sets up the client, the key, the job and the schedule as described in [Backup service setup](/backup-service-setup#one-command-setup).
 
 When the token is not valid, the response still has the content type of a shell script. It prints the reason and exits with a non-zero code, so `bash` shows the error instead of running anything. The HTTP status carries the error code, for example `410` for `PUBLIC_BACKUP_INSTALL_TOKEN_INVALID`.
+
+### Claim the API key
+
+`POST /api/v1/backup/install/claim`
+
+The installer calls this endpoint after all of its checks passed. It takes the same form fields as `install` (`token`, and optionally `host`) and answers with plain text: the new API key on success, or the reason of the failure with an error status.
+
+- The token is used up atomically, so it works exactly once, even when the command runs twice at the same time.
+- The platform creates a production API key limited to the backup service, with the validity chosen in the administration. Its description starts with `Backup:` and contains the host name. The installation is recorded in the activity log.
+- **Re-installing a series replaces its key.** When the organisation already has an earlier installation of the same series (the same source), the API keys created by its earlier install commands are deactivated. The organisation's administrators receive a security notification e-mail for each deactivated key, and you can reactivate a key in **System → API keys**. Keys created with **API key only** are not affected.
+
+You do not need to call this endpoint yourself; it is documented so that you can recognise it in logs and firewall rules.
 
 ## Start an upload
 
@@ -242,6 +255,18 @@ These fields are present for backups uploaded through the API.
 | `integrityStatus` | `verified` (the stored file matches the `sha256` you sent), `computed` (you sent no checksum, the platform computed one), `mismatch` (the stored file differs from your checksum; your organisation receives an e-mail) or `unavailable` (copied before the check existed). Absent until the second copy is made. |
 | `verifiedSha256` | SHA-256 of the stored file computed by the platform, 64 hex characters. |
 
+### Re-verification fields
+
+About every 30 days, the platform reads each completed backup that already has its second copy back from storage and computes its SHA-256 again. The runs alternate between the primary storage and the copy in the second datacentre, so both copies are checked over time.
+
+| Field | Meaning |
+|---|---|
+| `reverifiedAt` | Time of the last re-verification (ISO 8601). Absent until the first one. |
+| `reverifyStatus` | `ok` (the copy still matches the checksum), `mismatch` (the copy differs from the checksum or has a different size) or `missing` (the copy could not be found). |
+| `reverifyCopy` | The copy read by the last re-verification: `primary` (primary storage) or `mirror` (second datacentre). |
+
+A `mismatch` or `missing` result alerts the BizKitHub operations team; the other copy stays available. For an older backup that has no checksum yet, the first re-verification stores the computed SHA-256 in `verifiedSha256` and sets `integrityStatus`, and later runs compare against it.
+
 ### Size change fields
 
 | Field | Meaning |
@@ -259,6 +284,10 @@ These fields are present for backups uploaded through the API.
 | `expectationAlertedAt` | When the "expected backup did not arrive" e-mail was sent. |
 
 A newer backup of the same `source` and `type` with the status `uploading` or `completed` ends the watch. A failed or cancelled backup does not. Send `nextExpectedAt` with every backup to keep monitoring on.
+
+### Webhooks
+
+Instead of polling `list`, your monitoring can receive [webhooks](/webhooks) when a backup is stored (`backup.completed`), fails (`backup.failed`), gets its second copy (`backup.mirrored`), is overdue (`backup.overdue`), changes size by more than 20 % (`backup.size_anomaly`) or fails the integrity check (`backup.integrity_mismatch`). Each event carries the backup in the same shape as `detail`.
 
 ## Abandoned uploads
 
@@ -306,5 +335,6 @@ The endpoints, request fields, response fields and error codes in this article a
 - [Backup service setup](/backup-service-setup): the ready-made Linux client.
 - [Backup restore](/backup-restore): downloads happen only in the administration.
 - [Backup troubleshooting](/backup-troubleshooting)
+- [Webhooks](/webhooks): backup events for your monitoring.
 - [API keys](/api-key-overview)
 - [Error codes reference](/error-codes-reference)
