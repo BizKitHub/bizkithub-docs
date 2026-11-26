@@ -15,10 +15,10 @@ The API can **write and read only**. It starts and finishes uploads and returns 
 
 ## Authentication and access
 
-Every endpoint except the client download takes the API key in the `apiKey` query parameter, also for `POST` requests with a JSON body. Keys in headers are ignored.
+Every endpoint except the client download and the installer takes the API key in the `apiKey` query parameter, also for `POST` requests with a JSON body. Keys in headers are ignored.
 
 - Use a **production** API key of the organisation that should own the backups. See [API keys](/api-key-overview).
-- Restrict the key to the scope **Backup service only**. Such a key is accepted by the backup endpoints and rejected by every other endpoint of the platform.
+- Restrict the key to the backup service: **Connect a new machine** on the Backups page creates such a key in one click, or assign the scope **Backup service only** to a key in **System → API keys**. Such a key is accepted by the backup endpoints and rejected by every other endpoint of the platform.
 - Starting an upload requires the **Enterprise** tariff. Reading (`list`, `detail`, `usage`) works on every tariff, so existing backups stay readable after a tariff change.
 - Requests to the backup endpoints count towards the request quota of the key like any other API call. Part uploads go to the storage and do not count. See [Rate limiting](/rate-limiting-overview).
 
@@ -27,6 +27,7 @@ Every endpoint except the client download takes the API key in the `apiKey` quer
 | Method and path | Purpose |
 |---|---|
 | `GET /api/v1/backup/client.sh` | Download the Linux client. No API key needed. |
+| `POST /api/v1/backup/install` | Exchange a one-time install command for the installer script. No API key needed. |
 | `POST /api/v1/backup/start` | Start an upload and receive the first upload addresses. |
 | `POST /api/v1/backup/part-urls` | Get more upload addresses, or fresh ones for a retry. |
 | `POST /api/v1/backup/complete` | Finish the upload and register the backup. |
@@ -65,6 +66,25 @@ curl -s -X POST "$API/complete?apiKey=$KEY" \
 ```
 
 A backup that is not completed has no effect on your stored backups. If your client stops in the middle, the platform closes the upload after 6 hours without new data (see [Abandoned uploads](#abandoned-uploads)).
+
+## One-command installer
+
+`POST /api/v1/backup/install`
+
+This endpoint powers the command that **Connect a new machine** shows in the administration. It needs no API key: a one-time token created in the administration authorises it. The request is a form post, and the response is always a bash script meant to be piped into `sudo bash`.
+
+| Form field | Required | Meaning |
+|---|---|---|
+| `token` | Yes | The one-time install token from the administration, 16 to 64 characters. |
+| `host` | No | Host name of the machine. It is added to the description of the created API key. |
+
+```bash
+curl -sSL https://api.bizkithub.com/api/v1/backup/install -d token=Xq3vB8nKp2LmT7wR9yZc4dFg6hJs1aEu -d host="$(hostname)" | sudo bash
+```
+
+A valid token is consumed atomically, so it works exactly once even when the command runs twice at the same time. The platform creates a production API key limited to the backup service, with the validity chosen in the administration, and records the installation in the activity log. The returned installer sets up the client, the key, the job and the schedule as described in [Backup service setup](/backup-service-setup#one-command-setup).
+
+When the token is not valid, the response still has the content type of a shell script. It prints the reason and exits with a non-zero code, so `bash` shows the error instead of running anything. The HTTP status carries the error code, for example `410` for `PUBLIC_BACKUP_INSTALL_TOKEN_INVALID`.
 
 ## Start an upload
 
@@ -128,7 +148,7 @@ The platform assembles the parts, checks that the stored size equals the declare
 
 If a part is missing or an `ETag` does not match, the call fails with `PUBLIC_BACKUP_UPLOAD_INCOMPLETE` and the upload stays open: upload the affected parts again and repeat `complete`. If the assembled file has a different size than declared, the backup is marked as `failed` and your organisation receives an e-mail.
 
-The copy to the second datacentre follows automatically after `complete`. Follow it in the `isMirrored` field.
+The copy to the second datacentre follows automatically after `complete`, together with the integrity check. Follow them in `isMirrored`, `mirrorDeadlineAt` and `integrityStatus`.
 
 ## Cancel an upload
 
@@ -205,6 +225,31 @@ Returns one backup with all [backup fields](#backup-fields), plus `meta` (your m
 | `mirrorRegion` | Region code of the second datacentre. |
 | `error` | Reason of a failure or cancellation. |
 
+### Copy deadline fields
+
+These fields are present for backups uploaded through the API.
+
+| Field | Meaning |
+|---|---|
+| `mirrorDeadlineAt` | When the second copy is due: completion time plus 1 hour plus 1 hour per 8 GiB of size, counted proportionally. |
+| `mirrorLagSeconds` | Seconds from completion to the confirmed second copy. |
+| `isMirrorLate` | `true` when the copy was made after its deadline, or is still missing after it. |
+
+### Integrity fields
+
+| Field | Meaning |
+|---|---|
+| `integrityStatus` | `verified` (the stored file matches the `sha256` you sent), `computed` (you sent no checksum, the platform computed one), `mismatch` (the stored file differs from your checksum; your organisation receives an e-mail) or `unavailable` (copied before the check existed). Absent until the second copy is made. |
+| `verifiedSha256` | SHA-256 of the stored file computed by the platform, 64 hex characters. |
+
+### Size change fields
+
+| Field | Meaning |
+|---|---|
+| `previousSize` | Size of the previous completed backup of the same source and type, in bytes. |
+| `sizeChangePercent` | Change against the previous backup in percent, for example `-35.2`. |
+| `isSizeAnomaly` | `true` when the size changed by more than 20 % and a warning e-mail was sent. Always `false` when both backups are smaller than 1 MiB. |
+
 ### Monitoring fields
 
 | Field | Meaning |
@@ -243,6 +288,8 @@ Errors use the standard error shape of the API with a stable `errorCode`, descri
 | `PUBLIC_BACKUP_FILE_TOO_LARGE` | 413 | The file is larger than 1 TiB. | Split the backup into several files or compress it. |
 | `PUBLIC_BACKUP_NOT_FOUND` | 404 | No backup with this `id` in the organisation of the key. | Use the `id` from `start` and a key of the same organisation. |
 | `PUBLIC_BACKUP_INVALID_STATE` | 409 | `part-urls`, `complete` or `abort` on a backup that is no longer uploading, or an upload that expired in storage. | Read the state with `detail` and start a new backup. |
+| `PUBLIC_BACKUP_INSTALL_TOKEN_INVALID` | 410 | The install command was already used or is older than 24 hours. | Create a new command with **Connect a new machine**. |
+| `PUBLIC_BACKUP_INVALID_INSTALL_PROFILE` | 400 | The profile for a new install command is invalid: an unknown kind, interval or time, a relative path, or a database or volume name with other characters than letters, digits, `_`, `.` and `-`. | Use an absolute path for folders and a plain name for databases and volumes. |
 | `PUBLIC_BACKUP_UPLOAD_INCOMPLETE` | 400 | Parts are missing, duplicated or have a wrong `ETag`, or the stored size differs from `size`. | Upload the affected parts again and repeat `complete`. |
 | `PUBLIC_REQUEST_VALIDATION_FAILED` | 422 | A field is missing or invalid, for example `nextExpectedAt` in the past, `sha256` not 64 hex characters or `meta` over 8 KB. | Read `errors` in the response and fix the field. |
 | `PUBLIC_API_KEY_SCOPE_NOT_ALLOWED` | 403 | The key is restricted to other scopes. | Assign the scope **Backup service only**. |
@@ -257,6 +304,7 @@ The endpoints, request fields, response fields and error codes in this article a
 
 - [Backup service](/backup-service): how backups are protected and monitored.
 - [Backup service setup](/backup-service-setup): the ready-made Linux client.
+- [Backup restore](/backup-restore): downloads happen only in the administration.
 - [Backup troubleshooting](/backup-troubleshooting)
 - [API keys](/api-key-overview)
 - [Error codes reference](/error-codes-reference)

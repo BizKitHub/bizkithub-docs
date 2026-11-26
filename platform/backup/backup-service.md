@@ -9,9 +9,9 @@ published_at: "2026-11-26T09:00:00.000Z"
 Backup service
 ==============
 
-The backup service stores backups of **your own servers and applications**: database dumps, website files, Docker volumes, anything you can pack into one file. Each backup is uploaded through the API, stored in the BizKitHub global distributed storage, copied automatically to a second datacentre in Nuremberg, Germany, and monitored. Nobody can delete or overwrite a stored backup: not a person with full access to your server, and not a BizKitHub administrator.
+The backup service stores backups of **your own servers and applications**: database dumps, website files, Docker volumes, anything you can pack into one file. Each backup is uploaded through the API, stored in the BizKitHub global distributed storage, copied automatically to a second datacentre in Nuremberg, Germany, checked for integrity and monitored. Nobody can delete or overwrite a stored backup: not a person with full access to your server, and not a BizKitHub administrator.
 
-This article explains how your backups are protected and what the service watches for you. The step-by-step setup is in [Backup service setup](/backup-service-setup), the API contract in [Backup API](/backup-api), and solutions to common problems in [Backup troubleshooting](/backup-troubleshooting).
+This article explains how your backups are protected and what the service checks for you. To connect a server with one command, follow [Backup service setup](/backup-service-setup). To get data back, see [Backup restore](/backup-restore). The API contract is in [Backup API](/backup-api), and solutions to common problems are in [Backup troubleshooting](/backup-troubleshooting).
 
 > **Note.** This page is about backups you send. Backups of your BizKitHub data (orders, contacts, invoices, files) are made automatically by the platform; see [Backup and recovery](/backup-overview).
 
@@ -21,8 +21,8 @@ The backup service is part of the **Enterprise** tariff. Organisations on other 
 
 ## When you would use it
 
-- Nightly dumps of a production database (`pg_dump`, `mysqldump`) with an alert when a night is missed.
-- Archives of website files, uploaded media or configuration (`tar`, `zstd`).
+- Nightly dumps of a production PostgreSQL or MySQL database, with an alert when a night is missed.
+- Archives of website files, uploaded media or configuration.
 - Exports of Docker volumes or virtual machine images, up to 1 TiB per file.
 - An off-site copy that ransomware on your server cannot reach, as part of a 3-2-1 backup strategy.
 - Moving older backups from another location into one place, sorted into the correct months.
@@ -39,9 +39,31 @@ On top of that, the platform makes a **full copy of every backup in a second dat
 | When it is made | During your upload | Automatically after the upload finishes |
 | Can be deleted or overwritten | No | No |
 
-The copy starts automatically, and nothing needs to be configured. Large backups are copied part by part; an interrupted copy resumes from the last finished part. Every backup in the administration shows whether its second copy exists, when it was made and in which region. Through the API, the `isMirrored`, `mirroredAt` and `mirrorRegion` fields carry the same information.
+The copy starts automatically, and nothing needs to be configured. Large backups are copied part by part; an interrupted copy resumes from the last finished part.
 
-If a copy fails repeatedly, the operations team is alerted, and a daily platform check reports any file that has waited for its second copy for more than 24 hours.
+### Copy deadline
+
+Every backup uploaded through the API has a deadline for its second copy: **1 hour after the upload finishes, plus 1 hour for every 8 GiB of size**, counted proportionally. A 4 GiB backup is due within 1 hour 30 minutes, a 100 GiB backup within 13 hours 30 minutes.
+
+Each backup shows when its copy was made and how long after the upload, or by when it is due. A copy that misses its deadline is marked as late in the administration and through the API, and the operations team is alerted. The [Backup API](/backup-api#backup-fields) returns the same information in `mirrorDeadlineAt`, `mirrorLagSeconds` and `isMirrorLate`.
+
+## Integrity check
+
+While the second copy is made, the platform reads the stored file once more and checks it:
+
+- **Every part** is compared with its copy in the second datacentre. A part that does not match is copied again.
+- **The whole file** gets a SHA-256 checksum computed by the platform. It is compared with the checksum your client sent when it finished the upload.
+
+The result is stored with each backup as its **integrity state**:
+
+| State | Meaning |
+|---|---|
+| `verified` | The stored file matches the checksum your client sent. |
+| `computed` | Your client sent no checksum. The platform computed one, and you can use it to verify a downloaded copy. |
+| `mismatch` | The stored file differs from the checksum your client sent. Your organisation receives a critical e-mail. |
+| `unavailable` | The backup was copied before the integrity check existed. |
+
+A mismatch means that the file stored is not the file your client hashed, for example because the file was still being written during the upload. Both copies are identical to each other; the difference is between your file and the uploaded one. Run the backup again and see [Backup troubleshooting](/backup-troubleshooting#integrity-check-failed).
 
 ## How an upload works
 
@@ -51,7 +73,7 @@ The file never passes through the API. Your client asks the API to start a backu
 2. The client uploads the parts, several at the same time. Each part is at least 64 MiB, and a failed part is simply sent again.
 3. The client confirms the upload. The platform checks that every part arrived and that the stored size matches the announced size, and registers the backup.
 
-Because the API only coordinates, a backup of hundreds of gigabytes does not slow anything down, and an unstable connection costs one part, not the whole file. The full contract is in the [Backup API](/backup-api).
+Because the API only coordinates, a backup of hundreds of gigabytes does not slow anything down, and an unstable connection costs one part, not the whole file. The ready-made client and the one-command installer do all of this for you.
 
 Each backup is stored in a **monthly folder** with a unique random suffix in its name, for example `prod-db_aB3dE5fG7hJ9kL1m.sql.zst`. Compound extensions such as `.tar.zst` or `.sql.gz` are preserved. A new backup never replaces an older one, even when the file name is the same.
 
@@ -59,44 +81,43 @@ Each backup is stored in a **monthly folder** with a unique random suffix in its
 
 Ransomware and attackers usually try to delete or encrypt backups first, so that the victim has nothing to restore from. The service is built so that this does not work:
 
-- **Write and read only.** The API can start uploads and read backup metadata. It has no operation to delete, overwrite, rename or download a backup. A compromised server can therefore neither destroy your backups nor steal them through the key it holds.
+- **Write and read only.** The API can start uploads and read backup metadata. It has no operation to delete, overwrite, rename or download a backup. A compromised server can neither destroy your backups nor steal them through the key it holds.
 - **Immutable storage.** A stored backup cannot be deleted or changed, not even by a BizKitHub administrator. A mistaken command or a stolen password has nothing to erase.
 - **Unique names.** Every upload gets its own name. A backup encrypted by ransomware is stored next to the clean ones, and you restore from the last clean one.
-- **A restricted key per machine.** An API key can be limited to the scope **Backup service only**. Such a key is rejected by every other endpoint of the platform. Use a separate key for each server, so you can revoke exactly one if it leaks.
-- **Encryption in transit.** All uploads and downloads use HTTPS. For sensitive data, encrypt the file before sending it (for example with `gpg` or `age`) and keep the key outside the server. Only you can then read the content.
-- **Downloads only in the administration.** Restoring requires signing in to the administration with permission for the **Backups** module. See [Restoring a backup](#restoring-a-backup).
+- **A restricted key per machine.** Keys created for backups are limited to the backup service and rejected by every other endpoint of the platform. **Connect a new machine** on the Backups page creates such a key with one click. Use a separate key for each server, so you can revoke exactly one if it leaks.
+- **Encryption in transit.** All uploads and downloads use HTTPS. For sensitive data, encrypt the file before sending it (for example with `gpg` or `age`) and keep the key outside the server.
+- **Downloads only in the administration.** Downloading requires signing in with permission for the **Backups** module, and every download link is recorded in the activity log. See [Backup restore](/backup-restore).
 
 ## What the service watches for you
 
-Backups are useful only if they really run. The service watches the following and sends an e-mail notification to your organisation when something is wrong. Each event is also recorded in the system log with its code; the [system code reference](/system-codes) explains every code.
+The service watches the following and sends an e-mail notification to your organisation when something is wrong. Each event is also recorded in the system log with its code; the [system code reference](/system-codes) explains every code.
 
 | Event | What happens | Code |
 |---|---|---|
-| **The next backup did not arrive.** Every backup can announce when the next one of the same source and type is due. | If no newer backup starts by that time plus 20 % of the interval, you receive one e-mail. A server that stopped backing up is noticed within hours, not when you need a restore. | `BKP_EXPECT_MISS` |
+| **The next backup did not arrive.** Every backup can announce when the next one of the same source and type is due. | If no newer backup starts by that time plus 20 % of the interval, you receive one e-mail. A server that stopped backing up is noticed within hours. | `BKP_EXPECT_MISS` |
 | **An upload failed.** The client reported an error, the stored size did not match, or no data arrived for 6 hours. | The backup is marked as failed and you receive an e-mail with the reason and the progress reached. | `BKP_UPLOAD_FAIL` |
-| **The client never confirmed the upload.** All parts arrived, but the confirmation did not, for example because the server restarted. | After 6 hours without activity, the platform completes the backup on its own and records a warning. The backup is stored normally. | `BKP_UPLOAD_AUTO` |
+| **The client never confirmed the upload.** All parts arrived, but the confirmation did not. | After 6 hours without activity, the platform completes the backup on its own and records a warning. The backup is stored normally. | `BKP_UPLOAD_AUTO` |
+| **The size changed suddenly.** Each completed backup is compared with the previous completed backup of the same source and type. | If it is more than 20 % larger or smaller, you receive a warning e-mail. The backup is stored normally. Backups where both files are under 1 MiB are not compared. | `BKP_SIZE_JUMP` |
+| **The integrity check failed.** | You receive a critical e-mail with both checksums. | `BKP_SHA_MISMATCH` |
 
-The monitoring of the next backup works per series. A **series** is the combination of the `source` and `type` you send with each backup, for example `shop-db` and `full`. The next backup in the series ends the watch, so every backup has to announce its own next time to keep monitoring on. The Linux client does this with the `--every` option.
+A sudden size change often reveals a problem the backup tool did not report: a much smaller dump can mean an empty or unreachable database, a missing table or a permission error; a much larger file can mean logs or a wrong directory in the archive.
 
-The service itself is monitored by the platform: the upload checks and the copying to the second datacentre run as monitored jobs, and the operations team is alerted when one of them stops or falls behind. Platform incidents are published on the [status page](https://status.bizkithub.com).
+The monitoring of the next backup works per **series**: the combination of the `source` and `type` sent with each backup, for example `shop-db` and `pg-dump`. The next backup in the series ends the watch, so every backup has to announce its own next time. The installer and the client's `--every` option do this automatically.
 
-## What you see in the administration
+The service itself is monitored by the platform: the upload checks, the copying and the copy deadlines run as monitored jobs, and the operations team is alerted when one of them stops or falls behind. Platform incidents are published on the [status page](https://status.bizkithub.com).
 
-The **Backups** page under **System** shows:
+## The Backups page
 
-- a **storage report** with the total size of your stored backups, how much was written each day and the trend over time, with a CSV export;
-- the **list of backups** with name, source, type, size, status, upload progress, the next expected backup and the state of the second copy, with help text for every column;
-- the **detail** of each backup with its checksum, metadata, the API key that uploaded it and the second copy (time and region);
-- ready-made upload scripts for Linux (bash), Node.js and PHP.
+The **Backups** page under **System** shows the state of all your backups at a glance.
 
-## Restoring a backup
+- **Health state.** One of **All good**, **Needs attention**, **Backup problem** or **No backups yet**, with the reasons. A series past its next backup time, a copy outside its deadline or an integrity mismatch is a problem; failed uploads or a tariff that does not allow new backups need attention.
+- **Key figures.** Stored backups, the share with a copy in the second datacentre, the share of copies made within their deadline over the last 30 days, the integrity results over the last 30 days, uploads running now, and the total storage of the organisation.
+- **Storage chart.** The total size in storage at the end of each day, and below it the amount written per day with its 7-day average. Both charts share the time axis. The daily data can be exported to CSV.
+- **Backup series.** Each series with its state (OK, overdue, failed, uploading, not monitored), the last and the next backup, how many backups have their second copy, the integrity results and the size change.
+- **Folders.** Which monthly folders grow most.
+- **Backup list and detail.** Every backup with its status, size and size change, checksums, integrity state, metadata, the API key that uploaded it, and its second copy with the time, the delay after the upload and the deadline.
 
-1. Sign in to the administration with a user who has permission for the **Backups** module.
-2. Open **System → Backups** and find the backup in the list or its detail.
-3. Click the download action. The administration generates a signed download link valid for **15 minutes**.
-4. Download the file and restore it with the same tool that created it (`psql`, `mysql`, `tar` and so on).
-
-Every download is recorded in the activity log of your organisation, so you can see who downloaded which backup and when. If the primary copy cannot be served, the download is served from the second datacentre automatically. If you uploaded the backup with a SHA-256 checksum, compare it with the downloaded file using `sha256sum` before you restore.
+Two actions start from this page: **Connect a new machine** (see [Backup service setup](/backup-service-setup)) and **Restore to a server** in the backup detail (see [Backup restore](/backup-restore)).
 
 ## Limits
 
@@ -107,14 +128,16 @@ Every download is recorded in the activity log of your organisation, so you can 
 | Metadata attached to one backup | 8 KB of JSON |
 | Validity of upload addresses | 12 hours, renewable |
 | Inactivity before an upload is closed | 6 hours |
-| Validity of a download link | 15 minutes |
+| Install command | Single use, valid 24 hours |
+| Download link in the administration | 15 minutes |
+| Download link for a server (restore) | 1 hour |
 
 ## Related
 
-- [Backup service setup](/backup-service-setup): connect a Linux server in a few minutes.
-- [Backup API](/backup-api): endpoints, fields and error codes for your own client.
-- [Backup troubleshooting](/backup-troubleshooting): what to do when an upload or an alert goes wrong.
+- [Backup service setup](/backup-service-setup): connect a server with one command.
+- [Backup restore](/backup-restore): get a backup back onto a server.
+- [Backup API](/backup-api): endpoints, fields and error codes.
+- [Backup troubleshooting](/backup-troubleshooting): alerts and errors explained.
 - [Backup and recovery](/backup-overview): how BizKitHub backs up its own data.
-- [Durability](/durability-overview): what eleven nines and the second datacentre mean.
-- [API keys](/api-key-overview): creating and restricting keys.
-- [SLA](/sla-overview): contractual commitments.
+- [Durability](/durability-overview): eleven nines and the second datacentre.
+- [SLA](/sla-overview): contractual commitments of the platform.

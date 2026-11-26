@@ -44,6 +44,8 @@ After a file is stored, the platform copies it automatically to a second datacen
 
 The copy is made for **every** file of the platform, not only for backups. Large files are copied part by part, and an interrupted copy resumes from the last finished part instead of starting again. The file detail in the administration shows whether the copy in the second datacentre exists. A platform check runs every day and alerts the operations team when any file has waited for its second copy for more than 24 hours.
 
+Backups sent to the [backup service](/backup-service) have a stricter deadline: their copy is due within 1 hour after the upload, plus 1 hour per 8 GiB of size. While the copy is made, the platform checks every part and computes the SHA-256 checksum of the whole file, so each backup shows both whether its copy arrived on time and whether its content matches the checksum your client sent.
+
 ### Immutable storage
 
 Backups are stored **write-once**. Backups sent to the backup service cannot be deleted or changed by anyone, not even by a BizKitHub administrator. Backups of the platform database cannot be changed or deleted before their retention period ends, not even with administrator credentials. A compromised server, a stolen password or a mistaken command has nothing to erase.

@@ -9,7 +9,7 @@ published_at: "2026-11-26T12:00:00.000Z"
 Backup troubleshooting
 ======================
 
-This article helps you when a backup sent to the [backup service](/backup-service) did not arrive, failed, or triggered an alert. Each section starts with the symptom you see: an e-mail, an error code from the API or the `bkh-backup` client, or a state in **System → Backups**. Find your symptom, check the causes in order and follow the fix.
+This article helps you when a backup sent to the [backup service](/backup-service) did not arrive, failed, or triggered an alert. Each section starts with the symptom you see: an e-mail, an error code from the API, a message from the installer or the `bkh-backup` client, or a state in **System → Backups**. Find your symptom, check the causes in order and follow the fix.
 
 All codes mentioned here are explained in the [system code reference](/system-codes) (e-mail alerts) and in the [error codes](/errors) (API errors).
 
@@ -92,11 +92,53 @@ The failed backup stays in the list as a record of the event. It does not count 
 | `date: invalid option` or `wait: -n: invalid option` | The system has a non-GNU `date` or `bash` older than 4.3. | Use a current Linux distribution, or upload with your own client over the [Backup API](/backup-api). |
 | `upload of part N failed after 5 attempts` | The connection to the storage failed repeatedly. | Check outgoing HTTPS from the server, a proxy or a firewall. Lower `--parallel`. |
 
-## The second copy is not shown yet
+## Integrity check failed
 
-**Symptom.** A completed backup does not show its copy in the second datacentre yet.
+**Symptom.** Your organisation receives a critical e-mail that a backup failed the integrity check, the system log shows `BKP_SHA_MISMATCH`, and the backup has the integrity state `mismatch`. The e-mail lists the checksum your client sent and the checksum of the stored file.
 
-**What causes it.** The copy starts automatically after the upload and takes longer for large backups, which are copied part by part. You do not need to do anything: the backup is already stored durably in the primary storage, and the operations team is alerted if the copy fails repeatedly or any file waits for its copy longer than 24 hours.
+**What causes it.** The platform computed the SHA-256 of the stored file while copying it to the second datacentre, and it differs from the checksum your client sent. The stored file is therefore not the file your client hashed. Both stored copies are identical to each other. The most common causes are:
+
+- the file was still being written when the upload started, for example a dump that had not finished;
+- a script changed or replaced the file between computing the checksum and uploading it;
+- a custom client sent the checksum of a different file.
+
+**How to fix it.**
+
+1. Make sure the backup script writes the file completely before it calls the client, as in the examples in [Backup service setup](/backup-service-setup).
+2. Run the backup again and check that the new backup reaches the state `verified`.
+3. Do not rely on the backup with the mismatch for a restore. Restore from the last backup with the state `verified`.
+
+## "Backup size changed by more than 20 %"
+
+**Symptom.** A warning e-mail says that a backup is much larger or smaller than the previous one, and the system log shows `BKP_SIZE_JUMP`. The backup list marks the size change.
+
+**What causes it.** Each completed backup is compared with the previous completed backup of the same source and type. The backup itself is stored normally; the warning tells you that its content may not be what you expect.
+
+- **Much smaller:** the database was empty or unreachable, a table was missing, the export lacked permissions or stopped early.
+- **Much larger:** logs, temporary files or a wrong directory got into the archive, or the data really grew.
+- **Either way:** the compression or the backup tool changed.
+
+**How to fix it.** Compare the backup with the previous one. If the change is expected, for example after a data import or a cleanup, nothing needs to be done: the next backup is compared with this one. If not, check the output of the backup job and fix the export. Backups where both files are under 1 MiB are not compared.
+
+## Install command errors
+
+A used command has already created a backup-only API key, even when the installation then stopped. Revoke unused keys in **System → API keys**; their description starts with `Backup:` and contains the host name.
+
+| Message on the server | Cause | Fix |
+|---|---|---|
+| `This install command was already used or has expired (24 h)` | Each command works once and only for 24 hours. | Create a new command with **Connect a new machine** and run it. |
+| `run as root` | The installer was run without root rights. | Pipe it into `sudo bash`, as shown in the administration. |
+| `missing command: pg_dump` (or `mysqldump`, `tar`, `docker`, `curl`, `sha256sum`) | A required tool is not installed. Nothing was changed on the server. | Install the tool, then create and run a new command. |
+| `path /var/www does not exist` | The folder in the profile does not exist on this server. | Create a new command with the correct absolute path. |
+| `Docker volume … not found` | The volume name is wrong or the volume is on another host. | Check `docker volume ls` and create a new command. |
+| `system user postgres not found` | PostgreSQL is not installed on this server, or runs in a container. | Run the installer on the database server, or back up the Docker volume instead. |
+| `the first backup failed` | The job is installed, but its first run failed. | Read the output above the message, fix the cause (most often database access) and run the job by hand with `sudo /usr/local/sbin/bkh-backup-<series>`. |
+
+## The second copy is late
+
+**Symptom.** A backup does not show its copy in the second datacentre yet, or the administration marks the copy as late.
+
+**What causes it.** The copy starts automatically after the upload and is due within 1 hour plus 1 hour per 8 GiB of size. Large backups are copied part by part and take longer. You do not need to do anything: the backup is already stored durably in the primary storage. A copy that misses its deadline, fails repeatedly, or a file that waits for its copy longer than 24 hours alerts the operations team, which resolves it.
 
 ## When to escalate
 
@@ -104,6 +146,7 @@ Contact info@bizkithub.com and quote the backup identifier when:
 
 - a backup you need to restore cannot be downloaded in the administration;
 - a backup has not had its second copy for more than 24 hours;
+- a backup shows the integrity state `mismatch` and running the backup again does not help;
 - the API returns a `5xx` error repeatedly; include the `requestId` from the response.
 
 Check the [status page](https://status.bizkithub.com) first: platform incidents are published there.
@@ -113,5 +156,6 @@ Check the [status page](https://status.bizkithub.com) first: platform incidents 
 - [Backup service](/backup-service)
 - [Backup service setup](/backup-service-setup)
 - [Backup API](/backup-api)
+- [Backup restore](/backup-restore)
 - [System codes](/system-codes)
 - [API key](/api-key-overview)

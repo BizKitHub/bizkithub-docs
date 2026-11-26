@@ -21,7 +21,8 @@ BizKitHub monitors the platform around the clock and publishes its state openly.
 - **Scheduled jobs.** Every background job (bank synchronisation, e-mail processing, imports, reminders and others) reports each run. A job that fails, runs too long or does not start on time raises an alert.
 - **Backups.** The freshness of database snapshots and of the continuous change archive is checked twice a day.
 - **Second copies.** A daily check confirms that every stored file has its copy in the second datacentre; a file that waits longer than 24 hours raises an alert.
-- **Your backups.** The [backup service](/backup-service) e-mails your organisation when an expected backup does not arrive or an upload fails.
+- **Backup copies.** Every backup sent to the backup service must reach the second datacentre within 1 hour after the upload plus 1 hour per 8 GiB; a late copy alerts the operations team.
+- **Your backups.** The [backup service](/backup-service) e-mails your organisation when an expected backup does not arrive, an upload fails, a backup fails its integrity check or its size changes by more than 20 %.
 - **Errors.** Unexpected errors in the API are recorded with a request identifier and reviewed by the engineering team.
 - **Abuse.** Request rates per API key and per network address are tracked, and abusive traffic is blocked at the edge.
 
