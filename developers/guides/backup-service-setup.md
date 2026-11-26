@@ -59,12 +59,12 @@ Paste the command into a shell on the server. The installer prints each step. It
    |---|---|---|
    | The installer runs as root. | All | `run as root`, followed by the command to use |
    | `curl`, `sha256sum`, `dd`, `stat` and `date` exist, plus the tools of the profile: `pg_dump` and `psql`, `mysqldump` and `mysql`, `tar`, or `docker`. | All | `missing command: <name>` |
-   | The Docker volume exists. This check also fails when the Docker daemon is not running. | Docker volume | `Docker volume <name> not found` |
+   | The Docker daemon answers. | Docker volume | `the Docker daemon is not reachable` |
+   | The Docker volume exists. | Docker volume | `Docker volume <name> not found` |
    | The folder exists. | Folder | `path <path> does not exist` |
    | The `postgres` system user exists. | PostgreSQL | `system user postgres not found (is PostgreSQL installed here?)` |
    | The `postgres` system user can log in to PostgreSQL and run a query, in the chosen database if you entered one. | PostgreSQL | `cannot connect to PostgreSQL as user postgres (database <name>)` |
    | `root` can log in to MySQL or MariaDB and run a query, in the chosen database if you entered one, through `/root/.my.cnf` or socket authentication. The attempt times out after 5 seconds. | MySQL / MariaDB | `cannot connect to MySQL as root: configure /root/.my.cnf or socket auth (database <name>)` |
-   | The Docker daemon answers. | Docker volume | `the Docker daemon is not reachable` |
 
    The part in brackets with the database name appears only when you entered a database. Each message is printed after `bkh: ERROR:`.
 2. Installs the client to `/usr/local/bin/bkh-backup`.
