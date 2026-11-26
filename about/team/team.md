@@ -107,4 +107,4 @@ Everyone understands the company's vision, and we work together to reach our sta
 
 We're looking for talented, motivated people who share our values and want to help us build the future of technology.
 
-Write to us at careers@bizkithub.com.
+Write to us at info@bizkithub.com.

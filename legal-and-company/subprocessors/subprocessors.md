@@ -67,4 +67,4 @@ US-based sub-processors operate under Standard Contractual Clauses (SCCs) and ma
 
 ## Change notifications
 
-We notify affected customers at least 30 days before adding a new sub-processor that handles customer data. Contact privacy@bizkithub.com if you would like to be added to the notification list.
+We notify affected customers at least 30 days before adding a new sub-processor that handles customer data. Contact info@bizkithub.com if you would like to be added to the notification list.

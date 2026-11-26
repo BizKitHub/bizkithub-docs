@@ -31,7 +31,7 @@ Connect with developers, share knowledge, and find solutions from the community.
 
 ### Email Support
 
-Direct assistance from our technical team for complex integration issues. Write to support@bizkithub.com.
+Direct assistance from our technical team for complex integration issues. Write to info@bizkithub.com.
 
 ### Live Chat
 
@@ -78,4 +78,4 @@ The live state of every service, together with current and past incidents, is on
 
 ## Still Need Help?
 
-Our support team is ready to assist you with any questions or issues. We typically respond within 24 hours on business days. Reach us at support@bizkithub.com.
+Our support team is ready to assist you with any questions or issues. We typically respond within 24 hours on business days. Reach us at info@bizkithub.com.

@@ -14,7 +14,7 @@ This page is a sample GDPR statement. Every section below must be reviewed by th
 
 ## Data controller
 
-BizKitHub s.r.o., *[registered address]*, ID *[ICO]*, is the data controller for personal data collected through the BizKitHub platform. The data protection officer can be reached at privacy@bizkithub.com.
+BizKitHub s.r.o., *[registered address]*, ID *[ICO]*, is the data controller for personal data collected through the BizKitHub platform. The data protection officer can be reached at info@bizkithub.com.
 
 ## What personal data we process
 
@@ -61,4 +61,4 @@ Technical and organisational measures include TLS 1.3 for all traffic, encryptio
 
 ## Contact
 
-For any GDPR-related request, contact privacy@bizkithub.com. We respond to verified requests within 30 days as required by Article 12(3).
+For any GDPR-related request, contact info@bizkithub.com. We respond to verified requests within 30 days as required by Article 12(3).

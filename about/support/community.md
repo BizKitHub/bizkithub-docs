@@ -13,7 +13,7 @@ BizKitHub is built in the open by a small team that lives on top of it every day
 
 ## Where to reach us
 
-The primary channel for asking questions, sharing implementations, and reporting issues is direct e-mail to [support@bizkithub.com](mailto:support@bizkithub.com). Every message reaches a human on the core team; there is no ticket-triage queue between you and the engineers who wrote the code you are integrating with. Response time targets and SLA definitions are covered in the [Support](/support-overview) article.
+The primary channel for asking questions, sharing implementations, and reporting issues is direct e-mail to [info@bizkithub.com](mailto:info@bizkithub.com). Every message reaches a human on the core team; there is no ticket-triage queue between you and the engineers who wrote the code you are integrating with. Response time targets and SLA definitions are covered in the [Support](/support-overview) article.
 
 For urgent production incidents (payments not settling, e-mails not sending, API returning 5xx across the board), the same address is monitored outside business hours and takes priority over feature questions.
 
