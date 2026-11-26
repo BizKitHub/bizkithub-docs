@@ -42,8 +42,9 @@ The platform is split into independent services (API, administration, PDF genera
 ### Data storage
 
 - **Records** live in a relational database in the EU that is not reachable from the public internet.
-- **Files** are kept in object storage with redundant copies, encrypted at rest. See [Storage](/storage-overview).
-- **Backups** are write-once and kept with two independent providers. See [Backup and recovery](/backup-overview).
+- **Files** are kept in the global distributed storage with redundant copies, encrypted at rest, and copied to a second datacentre in Nuremberg, Germany, operated by a different provider. See [Storage](/storage-overview).
+- **Backups** are write-once and kept with two independent providers. See [Backup and recovery](/backup-overview) and [Durability](/durability-overview).
+- **Your own backups** sent to the [backup service](/backup-service) are immutable: the API key on your server can upload but cannot delete, overwrite or download them.
 - **E-mails** are delivered through the providers listed on the [sub-processors](/subprocessors-overview) page.
 
 ## Data segregation

@@ -14,7 +14,7 @@ BizKitHub backs up every organisation's data automatically. You do not need to c
 ## What is backed up
 
 - **All business records.** Contacts, orders, invoices, products, posts, settings, members and every other record you see in the administration or the API.
-- **Uploaded files.** Images, documents and attachments live in object storage that keeps its own redundant copies (see [Storage](/storage-overview)).
+- **Uploaded files.** Images, documents and attachments live in the BizKitHub global distributed storage, which keeps redundant copies on several devices. Every file is also copied automatically to a second, geographically separated datacentre in Nuremberg, Germany, operated by a different provider (see [Storage](/storage-overview) and [Durability](/durability-overview)).
 - **Audit history.** Activity and system logs are part of the database and are backed up with it.
 
 ## How often
@@ -30,7 +30,7 @@ Together they allow **point-in-time recovery**: the database can be restored to 
 
 Backups are stored outside the production server, with two independent storage providers in different locations. The primary backup store is **write-once**: a backup object cannot be changed or deleted before its retention period ends, not even with administrator credentials. A compromised server or a mistaken command therefore cannot destroy the backups.
 
-Backup freshness is checked automatically twice a day. If a snapshot or the change stream falls behind, the operations team is alerted.
+Database snapshots are stored through the same [backup service](/backup-service) that is available to Enterprise customers, including its copy in the second datacentre in Nuremberg, Germany. Backup freshness is checked automatically twice a day. If a snapshot or the change stream falls behind, the operations team is alerted.
 
 ## Recovery
 

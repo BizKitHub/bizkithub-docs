@@ -55,7 +55,7 @@ A typical order shows how much happens without manual work:
 
 ## Your data
 
-Every record belongs to exactly one organisation, and the platform never mixes the data of two organisations. Data is processed in the European Union, backed up continuously and protected by role-based permissions. See [Architecture](/architecture-overview), [Security](/security-overview) and [Backup and recovery](/backup-overview).
+Every record belongs to exactly one organisation, and the platform never mixes the data of two organisations. Data is processed in the European Union, backed up continuously and protected by role-based permissions. Every file has a second copy in a geographically separated datacentre. See [Architecture](/architecture-overview), [Security](/security-overview), [Durability](/durability-overview) and [Backup and recovery](/backup-overview).
 
 ## Where to go next
 

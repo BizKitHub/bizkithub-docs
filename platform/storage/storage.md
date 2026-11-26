@@ -17,7 +17,9 @@ Records live in a relational database in the European Union. Every record belong
 
 ## Files
 
-Files are kept in S3-compatible object storage, separately from the database. The storage keeps redundant copies of every file, and a file counts as uploaded only after it has been stored durably.
+Files are kept in the BizKitHub **global distributed storage**, separately from the database. The storage keeps redundant copies of every file on several devices and is designed for an annual durability of 99.999999999 % (eleven nines). A file counts as uploaded only after it has been stored durably.
+
+After upload, every file is also copied automatically to **a second, geographically separated datacentre in Nuremberg, Germany**, operated by a different provider. Large files are copied part by part, and an interrupted copy resumes where it stopped. The file detail in the administration shows whether the second copy exists, and the operations team is alerted when any file waits for its second copy for more than 24 hours. See [Durability](/durability-overview).
 
 Files reach the storage in several ways:
 
@@ -32,14 +34,15 @@ Private files, such as invoices, contracts or ticket attachments, are not listed
 
 ## Encryption
 
-All traffic to and from storage uses TLS. Files in the object storage are encrypted at rest by the storage provider.
+All traffic to and from storage uses TLS. Files in the global distributed storage are encrypted at rest by the storage provider.
 
 ## Deleting files
 
-Deleting a file in the administration removes it from the organisation immediately. Copies may remain in backups until those backups expire. When an organisation is deleted, its files are removed together with its records.
+Deleting a file in the administration removes it from the organisation immediately. Copies may remain in backups until those backups expire. Backups sent to the [backup service](/backup-service) are the exception: they are immutable and cannot be deleted. When an organisation is deleted, its files are removed together with its records.
 
 ## Related
 
 - [Backup and recovery](/backup-overview)
 - [Durability](/durability-overview)
+- [Backup service](/backup-service)
 - [Security](/security-overview)

@@ -14,8 +14,8 @@ This article describes where BizKitHub runs and how the platform stays available
 ## Where your data is
 
 - **Database and application servers** run on dedicated hardware in a data centre in **France (EU)**. The data centre operator is certified to ISO/IEC 27001.
-- **Files** are kept in object storage with redundant copies (see [Storage](/storage-overview)).
-- **Backups** are stored with two independent providers in different locations (see [Backup and recovery](/backup-overview)).
+- **Files** are kept in the BizKitHub global distributed storage with redundant copies, and every file has an additional copy in a second datacentre in **Nuremberg, Germany**, operated by a different provider (see [Storage](/storage-overview)).
+- **Backups** are stored with two independent providers in different locations, one of them the datacentre in Nuremberg (see [Backup and recovery](/backup-overview) and [Durability](/durability-overview)).
 
 Customer records are processed in the European Union. Vendors that handle customer data are listed on the [sub-processors](/subprocessors-overview) page.
 
