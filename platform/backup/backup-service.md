@@ -19,6 +19,34 @@ This article explains how your backups are protected and what the service checks
 
 The backup service is part of the **Enterprise** tariff. Organisations on other tariffs cannot start a new upload; the API answers with `PUBLIC_BACKUP_TARIFF_NOT_SUPPORTED`. Backups that are already stored stay readable after a tariff change. BizKitHub uses the same service for the snapshots of its own database.
 
+## Pricing
+
+The backup service is a managed service with an SLA on durability. Uploading backups and restoring them, including restores through the administration, is free of charge: you pay only for the data you store. The minimum fee is CZK 199 per month for the Basic plan.
+
+| Plan | Price per month | Storage included |
+|---|---|---|
+| Basic | CZK 199 | 100 GB |
+| Pro | CZK 1,490 | 1 TB |
+| Enterprise | CZK 5,990 | 5 TB |
+
+You can choose any plan. Storage above the amount included in your plan costs CZK 1.50 per GB per month.
+
+For other sizes or specific projects, pricing and conditions can be agreed individually. Contact info@bizkithub.com.
+
+### Annual prepayment
+
+When you pay for one year in advance, you get a 10 % discount on the whole order. The longest period is 1 year. The price is fixed for the period and is paid in advance.
+
+| Plan | Price per year |
+|---|---|
+| Basic | CZK 2,149.20 |
+| Pro | CZK 16,092 |
+| Enterprise | CZK 64,692 |
+
+The fixed price also fixes the storage of the chosen plan. When your stored data exceeds it, you pay for the extra GB (CZK 1.50 per GB) in the month in which the plan was exceeded.
+
+With an annual plan, your storage can exceed the plan by at most 20 %: 120 GB for Basic, 1.2 TB for Pro and 6 TB for Enterprise. Beyond that, move the organisation to a higher plan. Otherwise new uploads are blocked: the API rejects requests to start an upload. Stored backups stay readable and can still be restored.
+
 ## When you would use it
 
 - Nightly dumps of a production PostgreSQL or MySQL database, with an alert when a night is missed.

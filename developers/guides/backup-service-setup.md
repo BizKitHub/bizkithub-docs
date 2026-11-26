@@ -15,7 +15,7 @@ How the backups are protected is explained in [Backup service](/backup-service).
 
 ## What you need before you start
 
-- An organisation on the **Enterprise** tariff, which includes the backup service.
+- An organisation on the **Enterprise** tariff, which includes the backup service. Plans and prices are listed in [Backup service](/backup-service#pricing).
 - A user with permission for the **Backups** module in the administration.
 - A Linux server where you can run commands with `sudo`. One-command setup has been tested on current Debian and Ubuntu releases using either the standard service manager timers (`systemctl`) or cron.
 - `curl`, `sha256sum`, `dd`, `stat` and GNU `date` on the server, plus the tool for what you back up: `pg_dump`, `mysqldump`, `tar` or `docker`. The installer checks all of them before it changes anything.
